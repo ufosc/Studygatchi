@@ -1,0 +1,4 @@
+env/
+
+# personal settings
+backend/settings.py
