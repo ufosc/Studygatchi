@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "React Chrome Extension",
+    "name": "Studygatchi",
     "version": "1.0.0",
-    "description": "A simple React app as a Chrome extension",
+    "description": "Virtual pet & study assistant",
     "action": {
       "default_popup": "index.html"
     },
