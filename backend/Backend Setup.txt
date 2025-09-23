@@ -1,0 +1,43 @@
+Backend Setup:
+
+1. Install Python & pip
+
+2. Fork the repo
+
+3. Create the venv
+	python -m venv env
+	google commands to activate
+
+4. pip install djangorestframework
+
+5. install PostgreSQL (THIS WILL TAKE A LONG TIME)
+	- Windows: https://www.postgresql.org/download/windows/
+	- Mac: https://www.postgresql.org/download/macosx/
+	- Linux: https://www.postgresql.org/download/linux/
+
+6. Activate the venv and install psycopg2
+	pip install psycopg2-binary
+
+7. Access the PostgreSQL shell by cd into 'directory you installed it to'/bin
+
+8. run the following SQL commands:
+	CREATE USER myprojectuser WITH PASSWORD 'your_secure_password';
+	CREATE DATABASE myprojectdb OWNER myprojectuser;
+  	GRANT ALL PRIVILEGES ON DATABASE myprojectdb TO myprojectuser;
+	\q
+
+	replace myprojectuser with whatever username you want, same for the password
+	replace myprojectdb with studygatchi_db
+
+9. Create a file called settings.py in the backend directory and copy and paste the contents of settings_template.txt into settings.py.
+
+10. On settings.py, go to where it says DATABASES, and insert your info from step 8 into the corresponding places.
+
+11. Run the following commands with the venv active to apply migrations:
+	python manage.py makemigrations
+	python manage.py migrate
+
+12. Test the connection by running this command
+	python manage.py runserver
+
+	If it all goes well cool stuff its working!
