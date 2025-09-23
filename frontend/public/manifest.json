@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "Studygatchi",
+    "version": "1.0.0",
+    "description": "Virtual pet & study assistant",
+    "action": {
+      "default_popup": "index.html"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "permissions": []
+  }
