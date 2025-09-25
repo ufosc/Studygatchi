@@ -59,7 +59,7 @@ This will generate the build files in the `build` directory.
 - `tsconfig.json`: TypeScript configuration file.
 - `package.json`: Contains the project dependencies and scripts.
 
-## Backend
+## Backend (Windows/Linux)
 
 ### Prerequisites
 This guide expects that you have [Python](https://www.python.org/downloads/) (At least 3.12.0) installed.
@@ -147,4 +147,83 @@ This guide expects that you have [Python](https://www.python.org/downloads/) (At
     ```
 
 	If it all goes well, cool stuff, it's working!
+
+## Backend (Mac)
+
+### Prerequisites
+This guide expects that you have [Python](https://www.python.org/downloads/) (At least 3.12.0) installed. 
+
+If Python was installed via either Homebrew or the official Python installer, you may need to use ``python3`` and ``pip3`` instead for the terminal to work.
+
+### Setup
+1. **Create the venv**
+
+    ```sh
+    cd Studygatchi
+	python3 -m venv env
+    ```
+    To activate the venv:
+
+    ```sh
+    source /env/bin/activate
+    ```
+
+2. **Run the following commands to install Django and the Django Rest Framework:**
     
+    ```sh
+    pip3 install django
+    pip3 install djangorestframework
+    ```
+
+3. **Install PostgreSQL (version 17)** ***(THIS WILL TAKE A LONG TIME)***
+	- Mac: https://www.postgresql.org/download/macosx/
+
+4. **Activate the venv (if it's not already active) using the corresponding command and install psycopg2**
+	
+    ```sh
+    pip3 install psycopg2-binary
+    ```
+    We will use this to be able to connect Django with Postgres!
+
+5. **Create a database for Studygatchi**
+
+    ```sh
+    createdb studygatchi_db
+    ```
+
+6. **Access the PostgreSQL shell, logged in as the superuser:**
+    
+    ```sh
+    cd <directory you installed it to>/env/bin
+    psql
+    ```
+
+7. **Run the following SQL commands:**
+	
+    ```sql
+    CREATE USER <myprojectuser> WITH PASSWORD '<your_secure_password>';
+	CREATE DATABASE studygatchi_db OWNER <myprojectuser>;
+  	GRANT ALL PRIVILEGES ON DATABASE studygatchi_db TO <myprojectuser>;
+	\q
+    ```
+	Replace `<myprojectuser>` with whatever username you want, same for the password;
+    Use `quit` to exit the PostgreSQL shell;
+
+8. **Create a file called `settings.py` in the backend directory and copy and paste the contents of `settings_template.txt` into `settings.py`.**
+
+9. **In `settings.py`, go to where it says `DATABASES`, and insert your info from step 7 into the corresponding places.**
+
+10. **Run the following commands** ***with the venv active*** **to apply migrations:**
+    
+    ```sh
+	python3 manage.py makemigrations
+	python3 manage.py migrate
+    ```
+
+11. **Test the connection by running this command:**
+	
+    ```sh
+    python3 manage.py runserver
+    ```
+
+	If it all goes well, cool stuff, it's working!
