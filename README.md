@@ -198,6 +198,12 @@ If Python was installed via either Homebrew or the official Python installer, yo
     psql
     ```
 
+    6a. If psql is not found, try this solution
+		```sh
+        brew install pgcli
+		brew link --force libpq
+        ```
+
 7. **Run the following SQL commands:**
 	
     ```sql
