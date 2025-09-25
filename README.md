@@ -101,7 +101,6 @@ This guide expects that you have [Python](https://www.python.org/downloads/) (At
 
 3. **Install PostgreSQL (version 17)** ***(THIS WILL TAKE A LONG TIME)***
 	- Windows: https://www.postgresql.org/download/windows/
-	- Mac: https://www.postgresql.org/download/macosx/
 	- Linux: https://www.postgresql.org/download/linux/
 
 4. **Activate the venv (if it's not already active) using the corresponding command and install psycopg2**
@@ -198,11 +197,11 @@ If Python was installed via either Homebrew or the official Python installer, yo
     psql
     ```
 
-    6a. If psql is not found, try this solution
-		```sh
-        brew install pgcli
-		brew link --force libpq
-        ```
+    6a. *If psql is not found, try this solution*
+	```sh
+    brew install pgcli
+	brew link --force libpq
+    ```
 
 7. **Run the following SQL commands:**
 	
