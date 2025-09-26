@@ -157,19 +157,19 @@ If Python was installed via either Homebrew or the official Python installer, yo
 ### Setup
 1. **Create the venv**
 
-    ```sh
+    ```zsh
     cd Studygatchi
 	python3 -m venv env
     ```
     To activate the venv:
 
-    ```sh
+    ```zsh
     source /env/bin/activate
     ```
 
 2. **Run the following commands to install Django and the Django Rest Framework:**
     
-    ```sh
+    ```zsh
     pip3 install django
     pip3 install djangorestframework
     ```
@@ -179,26 +179,26 @@ If Python was installed via either Homebrew or the official Python installer, yo
 
 4. **Activate the venv (if it's not already active) using the corresponding command and install psycopg2**
 	
-    ```sh
+    ```zsh
     pip3 install psycopg2-binary
     ```
     We will use this to be able to connect Django with Postgres!
 
 5. **Create a database for Studygatchi**
 
-    ```sh
+    ```zsh
     createdb studygatchi_db
     ```
 
 6. **Access the PostgreSQL shell, logged in as the superuser:**
     
-    ```sh
+    ```zsh
     cd <directory you installed it to>/env/bin
     psql
     ```
 
-    6a. *If psql is not found, try this solution*
-	```sh
+    6a. ***If psql is not found, try this solution***
+	```zsh
     brew install pgcli
 	brew link --force libpq
     ```
@@ -212,6 +212,7 @@ If Python was installed via either Homebrew or the official Python installer, yo
 	\q
     ```
 	Replace `<myprojectuser>` with whatever username you want, same for the password;
+    
     Use `quit` to exit the PostgreSQL shell;
 
 8. **Create a file called `settings.py` in the backend directory and copy and paste the contents of `settings_template.txt` into `settings.py`.**
@@ -220,14 +221,14 @@ If Python was installed via either Homebrew or the official Python installer, yo
 
 10. **Run the following commands** ***with the venv active*** **to apply migrations:**
     
-    ```sh
+    ```zsh
 	python3 manage.py makemigrations
 	python3 manage.py migrate
     ```
 
 11. **Test the connection by running this command:**
 	
-    ```sh
+    ```zsh
     python3 manage.py runserver
     ```
 
