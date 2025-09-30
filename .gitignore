@@ -1,4 +1,9 @@
+# Python environment
 env/
+__pycache__/
 
 # personal settings
 backend/settings.py
+
+# MacOS
+.DS_Store
