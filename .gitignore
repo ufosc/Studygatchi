@@ -1,6 +1,8 @@
 # Python environment
 env/
 __pycache__/
+#sorry i forgot
+.venv 
 
 # personal settings
 backend/settings.py
