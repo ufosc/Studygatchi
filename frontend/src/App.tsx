@@ -3,6 +3,7 @@ import oscLogo from "./assets/osc-logo.png"
 import githubLogo from "./assets/github-mark-white.svg"
 import './App.css'
 import Timer from './Timer'
+import ToDoList from './ToDoList'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -27,6 +28,7 @@ function App() {
         </p>
       </div>
       <Timer />
+      <ToDoList />
       <p className="read-the-docs">
         Click on the OSC link to get to OSC!
       </p>
