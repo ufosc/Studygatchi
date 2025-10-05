@@ -88,7 +88,7 @@ This guide expects that you have [Python](https://www.python.org/downloads/) (At
     - On Linux:
     
     ```sh
-    ./env/Scripts/activate
+    ./env/bin/activate
     ```
 
 
