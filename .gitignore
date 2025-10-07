@@ -1,4 +1,12 @@
+# Python environment
 env/
+__pycache__/
 
 # personal settings
 backend/settings.py
+
+# Personal Migrations
+backend/quickstart/migrations/*
+
+# MacOS
+.DS_Store
