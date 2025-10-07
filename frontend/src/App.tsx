@@ -2,7 +2,8 @@ import { useState } from 'react'
 import oscLogo from "./assets/osc-logo.png"
 import githubLogo from "./assets/github-mark-white.svg"
 import './App.css'
-import PomodoroTimer from './components/PomodoroTimer'
+import Timer from './Timer'
+import ToDoList from './ToDoList'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -26,7 +27,8 @@ function App() {
           Welcome to the Studygatchi Project!
         </p>
       </div>
-        <PomodoroTimer />
+      <Timer />
+      <ToDoList />
       <p className="read-the-docs">
         Click on the OSC link to get to OSC!
       </p>

@@ -1,4 +1,4 @@
-Backend Setup:
+---------------- WINDOWS BACKEND SETUP ----------------
 
 1. Install Python & pip
 
@@ -39,5 +39,59 @@ Backend Setup:
 
 12. Test the connection by running this command
 	python manage.py runserver
+
+	If it all goes well cool stuff its working!
+
+---------------- MAC BACKEND SETUP ----------------
+
+1. Install Python & pip
+	You may need to use python3 & pip3 as your commands in the terminal
+
+2. Fork the repo
+
+3. Create and activate the venv
+	python3 -m venv env
+	source /bin/activate
+
+4. Install django framework via pip3
+	pip3 install djangorestframework
+
+5. Install PostgreSQL (THIS WILL TAKE A LONG TIME)
+	Mac: https://www.postgresql.org/download/macosx/
+
+6. Activate the venv and install psycopg2
+	pip3 install psycopg2-binary
+
+7. Access the PostgreSQL shell by cd into 'directory you installed it to'/bin
+	psql
+
+	7a. If psql is not found, try this solution
+		brew install pgcli
+		brew link --force libpq
+
+8. Create a local database
+	createdb "your-name"
+	replace "your-name" with anything else
+
+9. Type psql and run the following SQL commands
+	CREATE USER myprojectuser WITH PASSWORD 'your_secure_password';
+	CREATE DATABASE myprojectdb OWNER myprojectuser;
+  	GRANT ALL PRIVILEGES ON DATABASE myprojectdb TO myprojectuser;
+	\q
+
+	replace myprojectuser with whatever username you want, same for the password
+	replace myprojectdb with studygatchi_db
+
+10. Create a file called settings.py in the backend directory (in your Studygatchi folder) and 
+	copy and paste the contents of settings_template.txt into settings.py.
+
+11. On settings.py, go to where it says DATABASES, and insert your info from step 9 into the corresponding places.
+
+12. Run the following commands with the venv active to apply migrations:
+	python3 manage.py makemigrations
+	python3 manage.py migrate
+
+13. Test the connection by running this command
+	python3 manage.py runserver
 
 	If it all goes well cool stuff its working!
