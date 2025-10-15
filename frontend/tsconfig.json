@@ -7,5 +7,12 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  // required for shadcn
+    "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
