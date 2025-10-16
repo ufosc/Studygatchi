@@ -10,10 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.14",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.545.0",
+    "bootstrap": "^5.3.8",
+    "pause": "^0.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwind-merge": "^3.3.1",
