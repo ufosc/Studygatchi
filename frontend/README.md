@@ -12,17 +12,20 @@ Make sure you have [Node.js](https://nodejs.org/) (version 18+ or 20+) installed
 
 1. Clone or fork the repository :
 
-    ```sh
-    # To clone
-    git clone https://github.com/ufosc/Studygatchi.git
-    cd Studygatchi/frontend
-    ```
+   ```sh
+   # To clone
+   git clone https://github.com/ufosc/Studygatchi.git
+   cd Studygatchi/frontend
+   ```
 
 2. Install the dependencies:
 
-    ```sh
-    npm install
-    ```
+   ```sh
+   npm install
+
+   //PLEASE CHECK THIS
+   npm install bootstrap@5.3.8
+   ```
 
 ## Development
 
@@ -34,7 +37,7 @@ npm run dev
 
 Inside your terminal, enter 'o' to open the project in your browser.
 
-## Build 
+## Build
 
 To create a production build for later importation as a Chrome extension:
 
