@@ -22,7 +22,6 @@ Make sure you have [Node.js](https://nodejs.org/) (version 18+ or 20+) installed
 
    ```sh
    npm install
-   npm install bootstrap@5.3.8
    ```
 
 ## Development
