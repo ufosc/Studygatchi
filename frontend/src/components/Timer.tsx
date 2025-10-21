@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "./App.css";
+import "../App.css";
 
 type SessionType = "Work" | "Short Break" | "Long Break";
 
@@ -34,8 +34,9 @@ export default function Timer() {
       if (session === "Short Break") setSecondsLeft(shortBreakMins * 60);
       if (session === "Long Break") setSecondsLeft(longBreakMins * 60);
     }
-  }, [workMins, shortBreakMins, longBreakMins, session, running]);
+  }, [workMins, shortBreakMins, longBreakMins, session]);
 
+  // This function is ran everytime running is modified
   useEffect(() => {
     if (running) {
       // use window.setInterval so TypeScript knows the return type
@@ -73,7 +74,15 @@ export default function Timer() {
         setSecondsLeft(workMins * 60);
       }
     }
-  }, [secondsLeft, session, completedCycles, cyclesBeforeLong, workMins, shortBreakMins, longBreakMins]);
+  }, [
+    secondsLeft,
+    session,
+    completedCycles,
+    cyclesBeforeLong,
+    workMins,
+    shortBreakMins,
+    longBreakMins,
+  ]);
 
   const toggle = () => setRunning((r) => !r);
   const reset = () => {
@@ -102,7 +111,9 @@ export default function Timer() {
             type="number"
             min={1}
             value={workMins}
-            onChange={(e) => setWorkMins(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) =>
+              setWorkMins(Math.max(1, Number(e.target.value) || 1))
+            }
           />
         </label>
         <label>
@@ -111,7 +122,9 @@ export default function Timer() {
             type="number"
             min={1}
             value={shortBreakMins}
-            onChange={(e) => setShortBreakMins(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) =>
+              setShortBreakMins(Math.max(1, Number(e.target.value) || 1))
+            }
           />
         </label>
         <label>
@@ -120,7 +133,9 @@ export default function Timer() {
             type="number"
             min={1}
             value={longBreakMins}
-            onChange={(e) => setLongBreakMins(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) =>
+              setLongBreakMins(Math.max(1, Number(e.target.value) || 1))
+            }
           />
         </label>
         <label>
@@ -129,7 +144,9 @@ export default function Timer() {
             type="number"
             min={1}
             value={cyclesBeforeLong}
-            onChange={(e) => setCyclesBeforeLong(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) =>
+              setCyclesBeforeLong(Math.max(1, Number(e.target.value) || 1))
+            }
           />
         </label>
       </div>

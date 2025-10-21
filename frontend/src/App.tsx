@@ -2,7 +2,7 @@ import { useState } from "react";
 import oscLogo from "./assets/osc-logo.png";
 import githubLogo from "./assets/github-mark-white.svg";
 import "./App.css";
-import Timer from "./Timer";
+import Timer from "./components/Timer";
 import ToDoList from "./ToDoList";
 import SettingsMenu from "./components/SettingsMenu";
 
