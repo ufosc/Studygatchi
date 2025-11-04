@@ -27,6 +27,7 @@ function App() {
           <Route path="/settings" element={<SettingsMenu />} />
           <Route path="/timer" element={<Timer />} />
           <Route path="/todo" element={<ToDoList />} />
+          <Route path="*" element={<Home />} />
         </Routes>
     </div>
     </Router>
