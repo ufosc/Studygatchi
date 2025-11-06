@@ -9,7 +9,7 @@
     "background": {
       "service_worker": "background.js"
     },
-    "permissions": ["sidePanel"],
+     "permissions": ["sidePanel"],
     "side_panel": {
       "default_path": "index.html"
     }
