@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "../App.css";
+import "./Timer.css"
 
 type SessionType = "Work" | "Short Break" | "Long Break";
 

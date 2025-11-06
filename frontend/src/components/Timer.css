@@ -1,0 +1,19 @@
+.timer-card {
+  max-width: 420px;
+  margin: 1.5rem auto;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.timer-display .time-large {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.timer-display .session-type {
+  font-size: 0.9rem;
+  color: #555;
+}
