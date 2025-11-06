@@ -1,25 +1,25 @@
-import { useState } from "react";
-import oscLogo from "./assets/osc-logo.png";
-import githubLogo from "./assets/github-mark-white.svg";
 import "./App.css";
+import SettingsMenu from "./components/SettingsMenu";
+import NavBar from "./components/NavBar"; //
+import Home from "./components/Home";
 import Timer from "./components/Timer";
 import ToDoList from "./ToDoList";
 import SettingsMenu from "./components/SettingsMenu";
 import GooberMenu from "./components/GooberMenu";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
-
+  // had to add because bootstrap defaults to light mode
+  document.documentElement.setAttribute("data-bs-theme", "dark");
+  
   // Current Players data
   const [currentXP, setXP] = useState(50);
   const [level, setLevel] = useState(9);
   const [money, setMoney] = useState(0);
   const [currentHealth, setHealth] = useState(50);
 
-  // had to add because bootstrap defaults to light mode
-  document.documentElement.setAttribute("data-bs-theme", "dark");
-
   return (
+    <Router>
     <div
       style={{
         display: "flex",
@@ -28,24 +28,7 @@ function App() {
       }}
     >
       <div>
-        <a href="https://ufosc.org/projects/" target="_blank">
-          <img src={oscLogo} className="logo" alt="OSC logo" />
-        </a>
-        <a href="https://github.com/ufosc/Studygatchi" target="_blank">
-          <img src={githubLogo} className="logo github" alt="GitHub logo" />
-        </a>
-      </div>
-      <h1>Welcome to StudyGatchi!</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>Welcome to the Studygatchi Project!</p>
-      </div>
-      <Timer />
-      <ToDoList />
-      <div style={{ padding: 20 }}>
-        <SettingsMenu />
+        <NavBar />
       </div>
       <GooberMenu
         setXP={setXP}
@@ -57,11 +40,15 @@ function App() {
         money={money}
         currentHealth={currentHealth}
       />
-      <p className="read-the-docs">Click on the OSC link to get to OSC!</p>
-      <p className="read-the-docs">
-        Click on the Github Link to get to this project's GitHub repository!
-      </p>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<SettingsMenu />} />
+          <Route path="/timer" element={<Timer />} />
+          <Route path="/todo" element={<ToDoList />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
     </div>
+    </Router>
   );
 }
 
