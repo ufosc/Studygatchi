@@ -29,8 +29,11 @@ export default function GooberInfo({
       setHealth(100);
     } else if (currentXP == 100) {
       setXP(0);
-      //Once this runs once, it gets really weird and runs a lot
+      // Once this runs once, it gets really weird and runs a lot,
+      // the level continues to increase even thought he bar isn't filling in
       setLevel(level + 1);
+
+      setMoney(money + 10);
     } else {
       setXP(currentXP + 1);
       setHealth(currentHealth - 0.1);
