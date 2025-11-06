@@ -1,19 +1,30 @@
-.timer-card {
-  max-width: 420px;
-  margin: 1.5rem auto;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
-  padding: 1rem;
+.timer-display {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}
+
+.progress-ring {
+  transform: rotate(-90deg) scale(1, -1);
+  transform-origin: center;
+}
+
+.progress-ring__background {
+  fill: none;
+  stroke: #ddd;
+}
+
+.progress-ring__progress {
+  fill: none;
+  stroke: var(--accent, #00eaff);
+  transition: stroke-dashoffset 0.5s linear;
+}
+
+.timer-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
-}
-
-.timer-display .time-large {
-  font-size: 3rem;
-  font-weight: 700;
-  margin: 0.5rem 0;
-}
-
-.timer-display .session-type {
-  font-size: 0.9rem;
-  color: #555;
 }
