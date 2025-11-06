@@ -105,40 +105,39 @@ export default function Timer() {
     <div className="card timer-card">
       <h2>Pomodoro Timer</h2>
       <div className="timer-display">
-        <div className="timer-display">
+        <svg className="progress-ring" width="200" height="200">
+          <circle
+            className="progress-ring__background"
+            cx="100"
+            cy="100"
+            r="90"
+            strokeWidth="12"
+          />
+          <circle
+            className="progress-ring__progress"
+            cx="100"
+            cy="100"
+            r="90"
+            strokeWidth="12"
+            style={{
+              strokeDasharray: 2 * Math.PI * 90,
+              strokeDashoffset: (1 - progress) * (2 * Math.PI * 90),
+            }}
+          />
+        </svg>
 
-  <svg className="progress-ring" width="200" height="200">
-    <circle
-      className="progress-ring__background"
-      cx="100"
-      cy="100"
-      r="90"
-      strokeWidth="12"
-    />
-    <circle
-      className="progress-ring__progress"
-      cx="100"
-      cy="100"
-      r="90"
-      strokeWidth="12"
-      style={{
-        strokeDasharray: 2 * Math.PI * 90,
-        strokeDashoffset: (1 - progress) * (2 * Math.PI * 90),
-      }}
-    />
-  </svg>
+        <div className="timer-content">
+          {(session === "Short Break" || session === "Long Break") && (
+            <div className="session-type">{session}</div>
+          )}
+          <div className="time-large">{formatTime(Math.max(0, secondsLeft))}</div>
+        </div>
 
-  <div className="timer-content">
-    <div className="session-type">{session}</div>
-    <div className="time-large">{formatTime(Math.max(0, secondsLeft))}</div>
-    <div className="controls">
-      <button onClick={toggle}>{running ? "Pause" : "Start"}</button>
-      <button onClick={reset}>Reset</button>
-    </div>
-  </div>
+      </div>
 
-</div>
-
+      <div className="controls controls-outside">
+        <button onClick={toggle}>{running ? "Pause" : "Start"}</button>
+        <button onClick={reset}>Reset</button>
       </div>
 
       <div className="settings">

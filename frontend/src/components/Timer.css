@@ -28,3 +28,14 @@
   transform: translate(-50%, -50%);
   text-align: center;
 }
+
+.controls-outside {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.time-large {
+  font-size: 2rem;
+}
