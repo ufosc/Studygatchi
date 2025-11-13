@@ -29,6 +29,18 @@
   text-align: center;
 }
 
+.timer-content .session-type {
+  position: absolute;
+  top: 0px; /* adjust as needed */
+  width: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: red;
+  font-size: 1rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
 .controls-outside {
   margin-top: 1rem;
   display: flex;

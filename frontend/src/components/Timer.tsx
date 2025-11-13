@@ -38,12 +38,13 @@ export default function Timer() {
   const progress = secondsLeft / totalSeconds;
 
   useEffect(() => {
-    if (!running) {
-      if (session === "Work") setSecondsLeft(workMins * 60);
-      if (session === "Short Break") setSecondsLeft(shortBreakMins * 60);
-      if (session === "Long Break") setSecondsLeft(longBreakMins * 60);
-    }
-  }, [workMins, shortBreakMins, longBreakMins, session, running]);
+    // Only update when settings change AND timer is not running
+    if (running) return;
+
+    if (session === "Work") setSecondsLeft(workMins * 60);
+    else if (session === "Short Break") setSecondsLeft(shortBreakMins * 60);
+    else if (session === "Long Break") setSecondsLeft(longBreakMins * 60);
+  }, [workMins, shortBreakMins, longBreakMins, session]);
 
   useEffect(() => {
     if (running) {
