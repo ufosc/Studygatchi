@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "./Timer.css"
+import "./Timer.css";
 
 type SessionType = "Work" | "Short Break" | "Long Break";
 
@@ -24,6 +24,7 @@ export default function Timer() {
   const [secondsLeft, setSecondsLeft] = useState<number>(workMins * 60);
   const [running, setRunning] = useState<boolean>(false);
   const [completedCycles, setCompletedCycles] = useState<number>(0);
+  const [showSettings, setShowSettings] = useState<boolean>(false); // popup toggle
 
   const intervalRef = useRef<number | null>(null);
 
@@ -36,19 +37,16 @@ export default function Timer() {
 
   const progress = secondsLeft / totalSeconds;
 
-  // keep secondsLeft in sync when user changes durations while stopped
   useEffect(() => {
     if (!running) {
       if (session === "Work") setSecondsLeft(workMins * 60);
       if (session === "Short Break") setSecondsLeft(shortBreakMins * 60);
       if (session === "Long Break") setSecondsLeft(longBreakMins * 60);
     }
-  }, [workMins, shortBreakMins, longBreakMins, session]);
+  }, [workMins, shortBreakMins, longBreakMins, session, running]);
 
-  // This function is ran everytime running is modified
   useEffect(() => {
     if (running) {
-      // use window.setInterval so TypeScript knows the return type
       intervalRef.current = window.setInterval(() => {
         setSecondsLeft((s) => s - 1);
       }, 1000) as unknown as number;
@@ -62,11 +60,9 @@ export default function Timer() {
     };
   }, [running]);
 
-  // handle session end
   useEffect(() => {
-    if (secondsLeft < 0) return; // guard
+    if (secondsLeft < 0) return;
     if (secondsLeft === 0) {
-      // switch sessions
       if (session === "Work") {
         const nextCycle = completedCycles + 1;
         setCompletedCycles(nextCycle);
@@ -78,7 +74,6 @@ export default function Timer() {
           setSecondsLeft(shortBreakMins * 60);
         }
       } else {
-        // from any break, go to work
         setSession("Work");
         setSecondsLeft(workMins * 60);
       }
@@ -130,62 +125,81 @@ export default function Timer() {
           {(session === "Short Break" || session === "Long Break") && (
             <div className="session-type">{session}</div>
           )}
-          <div className="time-large">{formatTime(Math.max(0, secondsLeft))}</div>
+          <div className="time-large">
+            {formatTime(Math.max(0, secondsLeft))}
+          </div>
         </div>
-
       </div>
 
+      {/* --- Controls --- */}
       <div className="controls controls-outside">
         <button onClick={toggle}>{running ? "Pause" : "Start"}</button>
         <button onClick={reset}>Reset</button>
+        <button
+          className="settings-btn"
+          onClick={() => setShowSettings((s) => !s)}
+        >
+          ⚙️
+        </button>
       </div>
 
-      <div className="settings">
-        <label>
-          Work (minutes)
-          <input
-            type="number"
-            min={1}
-            value={workMins}
-            onChange={(e) =>
-              setWorkMins(Math.max(1, Number(e.target.value) || 1))
-            }
-          />
-        </label>
-        <label>
-          Short Break (minutes)
-          <input
-            type="number"
-            min={1}
-            value={shortBreakMins}
-            onChange={(e) =>
-              setShortBreakMins(Math.max(1, Number(e.target.value) || 1))
-            }
-          />
-        </label>
-        <label>
-          Long Break (minutes)
-          <input
-            type="number"
-            min={1}
-            value={longBreakMins}
-            onChange={(e) =>
-              setLongBreakMins(Math.max(1, Number(e.target.value) || 1))
-            }
-          />
-        </label>
-        <label>
-          Cycles before long break
-          <input
-            type="number"
-            min={1}
-            value={cyclesBeforeLong}
-            onChange={(e) =>
-              setCyclesBeforeLong(Math.max(1, Number(e.target.value) || 1))
-            }
-          />
-        </label>
-      </div>
+      {/* --- Popup Settings --- */}
+      {showSettings && (
+        <div className="settings-popup">
+          <div className="settings-content">
+            <h3>Timer Settings</h3>
+
+            <label>
+              Work (minutes)
+              <input
+                type="number"
+                min={1}
+                value={workMins}
+                onChange={(e) =>
+                  setWorkMins(Math.max(1, Number(e.target.value) || 1))
+                }
+              />
+            </label>
+            <label>
+              Short Break (minutes)
+              <input
+                type="number"
+                min={1}
+                value={shortBreakMins}
+                onChange={(e) =>
+                  setShortBreakMins(Math.max(1, Number(e.target.value) || 1))
+                }
+              />
+            </label>
+            <label>
+              Long Break (minutes)
+              <input
+                type="number"
+                min={1}
+                value={longBreakMins}
+                onChange={(e) =>
+                  setLongBreakMins(Math.max(1, Number(e.target.value) || 1))
+                }
+              />
+            </label>
+            <label>
+              Cycles before long break
+              <input
+                type="number"
+                min={1}
+                value={cyclesBeforeLong}
+                onChange={(e) =>
+                  setCyclesBeforeLong(Math.max(1, Number(e.target.value) || 1))
+                }
+              />
+            </label>
+
+            <div className="settings-actions">
+              <button onClick={() => setShowSettings(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="meta">
         <small>Completed cycles: {completedCycles}</small>
