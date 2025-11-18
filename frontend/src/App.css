@@ -32,6 +32,22 @@
   padding: 2em;
 }
 
+.card.bCard,
+.card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.card-header {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+.card-body {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
 .read-the-docs {
   color: #888;
 }
@@ -129,7 +145,6 @@
   opacity: 0;
   cursor: pointer
 }
-
 
 .wrapper label::before {
   content: "";
