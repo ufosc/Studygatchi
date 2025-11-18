@@ -24,8 +24,7 @@ export default function SettingsMenu() {
             marginLeft: "auto",
           }}
         >
-          <text style={{ paddingRight: 10 }}>Money</text>
-          <text>Settings</text>
+          <text>Money</text>
         </text>
       </div>
       <div className="card-body">
@@ -35,12 +34,12 @@ export default function SettingsMenu() {
             className="form-check-input"
             type="checkbox"
             role="switch"
-            id="switchCheckDefault"
+            id="sampleCheckbox1"
             onClick={() => {
               firstOption ? setFirst(false) : setFirst(true);
             }}
           />
-          <label className="form-check-label" htmlFor="switchCheckDefault">
+          <label className="form-check-label" htmlFor="sampleCheckbox1">
             This is set to {firstOption ? "true" : "false"}
           </label>
         </div>
@@ -49,12 +48,12 @@ export default function SettingsMenu() {
             className="form-check-input"
             type="checkbox"
             role="switch"
-            id="switchCheckDefault"
+            id="sampleCheckbox2"
             onClick={() => {
               secondOption ? setSecond(false) : setSecond(true);
             }}
           />
-          <label className="form-check-label" htmlFor="switchCheckDefault">
+          <label className="form-check-label" htmlFor="sampleCheckbox2">
             This is set to {secondOption ? "true" : "false"}
           </label>
         </div>
@@ -71,6 +70,7 @@ export default function SettingsMenu() {
             style={{ backgroundColor: "#ff8d8d" }}
           ></div>
           <div className="themeChoice"></div>
+
           <div className="themeChoice"></div>
         </div>
         <h5 className="card-title" style={{ paddingTop: 10 }}>
