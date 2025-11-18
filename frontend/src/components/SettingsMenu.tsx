@@ -1,11 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./SettingsMenu.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SettingsMenu() {
+  const themes = {
+    pink: {bg: "#F2B8CF", text: "#4A2B33", card: "#F6D1E6"},
+    green: {bg: "#C8EABB", text: "#2F3A2D", card: "#D4F5D0"},
+    lightblue: {bg: "#9bd0ec", text: "#0F2B3A", card:"#C9ECF6"},
+    white: {bg: "#E8E8E8", text: "#1A1A1A", card: "#d8d6d6"},
+    black: {bg: "#383838", text: "#F5F5F5", card: "#2A2A2A"}
+  };
+  
   const [firstOption, setFirst] = useState(false);
   const [secondOption, setSecond] = useState(false);
+  const [theme, setTheme] = useState(themes.black);
 
+  useEffect(() => {
+    document.documentElement.style.setProperty("--bg-color", theme.bg);
+    document.documentElement.style.setProperty("--text-color", theme.text);
+    document.documentElement.style.setProperty("--card-bg", theme.card);
+  },[theme])
+  
   return (
     <div className="card bCard" style={{ width: "400px" }}>
       <div
@@ -70,7 +85,6 @@ export default function SettingsMenu() {
             style={{ backgroundColor: "#ff8d8d" }}
           ></div>
           <div className="themeChoice"></div>
-
           <div className="themeChoice"></div>
         </div>
         <h5 className="card-title" style={{ paddingTop: 10 }}>
