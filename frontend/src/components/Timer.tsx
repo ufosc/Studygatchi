@@ -1,4 +1,4 @@
-import Card from "./Card/card.tsx";
+import Card from "./Card/Card";
 
 const Timer = () => {
   return <Card></Card>;

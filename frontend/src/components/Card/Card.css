@@ -1,0 +1,24 @@
+.cardContainer {
+  width: 80vw;
+  height: 80vh;
+
+  border-color: rgb(0, 255, 255);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 12px;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 3vh;
+}
+
+.cardContent {
+  padding: 5vw;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
