@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "./SettingsMenu.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Card from "./Card/Card";
 
 export default function SettingsMenu() {
   const [firstOption, setFirst] = useState(false);
   const [secondOption, setSecond] = useState(false);
 
   return (
-    <div className="card bCard" style={{ width: "400px" }}>
+    <Card>
       <div
         className="card-header"
         style={{
@@ -77,6 +77,6 @@ export default function SettingsMenu() {
           Miscellaneous
         </h5>
       </div>
-    </div>
+    </Card>
   );
 }

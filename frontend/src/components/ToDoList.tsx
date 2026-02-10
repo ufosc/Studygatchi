@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css";
+import Card from "./Card/Card";
 
 export default function ToDoList() {
   const [items, setItems] = useState([
@@ -10,10 +10,13 @@ export default function ToDoList() {
   const [newItem, setNewItem] = useState("");
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
     () =>
-      items.reduce((acc, item) => {
-        acc[item] = false;
-        return acc;
-      }, {} as Record<string, boolean>)
+      items.reduce(
+        (acc, item) => {
+          acc[item] = false;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      ),
   );
 
   const addItem = (event: React.FormEvent) => {
@@ -39,7 +42,7 @@ export default function ToDoList() {
   };
 
   return (
-    <div>
+    <Card>
       <div className="todolist-logo">
         <h1>Goober To Do List</h1>
       </div>
@@ -84,6 +87,6 @@ export default function ToDoList() {
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   );
 }
