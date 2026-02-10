@@ -6,6 +6,7 @@ import GooberInfo from "./GooberInfo";
 import GooberPlayMenu from "./GooberPlayMenu";
 import GooberFoodMenu from "./GooberFoodMenu";
 import GooberGiftMenu from "./GooberGiftMenu";
+import Card from "./Card/Card";
 
 interface Props {
   setXP: (arg0: number) => void;
@@ -32,7 +33,7 @@ export default function GooberMenu({
   const [currentPage, setPage] = useState("home");
 
   return (
-    <div className="card bCard" style={{ width: "400px" }}>
+    <Card>
       <div
         className="card-header"
         style={{
@@ -147,6 +148,6 @@ export default function GooberMenu({
           {currentPage == "gift" && <GooberGiftMenu pageSetter={setPage} />}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
