@@ -7,6 +7,7 @@ import Timer from "./components/Timer";
 import ToDoList from "./ToDoList";
 import GooberMenu from "./components/GooberMenu";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ThemeProvider } from './components/ThemeProvider';
 
 function App() {
   // had to add because bootstrap defaults to light mode
@@ -19,36 +20,38 @@ function App() {
   const [currentHealth, setHealth] = useState(50);
 
   return (
-    <Router>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <NavBar />
+    <ThemeProvider>
+      <Router>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <NavBar />
+          </div>
+          <GooberMenu
+            setXP={setXP}
+            setLevel={setLevel}
+            setMoney={setMoney}
+            setHealth={setHealth}
+            currentXP={currentXP}
+            level={level}
+            money={money}
+            currentHealth={currentHealth}
+          />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/settings" element={<SettingsMenu />} />
+            <Route path="/timer" element={<Timer />} />
+            <Route path="/todo" element={<ToDoList />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
         </div>
-        <GooberMenu
-          setXP={setXP}
-          setLevel={setLevel}
-          setMoney={setMoney}
-          setHealth={setHealth}
-          currentXP={currentXP}
-          level={level}
-          money={money}
-          currentHealth={currentHealth}
-        />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/settings" element={<SettingsMenu />} />
-          <Route path="/timer" element={<Timer />} />
-          <Route path="/todo" element={<ToDoList />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
-      </div>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 }
 
