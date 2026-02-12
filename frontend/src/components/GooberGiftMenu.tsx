@@ -5,8 +5,10 @@ interface Props {
 export default function GooberGiftMenu({ pageSetter }: Props) {
   return (
     <>
-      place gober gift menu here
-      <button onClick={() => pageSetter("home")}>home</button>
+      <div style = {{backgroundColor: "var(--bg-color)", padding: "15px"}}>
+        place gober gift menu here
+        <button onClick={() => pageSetter("home")}>home</button>
+      </div>
     </>
   );
 }
