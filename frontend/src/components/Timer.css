@@ -1,8 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet');
+
 .timer-display {
   position: relative;
   width: 200px;
-  height: 200px;
+  height: 202px;
   margin: auto;
+
+  background-color: #83b0cb;
+  border: 2px solid #b0c9c7;
+  opacity: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  box-shadow: 0 0 15px rgba(83, 97, 139, 0.516);
+}
+
+.timer-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size:3rem;
+  font-weight: 600;
+  color: rgb(66, 122, 168);
+}
+
+.timer-card{
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color:rgba(244, 241, 241, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+  font-family: 'Shantell Sans', cursive;
 }
 
 .progress-ring {
@@ -12,12 +44,13 @@
 
 .progress-ring__background {
   fill: none;
-  stroke: #ddd;
+  stroke: #dddddd;
+  
 }
 
 .progress-ring__progress {
   fill: none;
-  stroke: var(--accent, #00eaff);
+  stroke: var(--accent, #4bcce0);
   transition: stroke-dashoffset 0.5s linear;
 }
 
@@ -33,12 +66,41 @@
   position: absolute;
   top: 0px; /* adjust as needed */
   width: 100px;
+  max-width:140px;
+  width:80%;
+  
   left: 50%;
   transform: translateX(-50%);
-  color: red;
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 2.5vw, 1.2rem);
   font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom:1rem;
   pointer-events: none;
+}
+
+.timer-content .session-type.session-work{
+  color: rgba(255, 49, 49, 0.867); 
+  
+}
+
+.timer-content .session-type.session-short-break{
+  color: rgb(255, 220, 93);
+}
+
+.timer-content .session-type.session-long-break{
+  color: rgb(153, 220, 142);
+}
+
+.cycle-info{
+  position:absolute;
+  top:75px;
+  width: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size:0.8rem;
+  opacity: 0.7;
 }
 
 .controls-outside {
@@ -46,11 +108,50 @@
   display: flex;
   justify-content: center;
   gap: 0.75rem;
+  color:#5079a4
+  
+}
+
+.controls button{
+  background-color: #5079a4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  width:36px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.controls button:hover {
+  background-color: #289386;
+}
+
+controls button svg,
+.settings-btn svg{
+  display:block;
+  width: 18px;
+  height: 18px;
+  transform: translateY(0);
 }
 
 .time-large {
   font-size: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  
 }
+
+.meta{
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-top: 0.3rem;
+  color: #5079a4;
+  font-weight:600;
+}
+
 
 /* --- Popup Background Overlay --- */
 .settings-popup {
@@ -116,6 +217,13 @@
 
 .settings-content input:focus {
   border-color: var(--accent, #00eaff);
+}
+
+.settings-content input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 4px;
+
 }
 
 /* --- Actions (Close Button) --- */
