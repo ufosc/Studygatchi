@@ -41,55 +41,109 @@
   padding: 0.5rem 0.75rem;
 }
 
+.todolist-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
 .todolist-logo {
   text-align: center;
-  font-size: 1rem;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  margin-bottom: 5px;
+  margin-bottom: 1.5rem;
+}
+
+.todolist-logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.todolist-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.todolist-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.todolist-input:focus {
+  border-color: #007bff;
+}
+
+.todolist-input::placeholder {
+  color: #777;
 }
 
 .todolist-addItem {
-  box-sizing: border-box;
-  margin: 4px 0 0 5px;
-  font-size: 12px;
-  padding: 4px 12px;
-  background-color: #8f8f8f;
-  color: #d3d1d1;
-  border: 1px solid #444;
-  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .todolist-addItem:hover {
-  background-color: #7e7c7c;
+  background-color: #0056b3;
+}
+
+.todolist-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .todolist-item {
-  text-align: center;
-  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: 8px;
-  margin-top: 5px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background-color: #2a2a2a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.todolist-item:hover {
+  background-color: #333;
 }
 
 .todolist-trashbutton {
-  box-sizing: border-box;
-  margin: 4px 0 0 5px;
-  font-size: 12px;
-  padding: 4px 12px;
-  background-color: #8f8f8f;
-  color: #d3d1d1;
-  border: 1px solid #444;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 6px;
   cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.todolist-item:hover .todolist-trashbutton {
+  opacity: 1;
 }
 
 .todolist-trashbutton:hover {
-  background-color: #7e7c7c;
+  color: #e74c3c;
 }
 
 .wrapper {

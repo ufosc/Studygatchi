@@ -30,22 +30,40 @@ function App() {
         <div>
           <NavBar />
         </div>
-        <GooberMenu
-          setXP={setXP}
-          setLevel={setLevel}
-          setMoney={setMoney}
-          setHealth={setHealth}
-          currentXP={currentXP}
-          level={level}
-          money={money}
-          currentHealth={currentHealth}
-        />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={
+            <>
+              <GooberMenu
+                setXP={setXP}
+                setLevel={setLevel}
+                setMoney={setMoney}
+                setHealth={setHealth}
+                currentXP={currentXP}
+                level={level}
+                money={money}
+                currentHealth={currentHealth}
+              />
+              <Home />
+            </>
+          } />
           <Route path="/settings" element={<SettingsMenu />} />
           <Route path="/timer" element={<Timer />} />
           <Route path="/todo" element={<ToDoList />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={
+            <>
+              <GooberMenu
+                setXP={setXP}
+                setLevel={setLevel}
+                setMoney={setMoney}
+                setHealth={setHealth}
+                currentXP={currentXP}
+                level={level}
+                money={money}
+                currentHealth={currentHealth}
+              />
+              <Home />
+            </>
+          } />
         </Routes>
       </div>
     </Router>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaTrash } from "react-icons/fa";
 import "./App.css";
 
 export default function ToDoList() {
@@ -39,14 +40,16 @@ export default function ToDoList() {
   };
 
   return (
-    <div>
+    <div className="todolist-container">
       <div className="todolist-logo">
         <h1>Goober To Do List</h1>
       </div>
 
-      <form className="Add-item" onSubmit={addItem}>
+      <form className="todolist-form" onSubmit={addItem}>
         <input
+          className="todolist-input"
           type="text"
+          placeholder="Add a new task..."
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
         />
@@ -55,14 +58,7 @@ export default function ToDoList() {
         </button>
       </form>
 
-      <ul
-        style={{
-          maxWidth: "400px",
-          margin: "0 auto",
-          listStyleType: "none",
-          padding: 0,
-        }}
-      >
+      <ul className="todolist-list">
         {items.map((item) => (
           <li key={item} className="todolist-item">
             <div className="wrapper">
@@ -79,7 +75,7 @@ export default function ToDoList() {
               className="todolist-trashbutton"
               onClick={() => removeItem(item)}
             >
-              Del
+              <FaTrash />
             </button>
           </li>
         ))}
