@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 //import { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./NavBar.css";
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const NavBar = () => {
         navigate('/todo');
     }
     return (
-        <div>
+        <div className="navbar">
             <button onClick={handleHomeClick}>Home</button>
             <button onClick={handleSettingsClick}>Settings</button>
             <button onClick={handleTimerClick}>Timer</button>

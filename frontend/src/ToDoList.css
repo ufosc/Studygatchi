@@ -1,0 +1,23 @@
+.todolist-logo{
+
+}
+
+.todolist-addItem{
+    margin: 30px 10px;
+}
+
+.todolist-item{
+    
+}
+
+.todolist-item button{
+    opacity:0;
+}
+
+.todolist-item:hover button{
+    opacity:1;
+}
+
+.todolist-checkbox{
+    margin:0px 20px;
+}

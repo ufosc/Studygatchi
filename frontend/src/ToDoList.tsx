@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { FaTrash } from 'react-icons/fa';
 import "./App.css";
+import "./ToDoList.css";
 
 export default function ToDoList() {
   const [items, setItems] = useState([
@@ -61,26 +63,29 @@ export default function ToDoList() {
           margin: "0 auto",
           listStyleType: "none",
           padding: 0,
+          maxHeight: "auto",
         }}
       >
         {items.map((item) => (
           <li key={item} className="todolist-item">
-            <div className="wrapper">
-              <input
-                type="checkbox"
-                id={`checkbox-${item}`}
-                name={item}
-                checked={checkedItems[item]}
-                onChange={() => checkItem(item)}
-              />
-              <label htmlFor={`checkbox-${item}`}>{item}</label>
+            <label htmlFor={`checkbox-${item}`}>
+                <input
+                  type="checkbox"
+                  id={`checkbox-${item}`}
+                  name={item}
+                  checked={checkedItems[item]}
+                  onChange={() => checkItem(item)}
+                  className="todolist-checkbox"
+                />
+              {item}</label>
+            <div>
+              <button
+                className="todolist-trashbutton"
+                onClick={() => removeItem(item)}
+              >
+                <FaTrash />
+              </button>
             </div>
-            <button
-              className="todolist-trashbutton"
-              onClick={() => removeItem(item)}
-            >
-              Del
-            </button>
           </li>
         ))}
       </ul>
