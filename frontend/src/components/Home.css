@@ -130,7 +130,6 @@
   cursor: pointer
 }
 
-
 .wrapper label::before {
   content: "";
   position: absolute;
