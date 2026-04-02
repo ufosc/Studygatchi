@@ -59,6 +59,12 @@ This will generate the build files in the `build` directory.
 - `tsconfig.json`: TypeScript configuration file.
 - `package.json`: Contains the project dependencies and scripts.
 
+### Contributing
+
+When making a pull request to the frontend, you *must* follow these rules to ensure your PR is not automatically rejected:
+- Pull requests must be made to the `dev` branch, *NOT* `main`.
+- Pull requests must include an image of the changes made to the frontend.
+
 ## Backend (Windows/Linux)
 
 ### Prerequisites
