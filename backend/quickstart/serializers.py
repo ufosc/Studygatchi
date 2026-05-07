@@ -1,6 +1,8 @@
 from .models import Task
 from rest_framework import serializers
 
+# serializers are cool because they allow you to skip having to deal with the model constructors
+
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
