@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from .models import StudyUser # remove, should be serializer
@@ -13,9 +14,10 @@ def ping(request):
     print(type(StudyUser))
     return Response("pong")
     
-@api_view(['POST'])
+@api_view(['POST']) # Some of this function was made with the help of Gemini
+@permission_classes([IsAuthenticated])
 def create_task(request):
-    serializer = TaskSerializer(data=request.data)
+    serializer = TaskSerializer(data=request.data, context={"request": request})
 
     if serializer.is_valid():
         # save and return
