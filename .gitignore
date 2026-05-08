@@ -6,6 +6,10 @@ backend/__pycache/*
 # personal settings
 backend/settings.py
 
+# pytest
+.pytest_cache/
+*.py[cod]
+
 # Personal Migrations
 backend/quickstart/migrations/*
 
