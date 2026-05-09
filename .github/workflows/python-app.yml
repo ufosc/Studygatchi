@@ -40,6 +40,10 @@ jobs:
         # use sed to use SQLite for testing
         sed -i "s/'ENGINE': 'django.db.backends.postgresql'/'ENGINE': 'django.db.backends.sqlite3'/g" backend/settings.py
         sed -i "s/'NAME': 'your_database_name'/'NAME': ':memory:'/g" backend/settings.py
+    - name: Make and run migrations
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate
     - name: Test with pytest
       run: |
         pytest
