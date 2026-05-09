@@ -34,6 +34,12 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Create test settings.py
+      run: |
+        cp backend/settings_template.txt backend/settings.py
+        # use sed to use SQLite for testing
+        sed -i "s/'ENGINE': 'django.db.backends.postgresql'/'ENGINE': 'django.db.backends.sqlite3'/g" backend/settings.py
+        sed -i "s/'NAME': 'your_database_name'/'NAME': ':memory:'/g" backend/settings.py
     - name: Test with pytest
       run: |
         pytest
