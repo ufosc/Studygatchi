@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SettingsMenu from "./components/SettingsMenu";
 import NavBar from "./components/NavBar"; //
 import Home from "./components/Home";
@@ -18,6 +18,23 @@ function App() {
   const [level, setLevel] = useState(9);
   const [money, setMoney] = useState(0);
   const [currentHealth, setHealth] = useState(50);
+
+  useEffect (() => {
+    const userDistracted = () => {
+      if(document.hidden === true) {
+        setTimeout(() => {
+          alert("Get back on task before Goober gets hurt!")
+        }, 300)
+        
+      }
+    }
+    document.addEventListener("visibilitychange", userDistracted)
+    
+    return () => {
+      document.removeEventListener("visibilitychange", userDistracted)
+    }
+    }
+  );
 
   return (
     <ThemeProvider>
