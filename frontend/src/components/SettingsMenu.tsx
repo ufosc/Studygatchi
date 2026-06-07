@@ -1,14 +1,16 @@
-import { useState, useEffect, useContext } from "react";
+// FIXME useEffect is unused, preventing build
+import { useState, useEffect as _useEffect, useContext } from "react";
 import "./SettingsMenu.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {ThemeContext} from "./ThemeProvider.tsx";
+import { ThemeContext } from "./ThemeProvider.tsx";
 
 export default function SettingsMenu() {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error("SettingsMenu must be used within a ThemeProvider");
   }
-  const {theme, setTheme, themes} = context;
+  // FIXME theme unused, preventing build
+  const { theme: _theme, setTheme, themes } = context;
 
   const [firstOption, setFirst] = useState(false);
   const [secondOption, setSecond] = useState(false);
@@ -72,20 +74,20 @@ export default function SettingsMenu() {
           Themes
         </h5>
         <div style={{ display: "flex", gap: 10 }}>
-          <button className="themeChoice" type="button" style ={{backgroundColor: themes.pink.bg}}
+          <button className="themeChoice" type="button" style={{ backgroundColor: themes.pink.bg }}
             onClick={() => setTheme(themes.pink)}
           ></button>
-          <button className="themeChoice" type="button" style ={{backgroundColor: themes.green.bg}}
-             onClick={() => setTheme(themes.green)}
+          <button className="themeChoice" type="button" style={{ backgroundColor: themes.green.bg }}
+            onClick={() => setTheme(themes.green)}
           ></button>
-          <button className="themeChoice" type="button" style ={{backgroundColor: themes.lightblue.bg}}
-             onClick={() =>  setTheme(themes.lightblue)}
+          <button className="themeChoice" type="button" style={{ backgroundColor: themes.lightblue.bg }}
+            onClick={() => setTheme(themes.lightblue)}
           ></button>
-          <button className="themeChoice" type="button" style ={{backgroundColor: themes.white.bg}}
-             onClick={() => setTheme(themes.white)}
+          <button className="themeChoice" type="button" style={{ backgroundColor: themes.white.bg }}
+            onClick={() => setTheme(themes.white)}
           ></button>
-          <button className="themeChoice" type="button" style ={{backgroundColor: themes.black.bg}}
-             onClick={() =>  setTheme(themes.black)}
+          <button className="themeChoice" type="button" style={{ backgroundColor: themes.black.bg }}
+            onClick={() => setTheme(themes.black)}
           ></button>
         </div>
         <h5 className="card-title" style={{ paddingTop: 10 }}>

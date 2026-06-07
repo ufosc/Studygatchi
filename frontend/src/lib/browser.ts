@@ -1,0 +1,1 @@
+export const browser = (typeof chrome !== 'undefined' ? chrome : (window as any).browser);

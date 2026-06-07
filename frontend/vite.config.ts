@@ -15,17 +15,36 @@ export default defineConfig({
       ],
     }),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://ufl.instructure.com',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  },
   build: {
     outDir: 'build',
     rollupOptions: {
       input: {
         main: './index.html',
         background: './src/background.ts',
+        content: './src/content.ts',
       },
       output: {
         entryFileNames: (chunkInfo) => {
-          return chunkInfo.name === 'background' ? 'background.js' : 'assets/[name]-[hash].js';
+          if (chunkInfo.name === 'background') return 'background.js';
+          if (chunkInfo.name === 'content') return 'content.js';
+          return 'assets/[name]-[hash].js';
         },
+        inlineDynamicImports: false,
+        manualChunks: undefined,
       },
     },
   },

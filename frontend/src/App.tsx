@@ -1,19 +1,18 @@
 import "./App.css";
 import { useState } from "react";
 import SettingsMenu from "./components/SettingsMenu";
-import NavBar from "./components/NavBar"; //
+import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Timer from "./components/Timer";
 import ToDoList from "./ToDoList";
 import GooberMenu from "./components/GooberMenu";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from './components/ThemeProvider';
+import CanvasFetcher from './components/CanvasFetcher.tsx';
 
 function App() {
-  // had to add because bootstrap defaults to light mode
   document.documentElement.setAttribute("data-bs-theme", "dark");
 
-  // Current Players data
   const [currentXP, setXP] = useState(50);
   const [level, setLevel] = useState(9);
   const [money, setMoney] = useState(0);
@@ -47,6 +46,7 @@ function App() {
             <Route path="/settings" element={<SettingsMenu />} />
             <Route path="/timer" element={<Timer />} />
             <Route path="/todo" element={<ToDoList />} />
+            <Route path="/canvas-test" element={<CanvasFetcher />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </div>
