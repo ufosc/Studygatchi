@@ -65,7 +65,7 @@ When making a pull request to the frontend, you *must* follow these rules to ens
 - Pull requests must be made to the `dev` branch, *NOT* `main`.
 - Pull requests must include an image of the changes made to the frontend.
 
-## Backend (Windows/Linux)
+## Backend (Windows/ Generic Linux)
 
 ### Prerequisites
 This guide expects that you have [Python](https://www.python.org/downloads/) (At least 3.12.0) installed.
@@ -239,3 +239,98 @@ If Python was installed via either Homebrew or the official Python installer, yo
     ```
 
 	If it all goes well, cool stuff, it's working!
+
+### Setup (Arch Linux)
+
+- This guide assumes an installation using `systemd`. If you're using something else like OpenRC or runit, tweak the `systemctl` commands accordingly.
+
+1. **Create the venv**
+
+    ```sh
+    cd Studygatchi
+	python3 -m venv env
+    ```
+
+    ```sh
+    source ./env/bin/activate
+    ```
+
+
+2. **Run the following command to install Django and the Django Rest Framework:**
+    
+    ```sh
+    pip install django djangorestframework
+    ```
+
+3. **Install PostgreSQL (version 17)**
+
+    ```sh
+    pacman -Syu postgresql
+    ```
+    
+
+4. **Activate the venv (if it's not already active) using the corresponding command and install psycopg2**
+	
+    ```sh
+    pip install psycopg2-binary
+    ```
+    
+    We will use this to be able to connect Django with Postgres!
+
+5. **Initialize the database cluster**
+
+    ```sh
+    sudo -u postgres initdb -D /var/lib/postgres/data
+    ```
+
+6. **Start the PostgreSQL service**
+
+    ```sh
+    sudo systemctl start postgresql
+    ```
+
+    - It's optional, but recommended that you have PostgreSQL run at startup:
+    
+    ```sh
+    sudo systemctl enable postgresql
+    ```
+
+7. **Access the PostgreSQL shell, logged in as the superuser:**
+    
+    ```sh
+    psql -U postgres
+    ```
+
+8. **Run the following SQL commands:**
+	
+    ```sql
+    CREATE USER <myprojectuser> WITH PASSWORD '<your_secure_password>';
+	CREATE DATABASE studygatchi_db OWNER <myprojectuser>;
+  	GRANT ALL PRIVILEGES ON DATABASE studygatchi_db TO <myprojectuser>;
+	\q
+    ```
+	Replace `<myprojectuser>` with whatever username you want, and likewise for the password.
+
+9. **In the backend directory, create a file called `settings.py` with the contents of `settings_template.txt`.**
+
+    ```sh
+    cd backend/
+    cp settings_template.txt settings.py
+    ```
+
+10. **In `settings.py`, go to where it says `DATABASES`, and insert your info from step 6 into the corresponding places.**
+
+11. **At the root of the project, run the following commands** ***with the venv active*** **to apply migrations:**
+    
+    ```sh
+	python3 manage.py makemigrations
+	python3 manage.py migrate
+    ```
+
+12. **Test the connection by running this command:**
+	
+    ```sh
+    python3 manage.py runserver
+    ```
+
+	If it all goes well, cool stuff; it's working!
