@@ -1,6 +1,7 @@
 # Some tests created with aid from Gemini
 import pytest
 from rest_framework import status
+from django.urls import reverse
 from .models import StudyUser, Task
 
 @pytest.fixture
@@ -15,6 +16,15 @@ def test_user(db):
         username="andres", 
         password="password123",
         money=500
+    )
+
+@pytest.fixture
+def test_task(db):
+    return Task.objects.create(
+        name="Test",
+        reward=50,
+        description="Make sure this works",
+        due_date="2026-12-31"
     )
 
 @pytest.mark.django_db
@@ -51,5 +61,29 @@ class TestTaskCreation:
         response = api_client.post(url, data, format='json')
         
         assert response.status_code == status.HTTP_403_FORBIDDEN
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("test_username", ["andres"])
+class TestTaskRetrieval:
+    def test_get_task_authenticated(self, api_client, test_user, test_username):
+        # Log in
+        user = StudyUser.objects.get(username=test_username)
+        api_client.force_authenticate(user=user)
+
+        # Make the request
+        url = "/api/get_task/"
+        query_params = {"username": test_username}
+        response = api_client.get(url, data=query_params)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data[0]["name"] == "Test"
+
+    def test_get_task_unauthenticated(self, api_client, test_username):
+        url = "/api/get_task/"
+        query_params = {"username": test_username}
+        response = api_client.get(url, data=query_params)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        
 
 # Create your tests here.

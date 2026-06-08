@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from .models import StudyUser # remove, should be serializer
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, StudyUserSerializer
 
 # Create your views here.
 
@@ -25,3 +25,20 @@ def create_task(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_task(request):
+    username = request.query_params.get("username")
+    if not username:
+        return Response({"error": "No username provided"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # look up user and react accordingly if they don't exist
+    try:
+        user = StudyUser.objects.get(username=username)
+        serializer = StudyUserSerializer(user)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    except StudyUser.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
