@@ -1,16 +1,25 @@
 {
-    "manifest_version": 3,
-    "name": "Studygatchi",
-    "version": "1.0.0",
-    "description": "Virtual pet & study assistant",
-    "action": {
-      "default_popup": "index.html"
-    },
-    "background": {
-      "service_worker": "background.js"
-    },
-     "permissions": ["sidePanel"],
-    "side_panel": {
-      "default_path": "index.html"
+  "manifest_version": 3,
+  "name": "Studygatchi",
+  "version": "1.0.0",
+  "description": "Virtual pet & study assistant",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.instructure.com/*"],
+      "js": ["content.js"]
     }
+  ],
+  "permissions": ["sidePanel", "storage", "tabs"],
+  "host_permissions": [
+    "https://*.instructure.com/*"
+  ],
+  "side_panel": {
+    "default_path": "index.html"
   }
+}

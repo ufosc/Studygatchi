@@ -63,6 +63,7 @@ export default function GooberMenu({
             width: 350,
             height: 350,
             paddingBottom: 10,
+            marginRight: -60,
           }}
         />
       </div>
@@ -88,9 +89,8 @@ export default function GooberMenu({
         >
           <text style={{ padding: "10px" }}>{gooberName}</text>
         </div>
-        <div
+        <div className = "gooberInfo"
           style={{
-            backgroundColor: "grey",
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
             margin: "-16px",
@@ -101,7 +101,7 @@ export default function GooberMenu({
           <button
             type="button"
             className={
-              "btn btn-primary interactionNavBtn " +
+              "interactionNavBtn " +
               (currentPage === "food" ? "active" : "")
             }
             onClick={() => setPage("food")}
@@ -111,7 +111,7 @@ export default function GooberMenu({
           <button
             type="button"
             className={
-              "btn btn-primary interactionNavBtn " +
+              "interactionNavBtn " +
               (currentPage === "play" ? "active" : "")
             }
             onClick={() => setPage("play")}
@@ -121,7 +121,7 @@ export default function GooberMenu({
           <button
             type="button"
             className={
-              "btn btn-primary interactionNavBtn " +
+              "interactionNavBtn " +
               (currentPage === "gift" ? "active" : "")
             }
             onClick={() => setPage("gift")}

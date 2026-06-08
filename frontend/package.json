@@ -20,7 +20,8 @@
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
-    "@types/chrome": "^0.1.4",
+    "@types/chrome": "^0.1.43",
+    "@types/firefox-webext-browser": "^143.0.0",
     "@types/node": "^24.9.2",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",

@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class StudyUser(User):
+class StudyUser(AbstractUser):
     # inherits: username, password, email, ...
     money = models.IntegerField(default=100)
 
@@ -14,4 +14,4 @@ class Task(models.Model):
     category = models.TextField(null=True)
     due_date = models.DateTimeField()
     description = models.TextField()
-    username = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
