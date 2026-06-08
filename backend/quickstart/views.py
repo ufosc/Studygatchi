@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
-from .models import StudyUser # remove, should be serializer
+from .models import StudyUser, Task # remove, should be serializer
 from .serializers import TaskSerializer, StudyUserSerializer
 
 # Create your views here.
@@ -36,7 +36,9 @@ def get_task(request):
     # look up user and react accordingly if they don't exist
     try:
         user = StudyUser.objects.get(username=username)
-        serializer = StudyUserSerializer(user)
+        tasks = Task.objects.filter(user=user)
+
+        serializer = TaskSerializer(tasks, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     

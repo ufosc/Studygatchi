@@ -19,12 +19,13 @@ def test_user(db):
     )
 
 @pytest.fixture
-def test_task(db):
+def test_task(db, test_user):
     return Task.objects.create(
         name="Test",
         reward=50,
         description="Make sure this works",
-        due_date="2026-12-31"
+        due_date="2026-12-31",
+        user=test_user
     )
 
 @pytest.mark.django_db
@@ -65,7 +66,7 @@ class TestTaskCreation:
 @pytest.mark.django_db
 @pytest.mark.parametrize("test_username", ["andres"])
 class TestTaskRetrieval:
-    def test_get_task_authenticated(self, api_client, test_user, test_username):
+    def test_get_task_authenticated(self, api_client, test_user, test_task, test_username):
         # Log in
         user = StudyUser.objects.get(username=test_username)
         api_client.force_authenticate(user=user)
