@@ -10,8 +10,8 @@ class StudyUser(AbstractUser):
 class Task(models.Model):
     # task_id will be automatically created by Django
     reward = models.IntegerField(default=0)
-    name = models.TextField(default="task")
+    name = models.TextField()
     category = models.TextField(null=True)
     due_date = models.DateTimeField()
-    description = models.TextField()
+    description = models.TextField(default="No description given")
     user = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
