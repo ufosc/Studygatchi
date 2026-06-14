@@ -1,7 +1,8 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 # Create your models here.
+
 
 class StudyUser(AbstractUser):
     # inherits: username, password, email, ...
@@ -15,7 +16,7 @@ class Pet(models.Model):
     level = models.IntegerField(default=1)
     happiness = models.DecimalField(default=0.5, decimal_places=2, max_digits=3)
     equipped_clothes = models.IntegerField(null=True)
-    image_url = models.URLField(null=True) # Change in the future
+    image_url = models.URLField(null=True)  # Change in the future
     owner = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
 
 
