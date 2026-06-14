@@ -1,8 +1,9 @@
 from django.urls import path
-from .quickstart.views import *
+
+from backend.quickstart import views
 
 urlpatterns = [
-    path("ping/", ping),
-    path("create_task/", create_task),
-    path("get_task/", get_task),
+    path("ping/", views.ping),
+    path("create_task/", views.create_task),
+    path("get_task/", views.get_task),
 ]
