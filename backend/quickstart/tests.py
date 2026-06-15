@@ -18,19 +18,19 @@ def api_client() -> APIClient:
 
 
 @pytest.fixture
-def test_user(_db: Any) -> StudyUser:
+def test_user(db: Any) -> StudyUser:
     """Creates a StudyUser for testing"""
     return StudyUser.objects.create_user(username="andres", password="password123", money=500)
 
 
 @pytest.fixture
-def other_user(_db: Any) -> StudyUser:
+def other_user(db: Any) -> StudyUser:
     """Creates another StudyUser for isolation testing"""
     return StudyUser.objects.create_user(username="anthony", password="password456", money=50)
 
 
 @pytest.fixture
-def test_task(_db: Any, test_user: StudyUser) -> Task:
+def test_task(db: Any, test_user: StudyUser) -> Task:
     """Creates a Task for testing"""
     return Task.objects.create(
         name="Test",
@@ -133,8 +133,8 @@ class TestTaskRetrieval:
     def test_get_task_authenticated(
         self,
         api_client: APIClient,
-        _test_user: StudyUser,
-        _test_task: Task,
+        test_user: StudyUser,
+        test_task: Task,
         test_username: str,
     ) -> None:
         # Log in
