@@ -4,20 +4,50 @@ asgiref==3.11.1
     # via
     #   -r requirements.txt
     #   django
+ast-serialize==0.5.0
+    # via
+    #   -r requirements.txt
+    #   mypy
 django==6.0.6
     # via
     #   -r requirements.txt
+    #   django-stubs
+    #   django-stubs-ext
     #   djangorestframework
+django-stubs==6.0.5
+    # via
+    #   -r requirements.txt
+    #   djangorestframework-stubs
+django-stubs-ext==6.0.5
+    # via
+    #   -r requirements.txt
+    #   django-stubs
 djangorestframework==3.17.1
+    # via -r requirements.txt
+djangorestframework-stubs==3.17.0
     # via -r requirements.txt
 iniconfig==2.3.0
     # via
     #   -r requirements.txt
     #   pytest
+librt==0.11.0
+    # via
+    #   -r requirements.txt
+    #   mypy
+mypy==2.1.0
+    # via -r requirements.txt
+mypy-extensions==1.1.0
+    # via
+    #   -r requirements.txt
+    #   mypy
 packaging==26.2
     # via
     #   -r requirements.txt
     #   pytest
+pathspec==1.1.1
+    # via
+    #   -r requirements.txt
+    #   mypy
 pluggy==1.6.0
     # via
     #   -r requirements.txt
@@ -40,3 +70,15 @@ sqlparse==0.5.5
     # via
     #   -r requirements.txt
     #   django
+types-pyyaml==6.0.12.20260518
+    # via
+    #   -r requirements.txt
+    #   django-stubs
+    #   djangorestframework-stubs
+typing-extensions==4.15.0
+    # via
+    #   -r requirements.txt
+    #   django-stubs
+    #   django-stubs-ext
+    #   djangorestframework-stubs
+    #   mypy
