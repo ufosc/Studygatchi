@@ -1,23 +1,23 @@
+from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
-from .models import StudyUser, Task  # remove, should be serializer
+from .models import StudyUser, Task  # TODO remove, should be serializer
 from .serializers import TaskSerializer
-
-# Create your views here.
 
 
 @api_view(["GET"])
-def ping(request):
+def ping(_request: Request) -> Response:
     print(type(StudyUser))
     return Response("pong")
 
 
-@api_view(["POST"])  # Some of this function was made with the help of Gemini
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def create_task(request):
+def create_task(request: Request) -> Response:
     serializer = TaskSerializer(data=request.data, context={"request": request})
 
     if serializer.is_valid():
@@ -30,15 +30,15 @@ def create_task(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_task(request):
+def get_task(request: Request) -> Response:
     username = request.query_params.get("username")
     if not username:
         return Response({"error": "No username provided"}, status=status.HTTP_400_BAD_REQUEST)
 
     # look up user and react accordingly if they don't exist
     try:
-        user = StudyUser.objects.get(username=username)
-        tasks = Task.objects.filter(user=user)
+        user: StudyUser = StudyUser.objects.get(username=username)
+        tasks: QuerySet[Task] = Task.objects.filter(user=user)
 
         serializer = TaskSerializer(tasks, many=True)
 
