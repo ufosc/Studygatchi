@@ -10,7 +10,8 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
+from django.core.handlers.asgi import ASGIHandler
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "studygatchi.settings")
 
-application = get_asgi_application()
+application: ASGIHandler = get_asgi_application()
