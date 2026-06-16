@@ -1,3 +1,4 @@
+# Some tests created with aid from Gemini
 from typing import Any
 
 import pytest
@@ -67,7 +68,10 @@ class TestTaskCreation:
     def test_create_task_unauthenticated(self, api_client: APIClient) -> None:
         """Ensure logged-out users can't create tasks."""
         url = "/api/create_task/"
-        data = {"name": "Ghost Task", "due_date": "2029-12-31"}
+        data = {
+            "name": "Ghost Task",
+            "due_date": "2029-12-31",
+        }
 
         response = api_client.post(url, data, format="json")
 
@@ -80,7 +84,11 @@ class TestTaskCreation:
         test_user: StudyUser,
     ) -> None:
         api_client.force_authenticate(user=test_user)
-        data = {"name": "No Date Task", "reward": 50, "description": "test"}
+        data = {
+            "name": "No Date Task",
+            "reward": 50,
+            "description": "test",
+        }
 
         response = api_client.post("/api/create_task/", data, format="json")
 
@@ -93,7 +101,11 @@ class TestTaskCreation:
     ) -> None:
         """Malformed date should be rejected."""
         api_client.force_authenticate(user=test_user)
-        data = {"name": "Bad Date Task", "reward": 50, "due_date": "not-a-date"}
+        data = {
+            "name": "Bad Date Task",
+            "reward": 50,
+            "due_date": "not-a-date",
+        }
 
         response = api_client.post("/api/create_task/", data, format="json")
 
@@ -101,7 +113,11 @@ class TestTaskCreation:
 
     def test_create_task_negative_reward(self, api_client: APIClient, test_user: StudyUser) -> None:
         api_client.force_authenticate(user=test_user)
-        data = {"name": "Negative Task", "reward": -100, "due_date": "2029-12-31"}
+        data = {
+            "name": "Negative Task",
+            "reward": -100,
+            "due_date": "2029-12-31",
+        }
 
         response = api_client.post("/api/create_task/", data, format="json")
 
@@ -109,7 +125,11 @@ class TestTaskCreation:
 
     def test_create_task_positive_reward(self, api_client: APIClient, test_user: StudyUser) -> None:
         api_client.force_authenticate(user=test_user)
-        data = {"name": "Positive Task", "reward": 100, "due_date": "2029-12-31"}
+        data = {
+            "name": "Positive Task",
+            "reward": 100,
+            "due_date": "2029-12-31",
+        }
 
         response = api_client.post("/api/create_task/", data, format="json")
 
@@ -119,7 +139,11 @@ class TestTaskCreation:
         self, api_client: APIClient, test_user: StudyUser
     ) -> None:
         api_client.force_authenticate(user=test_user)
-        data = {"name": "Late Task", "reward": 10, "due_date": "2000-01-01"}
+        data = {
+            "name": "Late Task",
+            "reward": 10,
+            "due_date": "2000-01-01",
+        }
 
         response = api_client.post("/api/create_task/", data, format="json")
 
