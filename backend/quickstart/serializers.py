@@ -18,7 +18,7 @@ class StudyUserSerializer(serializers.HyperlinkedModelSerializer):
     # includes support for password hashing and safety
     class Meta:  # type: ignore
         # TODO Changed from User to StudyUser
-        model = StudyUser
+        model = User
         fields = ["id", "username", "email", "password", "money"]
         extra_kwargs = {
             "password": {
