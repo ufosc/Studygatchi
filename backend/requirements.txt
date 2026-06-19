@@ -1,4 +1,5 @@
 django
 djangorestframework
 psycopg2-binary
-
+icalendar
+requests
