@@ -42,9 +42,8 @@ export default function GooberInfo({
 
   return (
     <>
-      <div
+      <div className = "gooberInfo"
         style={{
-          backgroundColor: "grey",
           margin: "-16px",
           padding: "10px",
           marginTop: "0px",
@@ -86,9 +85,8 @@ export default function GooberInfo({
           <text>Cash money: ${money}</text>
         </div>
       </div>
-      <div
+      <div className = "gooberInfo"
         style={{
-          backgroundColor: "grey",
           margin: "-16px",
           marginTop: "30px",
           padding: "10px",
@@ -97,9 +95,8 @@ export default function GooberInfo({
       >
         Shop
       </div>
-      <div
+      <div className = "gooberInfo"
         style={{
-          backgroundColor: "grey",
           margin: "-16px",
           marginTop: "30px",
           padding: "20px",
