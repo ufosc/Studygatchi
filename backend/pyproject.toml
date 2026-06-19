@@ -1,0 +1,80 @@
+[tool.ruff]
+line-length = 100
+indent-width = 4
+target-version = "py312"
+
+exclude = [
+    ".git",
+    "__pycache__",
+    # Try to catch common names for the virtual environment
+    ".venv",
+    "venv",
+    "env",
+    "migrations",
+    ".vscode",
+    ".idea",
+]
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.django-stubs]
+django_settings_module = "backend.settings"
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+[tool.pyright]
+include = ["backend"]
+exclude = ["**/migrations", "**/__pycache__", "**/node_modules", "**/.*", ".venv"]
+pythonVersion = "3.12"
+typeCheckingMode = "basic"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+# Should be enforced by git anyway, but nice to have
+line-ending = "lf"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort (import sorting)
+    "N",  # pep8-naming
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+]
+
+ignore = [
+    "E501", # line-too-long (formatter handles this)
+]
+
+# Allow unused variables when underscore-prefixed
+[tool.ruff.lint.pylint]
+allow-magic-value-types = ["int", "str"]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow unused imports in __init__.py
+"__init__.py" = ["F401"]
+# Allow star imports in Django settings
+"settings.py" = ["F405"]
+# Ignore migrations
+"**/migrations/*.py" = ["E501", "N999"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["backend"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
