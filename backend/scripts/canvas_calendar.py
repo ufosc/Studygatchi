@@ -22,20 +22,22 @@ def canvas_ics_parse(url: str) -> list[dict]:
             if course is not None:
                 summary = summary.replace(f"[{course}]", "").strip()
 
+            # fmt: off
             events.append(
                 {
                     "summary": summary,
                     "course": course,
                     "description": component.get("description").strip()
-                    if component.get("description")
-                    else None,
-                    "start": component.get("dtstart").dt if component.get("dtstart") else None,
-                    "end": component.get("dtend").dt if component.get("dtend") else None,
+                        if component.get("description") else None,
+                    "start": component.get("dtstart").dt
+                        if component.get("dtstart") else None,
+                    "end": component.get("dtend").dt
+                        if component.get("dtend") else None,
                     "location": component.get("location").strip()
-                    if component.get("location")
-                    else None,
+                        if component.get("location") else None,
                 }
             )
+            # fmt: on
 
     # TESTING
     #             print(f"""
