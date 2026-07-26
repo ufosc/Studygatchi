@@ -1,0 +1,63 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+*.pyo
+**/__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.mo
+
+# Virtual environments
+.Python
+.venv/
+venv/
+env/
+ENV/
+
+# Django
+*.db
+*.sqlite3
+*.log
+db.sqlite3
+/media
+/static
+/staticfiles
+web/media
+web/static/CACHE
+
+# IDEs
+.vscode/
+.idea/
+.project
+.pydevproject
+.idea/workspace.xml
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Misc
+.cache
+.sass-cache
+.vagrant/
+*.css.map
+*.sql.gz
+docs/
+logs/
+stats/
+Dockerfile
+docker-compose*.yml
+README.md
+.dockerignore

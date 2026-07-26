@@ -65,9 +65,11 @@ allow-magic-value-types = ["int", "str"]
 # Allow unused imports in __init__.py
 "__init__.py" = ["F401"]
 # Allow star imports in Django settings
-"settings.py" = ["F405"]
+"settings/*.py" = ["F403", "F405"]
+"**/settings/*.py" = ["F403", "F405"]
 # Ignore migrations
 "**/migrations/*.py" = ["E501", "N999"]
+
 
 [tool.ruff.lint.isort]
 known-first-party = ["backend"]
@@ -77,4 +79,17 @@ section-order = [
     "third-party",
     "first-party",
     "local-folder",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "settings.test"
+django_find_project = false
+pythonpath = ["."]
+addopts = "--import-mode=importlib"
+python_files = ["test_*.py", "*_test.py", "tests.py"]
+python_classes = ["Test*", "*Test"]
+python_functions = ["test_*"]
+markers = [
+    "required: required core tests for CI pipeline",
+    "smoke: quick sanity check tests",
 ]
