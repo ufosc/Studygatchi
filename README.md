@@ -13,12 +13,17 @@ The fastest way to get the full stack running locally is by using Docker Compose
 ### Prerequsites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Docker Engine](https://docs.docker.com/compose/install/) with the `docker-compose` plugin.
+- Make sure you have [Node.js](https://nodejs.org/) (version 18+ or 20+) installed on your machine.
+
+#### Optional
+
+- [tmux](https://github.com/tmux/tmux) or similar will be nice to have if you are running both the frontend and backend simultaneously.
 
 ### Setup
 
 1. To setup the project, first fork the OSC repo. Then clone:
 
-    ```sh
+    ```bash
     # To clone
     git clone https://github.com/[INSERT YOUR GITHUB USERNAME HERE]/Studygatchi.git
     cd Studygatchi/
@@ -28,13 +33,21 @@ The fastest way to get the full stack running locally is by using Docker Compose
 
     Copy the `.env-example` in the project's root and name the copy `.env`. You may change the fields inside if you wish.
 
-3. Start the stack
+3. Start the backend
 
-    ```sh
+    ```bash
     docker compose up --build
     ```
 
-4. Access the services:
+4. Start the frontend
+
+    ```bash
+    npm run dev
+    ```
+
+    You can type 'o' into the Vite prompt to open the project in your default browser. Note that it will be a regular webpage, not an extension.
+
+5. Access the services:
 
     - Frontend: <http://localhost:5173>
     - Backend: <http://localhost:8000/>
@@ -63,62 +76,64 @@ docker compose exec backend pytest
 
 ## Manual Setup
 
-If you prefer to run the stack directly on your host machine without containerizing, you can run them concurrently across two separate terminal windows. You might consider using [tmux](https://github.com/tmux/tmux) if you decide to go this route.
+If you prefer to run the backend directly on your host machine without containerizing.
 
-### Prerequisites
+### Frontend Setup
+
+#### Prerequisites
 
 Make sure you have [Node.js](https://nodejs.org/) (version 18+ or 20+) installed on your machine.
 
-### Setup
+#### Setup
 
 1. To setup the project, first fork the OSC repo. Then clone:
 
-    ```sh
+    ```bash
     # To clone
     git clone https://github.com/[INSERT YOUR GITHUB USERNAME HERE]/Studygatchi.git
     cd Studygatchi/
     ```
 
-1. Install the dependencies:
+2. Install the dependencies:
 
-    ```sh
+    ```bash
     cd frontend
     npm install
     ```
 
-### Development
+#### Development
 
 Start the development server:
 
-```sh
+```bash
 npm run dev
 ```
 
 Inside your terminal, enter 'o' to open the project in your browser.
 
-### Build
+#### Build
 
 To create a production build for later importation as a Chrome extension:
 
-```sh
+```bash
 npm run build
 ```
 
 This will generate the build files in the `build` directory.
 
-## Backend Setup
+### Backend Setup
 
-### Prerequisites
+#### Prerequisites
 
 This guide expects that you have [Python](https://www.python.org/downloads/) (At least 3.12.0) installed.
 
 - For macOS users, if Python was installed via either Homebrew or the official Python installer, you may need to use `python3` and `pip3` instead of `python` and `pip`.
 
-### Windows & Generic Linux Setup
+#### Windows & Generic Linux Setup
 
 1. To setup the project, first fork the OSC repo. Then clone:
 
-    ```sh
+    ```bash
     # To clone
     git clone https://github.com/[INSERT YOUR GITHUB USERNAME HERE]/Studygatchi.git
     cd Studygatchi/
@@ -227,13 +242,13 @@ This guide expects that you have [Python](https://www.python.org/downloads/) (At
     For more information on production servers see: https://docs.   djangoproject.com/en/6.0/howto/deployment/
     ```
 
-### Arch Linux setup
+#### Arch Linux setup
 
 - This guide assumes an installation that uses `systemd`. If you're using something else like OpenRC or runit, tweak the `systemctl` commands accordingly.
 
 1. To setup the project, first fork the OSC repo. Then clone:
 
-    ```sh
+    ```bash
     # To clone
     git clone https://github.com/[INSERT YOUR GITHUB USERNAME HERE]/Studygatchi.git
     cd Studygatchi/
@@ -339,7 +354,7 @@ This guide expects that you have [Python](https://www.python.org/downloads/) (At
     For more information on production servers see: https://docs.   djangoproject.com/en/6.0/howto/deployment/
     ```
 
-### Load Studygatchi in Chrome
+### Loading Studygatchi in Chrome
 
 1. Open Chrome and navigate to `chrome://extensions/`.
 2. Enable "Developer mode" using the toggle switch in the top right corner.

@@ -35,21 +35,5 @@ services:
       db:
         condition: service_healthy
 
-  frontend:
-    image: node:20-alpine
-    container_name: studygatchi-frontend
-    working_dir: /app
-    command: sh -c "npm install && npm run dev -- --host"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:8000
-      - WATCHPACK_POLLING=true
-    depends_on:
-      - backend
-
 volumes:
   postgres_data:
