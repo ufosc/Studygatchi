@@ -19,7 +19,7 @@ env:
   REQUIRED_TESTS: ${{ github.event.inputs.test_filter || '-m required' }}
   PYTHONPATH: .
   DJANGO_SETTINGS_MODULE: settings.base
-  POSTGRES_HOST: postgres
+  POSTGRES_HOST: 127.0.0.1
   POSTGRES_DB: studygatchi_db
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: studygatchi
