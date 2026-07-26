@@ -21,7 +21,7 @@ env:
   DJANGO_SETTINGS_MODULE: settings.base
   POSTGRES_HOST: postgres
   POSTGRES_DB: studygatchi_db
-  POSTGRES_USER: ant
+  POSTGRES_USER: postgres
   POSTGRES_PASSWORD: studygatchi
   POSTGRES_PORT: 5432
 
@@ -33,8 +33,10 @@ jobs:
         image: postgres:16-alpine
         env:
           POSTGRES_DB: studygatchi_db
-          POSTGRES_USER: ant
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: studygatchi
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -83,8 +85,10 @@ jobs:
         image: postgres:16-alpine
         env:
           POSTGRES_DB: studygatchi_db
-          POSTGRES_USER: ant
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: studygatchi
+        ports:
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s

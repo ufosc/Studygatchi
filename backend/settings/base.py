@@ -1,9 +1,15 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # Note: Added an extra .parent because base.py is inside settings/
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load .env file and override pre-existing environment variables
+if not os.environ.get("CI") and not os.environ.get("GITHUB_ACTIONS"):
+    load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get(
     "SECRET_KEY", "django-insecure-i+^(ye$yyme1xo6_tb)@dn52=0clfe=zwcwe+d*u*n9m$)w)ni"
@@ -59,7 +65,7 @@ DATABASES = {
         "NAME": os.environ.get("POSTGRES_DB", "studygatchi_db"),
         "USER": os.environ.get("POSTGRES_USER", "ant"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "studygatchi"),
-        "HOST": os.environ.get("POSTGRES_HOST", "db"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     }
 }

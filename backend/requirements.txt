@@ -21,6 +21,7 @@ pygments==2.20.0
 pytest==9.1.0
 pytest-django==4.12.0
 python-dateutil==2.9.0.post0
+python-dotenv==1.2.2
 requests==2.34.2
 ruff==0.15.17
 six==1.17.0
@@ -29,7 +30,3 @@ types-pyyaml==6.0.12.20260518
 typing-extensions==4.15.0
 tzdata==2026.2
 urllib3==2.7.0
-ruff==0.15.17
-sqlparse==0.5.5
-types-pyyaml==6.0.12.20260518
-typing-extensions==4.15.0

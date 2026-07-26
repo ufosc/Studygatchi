@@ -15,9 +15,6 @@ backend/settings.py
 .pytest_cache/
 *.py[cod]
 
-# Personal Migrations
-backend/quickstart/migrations/*
-
 # MacOS
 .DS_Store
 
