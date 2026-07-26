@@ -1,50 +1,15 @@
-# Studygatchi
+# Contributing
 
-Studygatchi is an open-source Chrome/Firefox extension that encourages productivity and studying through combining Tamagotchi-style pet mechanics and gachapon/gambling!
+## Setup
 
-We use a Django REST backend, PostgreSQL database, and a React frontend powered with Vite.
-
-Check out UF OSC's other projects here: <https://ufosc.org/projects/>
-
-## Quickstart with Docker
-
-The fastest way to get the full stack running locally is by using Docker Compose.
-
-### Prerequsites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Docker Engine](https://docs.docker.com/compose/install/) with the `docker-compose` plugin.
-
-### Setup
-
-1. To setup the project, first fork the OSC repo. Then clone:
-
+To setup the project, first fork the OSC repo. Then clone:
     ```sh
     # To clone
-    git clone https://github.com/[INSERT YOUR GITHUB USERNAME HERE]/Studygatchi.git
+    git clone https://github.com/<Your GitHub Username>/Studygatchi.git
     cd Studygatchi/
     ```
 
-2. Configure your environment variables
-
-    Copy the `.env-example` in the project's root and name the copy `.env`. You may change the fields inside if you wish.
-
-3. Start the stack
-
-    ```sh
-    docker compose up --build
-    ```
-
-4. Access the services:
-
-    - Frontend: 
-
 ## Frontend
-
-### Prerequisites
-
-Make sure you have [Node.js](https://nodejs.org/) (version 18+ or 20+) installed on your machine.
-
-### Setup
 
 1. Install the dependencies:
 

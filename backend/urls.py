@@ -19,6 +19,6 @@ from django.contrib import admin
 from django.urls import URLResolver, include, path
 
 urlpatterns: list[URLResolver] = [
-    path("api/", include("backend.api")),
+    path("api/", include("api")),
     path("admin/", admin.site.urls),
 ]
