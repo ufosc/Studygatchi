@@ -1,3 +1,7 @@
+# Environment variables
+.env/
+.env
+
 # Python environment
 env/
 .venv/
@@ -11,9 +15,6 @@ backend/settings.py
 # pytest
 .pytest_cache/
 *.py[cod]
-
-# Personal Migrations
-backend/quickstart/migrations/*
 
 # MacOS
 .DS_Store
