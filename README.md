@@ -42,6 +42,8 @@ The fastest way to get the full stack running locally is by using Docker Compose
 4. Start the frontend
 
     ```bash
+    cd frontend/
+    npm install
     npm run dev
     ```
 
