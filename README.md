@@ -376,3 +376,15 @@ When making a pull request to the frontend, you *must* follow these rules to ens
 
 - Pull requests must be made to the `dev` branch, *NOT* `main`.
 - Pull requests must include an image of the changes made to the frontend.
+
+## More on Testing
+
+This project uses GitHub Actions to run tests on backend endpoints. Whenever you make a push to your fork, there will be two jobs that run under the **Python Application** workflow:
+
+* `build`
+* `build-addtl`
+
+`build` consists of tests that are required to pass for code to be submittable. By default this runs all tests with the `required` header, but *it is your responsibility to update this to run tests relevant to the feature you are working on*. 
+You can do this by going to `backend/quickstart/tests.py` and marking the relevant test class with the `@pytest.mark.required` decorator.
+
+`build-addtl` will run all the tests available in the testing suite, disregarding any test gating. It is not required to have all tests in `build-addtl` pass and `build-addtl` will be skipped on PRs.
