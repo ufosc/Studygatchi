@@ -82,7 +82,7 @@ section-order = [
 ]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "settings.test"
+DJANGO_SETTINGS_MODULE = "settings.base"
 django_find_project = false
 pythonpath = ["."]
 addopts = "--import-mode=importlib"
