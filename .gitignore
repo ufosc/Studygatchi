@@ -2,6 +2,9 @@
 .env/
 .env
 
+# Frontend
+.vite/
+
 # Python environment
 env/
 .venv/
