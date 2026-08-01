@@ -7,7 +7,7 @@ export default function GooberGiftMenu({ pageSetter }: Props) {
     <>
       <div style = {{backgroundColor: "var(--bg-color)", padding: "15px"}}>
         place gober gift menu here
-        <button onClick={() => pageSetter("home")}>home</button>
+         <button className="studygatchi-button" onClick={() => pageSetter("home")}>home</button>
       </div>
     </>
   );

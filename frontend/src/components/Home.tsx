@@ -2,7 +2,6 @@ import { useState } from "react";
 import oscLogo from "../assets/osc-logo.png";
 import githubLogo from "../assets/github-mark-white.svg";
 import "./Home.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 
 const Home = () => {

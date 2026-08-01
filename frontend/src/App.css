@@ -11,6 +11,7 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
@@ -23,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -32,20 +34,19 @@
   padding: 2em;
 }
 
-.card.bCard,
-.card {
-  background-color: var(--card-bg) !important;
-  color: var(--text-color) !important;
+.studygatchi-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
 }
 
-.card-header {
-  background-color: var(--bg-color) !important;
-  color: var(--text-color) !important;
+.studygatchi-card-header {
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
-.card-body {
-  background-color: var(--card-bg) !important;
-  color: var(--text-color) !important;
+.studygatchi-card-body {
+  background-color: var(--card-bg);
+  color: var(--text-color);
 }
 
 .read-the-docs {
@@ -62,7 +63,6 @@
   font-size: 1rem;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
   margin-bottom: 5px;
 }
 
@@ -138,6 +138,7 @@
   border-radius: 4px;
   background-color: #fff;
 }
+
 .wrapper label::after {
   content: "";
   position: absolute;
@@ -182,4 +183,32 @@
 .settings input {
   margin-top: 0.25rem;
   padding: 0.25rem;
+}
+
+button.studygatchi-button,
+button.studygatchi-button:hover,
+button.studygatchi-button:active,
+button.studygatchi-button:focus,
+button.studygatchi-button:focus-visible,
+button.studygatchi-button.active,
+button.studygatchi-button.active:hover,
+button.studygatchi-button.active:active,
+button.studygatchi-button.active:focus,
+button.studygatchi-button.active:focus-visible {
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+button.studygatchi-button:hover,
+button.studygatchi-button:active,
+button.studygatchi-button.active,
+button.studygatchi-button.active:hover,
+button.studygatchi-button.active:active {
+  border-color: var(--button-border-hover);
+}
+
+button.studygatchi-button:focus-visible,
+button.studygatchi-button.active:focus-visible {
+  outline: 2px solid var(--button-outline);
+  outline-offset: 2px;
 }

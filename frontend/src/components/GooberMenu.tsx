@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./GooberMenu.css";
 import GooberImg from "../assets/GooberPlaceholder.png";
 import { useState } from "react";
@@ -53,17 +52,19 @@ export default function GooberMenu({
           <text>Settings</text>
         </text>
       </div>
-      <div className="card-body">
+      <div
+        className="card-body"
+        style={{ textAlign: 'center', padding: 0 }}
+      >
         <img
           src={GooberImg}
+          alt={`${gooberName} placeholder`}
           style={{
+            borderRadius: 32,
+            width: "90%",
+            objectFit: "cover",
+            margin: "25px auto",
             display: "block",
-            margin: "auto",
-            borderRadius: "32px",
-            width: 350,
-            height: 350,
-            paddingBottom: 10,
-            marginRight: -60,
           }}
         />
       </div>
@@ -89,7 +90,7 @@ export default function GooberMenu({
         >
           <text style={{ padding: "10px" }}>{gooberName}</text>
         </div>
-        <div className = "gooberInfo"
+        <div className="gooberInfo"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
@@ -101,7 +102,7 @@ export default function GooberMenu({
           <button
             type="button"
             className={
-              "interactionNavBtn " +
+              "interactionNavBtn studygatchi-button " +
               (currentPage === "food" ? "active" : "")
             }
             onClick={() => setPage("food")}
@@ -111,7 +112,7 @@ export default function GooberMenu({
           <button
             type="button"
             className={
-              "interactionNavBtn " +
+              "interactionNavBtn studygatchi-button " +
               (currentPage === "play" ? "active" : "")
             }
             onClick={() => setPage("play")}
@@ -121,7 +122,7 @@ export default function GooberMenu({
           <button
             type="button"
             className={
-              "interactionNavBtn " +
+              "interactionNavBtn studygatchi-button " +
               (currentPage === "gift" ? "active" : "")
             }
             onClick={() => setPage("gift")}
