@@ -5,9 +5,9 @@ interface Props {
 export default function GooberPlayMenu({ pageSetter }: Props) {
   return (
     <>
-      <div style = {{backgroundColor: "var(--bg-color)", padding: "15px"}}>
+      <div style={{ backgroundColor: "var(--bg-color)", padding: "15px" }}>
         place gober play menu here
-        <button onClick={() => pageSetter("home")}>home</button>
+        <button className="studygatchi-button" onClick={() => pageSetter("home")}>home</button>
       </div>
     </>
   );
