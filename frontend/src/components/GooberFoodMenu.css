@@ -1,0 +1,87 @@
+.goober-food-menu {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 18px 18px;
+}
+
+.goober-food-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #d9d9d9;
+    border-radius: 14px 14px 0 0;
+    padding: 14px 16px;
+}
+
+.goober-food-title {
+    font-size: 16px;
+    color: #333;
+    text-transform: lowercase;
+}
+
+.goober-food-image {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    image-rendering: pixelated;
+}
+
+.goober-food-money {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.goober-food-grid {
+    background: #5f8f99;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.goober-food-tile {
+    aspect-ratio: 1 / 1;
+    background: #59c3e6;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.goober-food-tile:focus-visible {
+    outline: 2px solid var(--button-outline);
+    outline-offset: 2px;
+}
+
+.goober-food-empty {
+    grid-column: 1 / -1;
+    color: white;
+    text-align: center;
+    padding: 24px 0;
+}
+
+.goober-food-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #5f8f99;
+    border-radius: 0 0 18px 18px;
+    padding: 0 18px 18px;
+}
+
+.goober-page-button {
+    min-width: 72px;
+}
+
+.goober-page-indicator {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}

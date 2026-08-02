@@ -1,5 +1,9 @@
 import "./GooberMenu.css";
-import GooberImg from "../assets/GooberPlaceholder.png";
+// TODO These are placeholders. 
+// Eventually we're going to want to lazy-load the assets since there will be a lot of them.
+import GooberBackground from "../assets/backgrounds/placeholder.jpg"
+import GooberImg from "../assets/goobers/goober-panda.png";
+
 import { useState } from "react";
 import GooberInfo from "./GooberInfo";
 import GooberPlayMenu from "./GooberPlayMenu";
@@ -31,7 +35,10 @@ export default function GooberMenu({
   const [currentPage, setPage] = useState("home");
 
   return (
-    <div className="card bCard" style={{ width: "400px" }}>
+    <div className="card bCard" style={{
+      width: "100%",
+      maxWidth: "400px"
+    }}>
       <div
         className="card-header"
         style={{
@@ -40,41 +47,67 @@ export default function GooberMenu({
           flexDirection: "row",
         }}
       >
-        <text>{gooberName}</text>
-        <text
+        <span>{gooberName}</span>
+        <span
           style={{
             fontSize: 12,
             marginTop: "auto",
             marginLeft: "auto",
           }}
         >
-          <text style={{ paddingRight: 10 }}>Money</text>
-          <text>Settings</text>
-        </text>
+          <span style={{ paddingRight: 10 }}>Money</span>
+          <span>Settings</span>
+        </span>
       </div>
+
       <div
         className="card-body"
-        style={{ textAlign: 'center', padding: 0 }}
+        style={{ spanAlign: "center", padding: 0 }}
       >
-        <img
-          src={GooberImg}
-          alt={`${gooberName} placeholder`}
+        <div
           style={{
-            borderRadius: 32,
+            position: "relative",
             width: "90%",
-            objectFit: "cover",
             margin: "25px auto",
-            display: "block",
+            borderRadius: 32,
+            overflow: "hidden",
           }}
-        />
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundColor: "red",
+              backgroundImage: `url(${GooberBackground})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              zIndex: 0,
+            }}
+          />
+
+          <img
+            src={GooberImg}
+            alt={`${gooberName} placeholder`}
+            style={{
+              position: "relative",
+              zIndex: 1,
+              width: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        </div>
       </div>
+
       <div
         className="card-footer"
         style={{
-          height: 400,
+          minHeight: 400,
           position: "relative",
           display: "flex",
           flexDirection: "column",
+          overflow: "visible"
         }}
       >
         <div
@@ -88,15 +121,17 @@ export default function GooberMenu({
             color: "black",
           }}
         >
-          <text style={{ padding: "10px" }}>{gooberName}</text>
+          <span style={{ padding: "10px" }}>{gooberName}</span>
         </div>
-        <div className="gooberInfo"
+
+        <div
+          className="gooberInfo"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
-            margin: "-16px",
             marginTop: "20px",
             padding: "10px",
+            gap: "8px"
           }}
         >
           <button
@@ -130,7 +165,17 @@ export default function GooberMenu({
             Gift
           </button>
         </div>
-        <div style={{ paddingTop: "30px" }}>
+
+        <div
+          style={{
+            paddingTop: "30px",
+            paddingLeft: "12px",
+            paddingRight: "12px",
+            paddingBottom: "12px",
+            boxSizing: "border-box",
+            width: "100%",
+          }}
+        >
           {currentPage == "home" && (
             <GooberInfo
               setXP={setXP}
@@ -144,7 +189,7 @@ export default function GooberMenu({
             />
           )}
           {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} />}
-          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} />}
+          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} money={money} />}
           {currentPage == "gift" && <GooberGiftMenu pageSetter={setPage} />}
         </div>
       </div>
