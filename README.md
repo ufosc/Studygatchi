@@ -1,5 +1,3 @@
-# 🚨 FOR ANYONE IN CEN3031 WORKING ON AN ISSUE FROM HERE AS YOUR OPEN SOURCE CONTRIBUTION, FEEL FREE TO FORK AND WORK ON THE ISSUE WITHOUT ASKING 🚨
-
 # Studygatchi
 
 Studygatchi is an open-source Chrome/Firefox extension that encourages productivity and studying through combining Tamagotchi-style pet mechanics and gachapon/gambling!
