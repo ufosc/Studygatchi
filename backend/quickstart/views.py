@@ -43,3 +43,25 @@ def get_task(request: Request) -> Response:
 
     except StudyUser.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_task(request: Request, pk: int) -> Response:
+    # look up user, 403 if inactive
+    if not request.user.is_active:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    # get task to edit on valid user or 404 on not found
+    try:
+        task = Task.objects.get(pk=pk, user=request.user)
+    except Task.DoesNotExist:
+        return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = TaskSerializer(task, data=request.data, partial=True, context={"request": request})
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
