@@ -599,7 +599,7 @@ class TestTaskIsolation:
     ) -> None:
         """Task should be assigned to the authenticated user, not someone else."""
         api_client.force_authenticate(user=test_user)
-        data = {"name": "My Task", "reward": 50}
+        data = {"name": "My Task", "reward": 50, "due_date": "2029-12-31T00:00:00Z"}
         api_client.post("/api/create_task/", data, format="json")
 
         assert Task.objects.filter(name="My Task", user=test_user).exists()
@@ -798,6 +798,7 @@ class TestTaskIsolation:
         assert "B" not in names
 
 
+@pytest.mark.required
 @pytest.mark.tasks
 class TestTaskUpdate:
     def test_update_task_authenticated_owner(
@@ -845,12 +846,12 @@ class TestTaskUpdate:
         original_description = test_task.description
 
         response = api_client.patch(
-            f"/api/update_task/{test_task.id}/", {"reward": 999}, format="json"
+            f"/api/update_task/{test_task.id}/", {"reward": 99}, format="json"
         )
 
         assert response.status_code == status.HTTP_200_OK
         test_task.refresh_from_db()
-        assert test_task.reward == 999
+        assert test_task.reward == 99
         assert test_task.description == original_description
 
     def test_update_task_multiple_fields(
