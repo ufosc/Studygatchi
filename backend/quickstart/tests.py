@@ -599,7 +599,7 @@ class TestTaskIsolation:
     ) -> None:
         """Task should be assigned to the authenticated user, not someone else."""
         api_client.force_authenticate(user=test_user)
-        data = {"name": "My Task", "reward": 50}
+        data = {"name": "My Task", "reward": 50, "due_date": "2029-12-31T00:00:00Z"}
         api_client.post("/api/create_task/", data, format="json")
 
         assert Task.objects.filter(name="My Task", user=test_user).exists()
