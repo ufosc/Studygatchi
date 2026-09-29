@@ -49,15 +49,16 @@ def get_task(request: Request) -> Response:
 @permission_classes([IsAuthenticated])
 def delete_task(request: Request, task_id: int) -> Response:
 
-    # need to check if user is active, if not return 403
+    # Need to check if user is active, if not return 403
     if not request.user.is_active:
-        return Response({"error": "Inactive users cannot delete tasks"}, 
-                        status=status.HTTP_403_FORBIDDEN)
-    # try to find the task and delete it, if it doesn't exist return 404 
+        return Response(
+            {"error": "Inactive users cannot delete tasks"}, status=status.HTTP_403_FORBIDDEN
+        )
+    # Try to find the task and delete it, if it doesn't exist return 404
     try:
         task: Task = Task.objects.get(id=task_id, user=request.user)
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     except Task.DoesNotExist:
         return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
