@@ -74,6 +74,27 @@ docker compose exec backend pytest
 
 - If you're having issues connecting to the backend, make sure that the PostgreSQL service is running on your system. You might need to do this manually with `sudo systemctl status postgresql`. Verify that your credentials in `.env` and `settings.py` match the fields in PostgreSQL.
 
+### Canvas Task Sync
+
+Users who save a Canvas calendar feed URL (`StudyUser.canvas_ics_url`) have their assignments synced into Tasks automatically.
+
+- With Docker Compose, a `cron` service runs `python manage.py sync_canvas` once an hour alongside `backend` and `db` - no extra setup needed.
+- Running the backend manually (see [Manual Setup](#manual-setup)), schedule the command yourself, e.g. with host crontab:
+
+    ```bash
+    0 * * * * cd /path/to/Studygatchi/backend && /path/to/.venv/bin/python manage.py sync_canvas
+    ```
+
+- To run a sync on demand:
+
+    ```bash
+    docker compose exec backend python manage.py sync_canvas
+    # or, without Docker:
+    python manage.py sync_canvas
+    ```
+
+The sync is safe to run as often as you like - each Canvas event is matched to a Task by its calendar UID, so re-running it updates existing tasks instead of duplicating them.
+
 ---
 
 ## Manual Setup

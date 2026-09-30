@@ -5,6 +5,7 @@ from django.db import models
 class StudyUser(AbstractUser):
     # inherits: username, password, email, ...
     money = models.IntegerField(default=100)
+    canvas_ics_url = models.URLField(null=True, blank=True, max_length=500)
 
 
 class Pet(models.Model):
@@ -26,3 +27,13 @@ class Task(models.Model):
     due_date = models.DateTimeField()
     description = models.TextField(default="No description given")
     user = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
+    canvas_uid = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "canvas_uid"],
+                name="unique_canvas_task_per_user",
+                condition=models.Q(canvas_uid__isnull=False),
+            )
+        ]

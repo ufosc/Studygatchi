@@ -10,11 +10,14 @@ def canvas_ics_parse(url: str) -> list[dict]:
     events = []
     for component in cal.walk():
         if component.name == "VEVENT":
-            summary = component.get("summary").strip()
+            raw_summary = component.get("summary")
+            if raw_summary is None:
+                continue
+            summary = str(raw_summary).strip()
 
             # parse course names... scared of this code
             course = None
-            if summary[-1] == "]":
+            if summary.endswith("]"):
                 last_chunk = summary.rsplit("[", 1)[-1]
                 course = last_chunk.rstrip("]")
 
@@ -35,6 +38,7 @@ def canvas_ics_parse(url: str) -> list[dict]:
                         if component.get("dtend") else None,
                     "location": component.get("location").strip()
                         if component.get("location") else None,
+                    "uid": str(component.get("uid")) if component.get("uid") else None,
                 }
             )
             # fmt: on

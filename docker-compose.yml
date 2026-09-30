@@ -35,5 +35,26 @@ services:
       db:
         condition: service_healthy
 
+  cron:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: studygatchi-cron
+    # No scheduler dependency (django-crontab, Celery beat, etc.) is added for
+    # this - a plain sleep loop invoking the management command keeps the
+    # dependency footprint at zero. See PR description for the trade-offs
+    # considered against django-crontab and Celery+beat.
+    command: sh -c "while true; do python manage.py sync_canvas; sleep 3600; done"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres_data:
