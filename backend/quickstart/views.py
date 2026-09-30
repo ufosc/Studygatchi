@@ -63,6 +63,7 @@ def delete_task(request: Request, task_id: int) -> Response:
     except Task.DoesNotExist:
         return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["PATCH"])
 @permission_classes([IsAuthenticated])
 def update_task(request: Request, pk: int) -> Response:
