@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./App.css";
-import type { Task } from "./types/task";
+import type { Task, TaskFields } from "./types/task";
+import TaskMenu from "./components/TaskMenu";
+import EditTaskModal from "./components/EditTaskModal";
 
 const newTask = (name: string): Task => ({
   id: Date.now() + Math.random(),
@@ -19,6 +21,7 @@ export default function ToDoList() {
     newTask("Write new Draft"),
   ]);
   const [newItem, setNewItem] = useState("");
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,6 +38,11 @@ export default function ToDoList() {
 
   const removeItem = (id: number) => {
     setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const saveEdit = (id: number, values: TaskFields) => {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...values } : t)));
+    setEditingTask(null);
   };
 
   return (
@@ -74,15 +82,21 @@ export default function ToDoList() {
               />
               <label htmlFor={`checkbox-${task.id}`}>{task.name}</label>
             </div>
-            <button
-              className="todolist-trashbutton"
-              onClick={() => removeItem(task.id)}
-            >
-              Del
-            </button>
+            <TaskMenu
+              onEdit={() => setEditingTask(task)}
+              onDelete={() => removeItem(task.id)}
+            />
           </li>
         ))}
       </ul>
+
+      {editingTask && (
+        <EditTaskModal
+          task={editingTask}
+          onSave={(values) => saveEdit(editingTask.id, values)}
+          onClose={() => setEditingTask(null)}
+        />
+      )}
     </div>
   );
 }
