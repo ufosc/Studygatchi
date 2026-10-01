@@ -3,6 +3,7 @@ import "./App.css";
 import type { Task, TaskFields } from "./types/task";
 import TaskMenu from "./components/TaskMenu";
 import EditTaskModal from "./components/EditTaskModal";
+import { updateTask } from "./api/tasks";
 
 const newTask = (name: string): Task => ({
   id: Date.now() + Math.random(),
@@ -22,6 +23,7 @@ export default function ToDoList() {
   ]);
   const [newItem, setNewItem] = useState("");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [saveError, setSaveError] = useState("");
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
@@ -40,9 +42,22 @@ export default function ToDoList() {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
-  const saveEdit = (id: number, values: TaskFields) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, ...values } : t)));
+  const closeEdit = () => {
     setEditingTask(null);
+    setSaveError("");
+  };
+
+  const saveEdit = async (task: Task, values: TaskFields) => {
+    if (task.persisted) {
+      try {
+        await updateTask(task.id, values);
+      } catch {
+        setSaveError("Couldn't save your changes. Please try again.");
+        return;
+      }
+    }
+    setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, ...values } : t)));
+    closeEdit();
   };
 
   return (
@@ -93,8 +108,9 @@ export default function ToDoList() {
       {editingTask && (
         <EditTaskModal
           task={editingTask}
-          onSave={(values) => saveEdit(editingTask.id, values)}
-          onClose={() => setEditingTask(null)}
+          error={saveError}
+          onSave={(values) => saveEdit(editingTask, values)}
+          onClose={closeEdit}
         />
       )}
     </div>
