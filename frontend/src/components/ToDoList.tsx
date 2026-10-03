@@ -1,4 +1,5 @@
 import { useState } from "react";
+import filterButtonImg from "../assets/FilterButton.png";
 import "./ToDoList.css";
 
 interface ListItem {
@@ -121,8 +122,13 @@ export default function ToDoList() {
           type="button"
           className="todolist-filter-btn"
           onClick={() => setIsFilterOpen((prev) => !prev)}
+          aria-label="Filter"
         >
-          Filter{/* TODO:: replace the text with an icon */}
+          <img
+            src={filterButtonImg}
+            alt="Filter"
+            className="todolist-filter-img"
+          />
         </button>
         <button
           type="button"
@@ -202,7 +208,18 @@ export default function ToDoList() {
                   />
                 </div>
               </div>
-              <button type="submit">Add</button>
+              <div className="todolist-add-item-actions">
+                <button
+                  type="button"
+                  className="todolist-add-item-cancel-btn"
+                  onClick={() => setIsFormOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="todolist-add-item-submit-btn">
+                  Add Task
+                </button>
+              </div>
             </form>
           </div>
         </div>

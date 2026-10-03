@@ -10,6 +10,8 @@
   overflow: hidden;
 }
 
+
+/* start of todo list items */
 .todolist-header {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -24,23 +26,31 @@
 }
 .todolist-filter-btn{
   background-color: #2b2b2b;
-  color: #f5f5f5;
   border: none;
-  padding: 6px 12px;
+  border-radius: 6px;
+  padding: 0;
   cursor: pointer;
-  font-size: 14px;
-  transition: all .2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.15s ease;
 }
 .todolist-filter-btn:hover{
   background-color: #444;
   outline: none;
+}
+.todolist-filter-img{
+  height: 32px;
+  width: auto;
+  display: block;
 }
 .todolist-add-btn{
   font-size: 26px;
   font-weight: bold;
   line-height: 1;
   padding: 4px 12px;
-  background-color: transparent; /* subtle green accent */
+  background-color: transparent;
   border-color: transparent;
   transition: all .2s ease;
   color: #267837;
@@ -50,6 +60,7 @@
   color: #3fa64f;
 }
 
+/* start of the modal menu for creating a new task */
 .todolist-add-item-shadow{
   position: absolute;
   inset: 0;
@@ -62,16 +73,41 @@
   padding: 16px;
 }
 .todolist-add-item{
-  background-color: #383838; 
+  background-color: #383838;
+  width: 300px;
+  box-sizing: border-box; 
+  flex-wrap: wrap;
+  padding: 6px;
+  border: 1px solid #555c63;
+  border-radius: 12px;
 }
 .todolist-add-item-group{
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .todolist-add-item-group label{
-  /* placeholder */
+  font-size: 11px;
+  color: #a0a0a0;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding-left: 8px;
+}
+.todolist-add-item-group input{
+  background-color: #2b2b2b;
+  border: 1px solid #555c63;
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-size: 12px;
+  outline: none;
+  transition: all .2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+.todolist-add-item-group input:focus{
+  border-color: #72a4d4;
+  box-shadow: 0 0 0 2px rgba(114, 164, 212,.35);
 }
 .todolist-add-item-row{
   display: flex;
@@ -80,8 +116,56 @@
 .todolist-add-item-row .todolist-add-item-group{
   flex: 1;
 }
+/* urgency */
+.todolist-add-item-row .todolist-add-item-group:last-child{
+  align-items: center;
+}
+/* urgency value */
+.todolist-add-item-row .todolist-add-item-group:last-child input{
+  text-align: center;
+  width: 60px;
+}
+/* urgency label */
+.todolist-add-item-row .todolist-add-item-group:last-child label{
+padding-left: 0;
+}
+/* buttons at the bottom of modal */
+.todolist-add-item-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+.todolist-add-item-cancel-btn{
+  background: #2b2b2b;
+  border: none;
+  border-radius: 6px; 
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.todolist-add-item-cancel-btn:hover {
+  background-color: #444;
+  outline: none;
+}.todolist-add-item-submit-btn {
+  background-color: #385838;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 4px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+.todolist-add-item-submit-btn:hover {
+  background-color: #486848;
+  outline: none;
+}
+  
 
-
+/* back to the todo list components */
 .todolist-body{
   list-style-type: none;
   padding: 0;
@@ -96,15 +180,6 @@
 .todolist-body::-webkit-scrollbar-thumb {
   background: #555c63;
   border-radius: 4px;
-}
-
-.todolist-add-item{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 6px;
-  border: 1px solid #555c63;
-  border-radius: 12px;
 }
 
 .todolist-item{
@@ -147,6 +222,7 @@
   background-color: #8C8C8C;
 }
 
+/* X at the end of each todo item */
 .todolist-trash-button{
   background: transparent;
   border: none;
