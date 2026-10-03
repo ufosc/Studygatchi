@@ -1,10 +1,45 @@
 .todolist-container {
+  /* Color Variables */
+  /* Main Background */
+  --bg-color: #383838;
+
+  /* Button Colors, the hover color is just adding 16 to each value */
+  --button-color: #2b2b2b; /* Secondary button (Filter, Cancel) & inputs */
+  --button-color-hover: rgb(from var(--button-color) calc(r + 16) calc(g + 16) calc(b + 16));
+
+  --button-primary: #385838; /* green button (Add Task) */
+  --button-primary-hover: rgb(from var(--button-primary) calc(r + 16) calc(g + 16) calc(b + 16));
+
+  /* + button colors */
+  --add-btn-color: #267837; 
+  --add-btn-hover: #3fa64f;
+
+  /* Text & Border Colors */
+  --text-color: #F5F5F5;
+  --border-color: #555c63;
+
+  /* Modal specific colors */
+  --modal-shadow: rgba(0, 0, 0, 0.25);
+  --label-color: #a0a0a0;
+  --focus-color: #72a4d4;
+  --focus-shadow: rgba(114, 164, 212, 0.35);
+
+  /* Radial Checkbox Colors */
+  --checkbox-hover-border: #8f96a0;
+  --checkbox-dot: #8C8C8C;
+
+  /* X Button */
+  --trash-color: #a65353;
+  --trash-glow: #ff8080;
+  --trash-glow-shadow: rgba(255, 128, 128, 0.4);
+
+  /* end of color variables */
   width: 400px;
   margin: 1.5rem auto;
   padding: 1.5rem;
-  background-color: #383838; /* this color is the same as the study button within goober menu, the hope is this is placed within the goober menu in the future*/
-  color: #F5F5F5;
-  border: 1px solid #555c63;
+  background-color: var(--bg-color); /* this color is the same as the study button within goober menu, the hope is this is placed within the goober menu in the future*/
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   position: relative;
   overflow: hidden;
@@ -23,27 +58,40 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  gap: 8px;
 }
-.todolist-filter-btn{
-  background-color: #2b2b2b;
-  border: none;
-  border-radius: 6px;
-  padding: 0;
-  cursor: pointer;
+.todolist-filter-inline{
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  gap: 4px;
+  font-size: 11px;
+}
+.todolist-filter-text{
+  font-size: 11px;
+  color: var(--label-color);
+  white-space: nowrap;
+}
+.todolist-filter-select{
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
   transition: all 0.15s ease;
 }
-.todolist-filter-btn:hover{
-  background-color: #444;
-  outline: none;
+.todolist-filter-select:hover{
+  background-color: var(--button-color-hover);
 }
-.todolist-filter-img{
-  height: 32px;
-  width: auto;
-  display: block;
+.todolist-filter-select:focus{
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 1px var(--focus-shadow);
+}
+.todolist-filter-select option{
+  background-color: var(--button-color);
+  color: var(--text-color);
 }
 .todolist-add-btn{
   font-size: 26px;
@@ -53,18 +101,18 @@
   background-color: transparent;
   border-color: transparent;
   transition: all .2s ease;
-  color: #267837;
+  color: var(--add-btn-color);
 }
 .todolist-add-btn:hover{
   outline: none;
-  color: #3fa64f;
+  color: var(--add-btn-hover);
 }
 
 /* start of the modal menu for creating a new task */
 .todolist-add-item-shadow{
   position: absolute;
   inset: 0;
-  background-color: rgba(0,0,0, 0.25);
+  background-color: var(--modal-shadow);
   backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
@@ -73,12 +121,12 @@
   padding: 16px;
 }
 .todolist-add-item{
-  background-color: #383838;
+  background-color: var(--bg-color);
   width: 300px;
   box-sizing: border-box; 
   flex-wrap: wrap;
   padding: 6px;
-  border: 1px solid #555c63;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
 }
 .todolist-add-item-group{
@@ -89,14 +137,15 @@
 }
 .todolist-add-item-group label{
   font-size: 11px;
-  color: #a0a0a0;
+  color: var(--label-color);
   letter-spacing: 0.5px;
   text-align: left;
   padding-left: 8px;
 }
 .todolist-add-item-group input{
-  background-color: #2b2b2b;
-  border: 1px solid #555c63;
+  background-color: var(--button-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 5px 8px;
   font-size: 12px;
@@ -106,8 +155,8 @@
   box-sizing: border-box;
 }
 .todolist-add-item-group input:focus{
-  border-color: #72a4d4;
-  box-shadow: 0 0 0 2px rgba(114, 164, 212,.35);
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px var(--focus-shadow);
 }
 .todolist-add-item-row{
   display: flex;
@@ -137,7 +186,8 @@ padding-left: 0;
   margin-top: 8px;
 }
 .todolist-add-item-cancel-btn{
-  background: #2b2b2b;
+  background-color: var(--button-color);
+  color: var(--text-color);
   border: none;
   border-radius: 6px; 
   padding: 4px 12px;
@@ -146,12 +196,13 @@ padding-left: 0;
   transition: all 0.15s ease;
 }
 .todolist-add-item-cancel-btn:hover {
-  background-color: #444;
+  background-color: var(--button-color-hover);
   outline: none;
-}.todolist-add-item-submit-btn {
-  background-color: #385838;
+}
+.todolist-add-item-submit-btn {
+  background-color: var(--button-primary);
   border: none;
-  color: white;
+  color: var(--text-color);
   border-radius: 6px;
   padding: 4px 14px;
   font-size: 13px;
@@ -160,7 +211,7 @@ padding-left: 0;
   transition: all 0.15s ease;
 }
 .todolist-add-item-submit-btn:hover {
-  background-color: #486848;
+  background-color: var(--button-primary-hover);
   outline: none;
 }
   
@@ -178,7 +229,7 @@ padding-left: 0;
   width: 6px;
 }
 .todolist-body::-webkit-scrollbar-thumb {
-  background: #555c63;
+  background: var(--border-color);
   border-radius: 4px;
 }
 
@@ -201,7 +252,7 @@ padding-left: 0;
   -webkit-appearance: none;
   width: 15px;
   height: 15px;
-  border: 1px solid #555c63;
+  border: 1px solid var(--border-color);
   outline: none;
   cursor: pointer;
   display: grid;
@@ -209,24 +260,24 @@ padding-left: 0;
   transition: all .2s ease;
 }
 .todolist-item input[type="checkbox"]:hover {
-  border-color: #8f96a0;
+  border-color: var(--checkbox-hover-border);
 }/* lighten the color when hovered over*/
 .todolist-item input[type="checkbox"]:checked {
-  background-color: #555c63;
+  background-color: var(--border-color);
 }
 .todolist-item input[type="checkbox"]:checked::before {
   content: "";
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #8C8C8C;
+  background-color: var(--checkbox-dot);
 }
 
 /* X at the end of each todo item */
 .todolist-trash-button{
   background: transparent;
   border: none;
-  color: #a65353 ;
+  color: var(--trash-color);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -235,9 +286,9 @@ padding-left: 0;
   transition: all 0.15s ease;
 }
 .todolist-trash-button:hover {
-  color: #a65353;
+  color: var(--trash-color);
   outline: none;
   text-shadow: 
-    0 0 1px #ff8080,
-    0 0 2px rgba(255, 128, 128, 0.4);
+    0 0 1px var(--trash-glow),
+    0 0 2px var(--trash-glow-shadow);
 }

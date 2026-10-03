@@ -1,5 +1,4 @@
 import { useState } from "react";
-import filterButtonImg from "../assets/FilterButton.png";
 import "./ToDoList.css";
 
 interface ListItem {
@@ -57,7 +56,6 @@ export default function ToDoList() {
   const [sortField, setSortField] = useState<SortField>("dueDate");
   const [sortOrder, setSortOrder] = useState<SortOrder>("ascending");
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
   const addItem = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -118,18 +116,28 @@ export default function ToDoList() {
       </div>
 
       <div className="todolist-toolbar">
-        <button
-          type="button"
-          className="todolist-filter-btn"
-          onClick={() => setIsFilterOpen((prev) => !prev)}
-          aria-label="Filter"
-        >
-          <img
-            src={filterButtonImg}
-            alt="Filter"
-            className="todolist-filter-img"
-          />
-        </button>
+        <div className="todolist-filter-inline">
+          <span className="todolist-filter-text">Sort By:</span>
+          <select
+            className="todolist-filter-select"
+            value={sortField}
+            onChange={(e) => setSortField(e.target.value as SortField)}
+          >
+            <option value="task">Task</option>
+            <option value="class">Class</option>
+            <option value="dueDate">Due Date</option>
+            <option value="urgency">Urgency</option>
+          </select>
+          <span className="todolist-filter-text">in</span>
+          <select
+            className="todolist-filter-select"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
+          >
+            <option value="ascending">Ascending</option>
+            <option value="descending">Descending</option>
+          </select>
+        </div>
         <button
           type="button"
           className="todolist-add-btn"
@@ -224,29 +232,7 @@ export default function ToDoList() {
           </div>
         </div>
       )}
-      {isFilterOpen && (
-        <label>
-          Sort By:{" "}
-          <select
-            value={sortField}
-            onChange={(e) => setSortField(e.target.value as SortField)}
-          >
-            <option value="task">Task</option>
-            <option value="class">Class</option>
-            <option value="dueDate">Due Date</option>
-            <option value="urgency">Urgency</option>
-          </select>
-          {" in "}
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-          >
-            <option value="ascending">Ascending</option>
-            <option value="descending">Descending</option>
-          </select>
-          {" order."}
-        </label>
-      )}
+
 
       <ul className="todolist-body">
         {sortedItems.map((item) => (
