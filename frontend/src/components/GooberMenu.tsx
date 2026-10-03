@@ -1,17 +1,17 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./GooberMenu.css";
 import GooberImg from "../assets/GooberPlaceholder.png";
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import GooberInfo from "./GooberInfo";
 import GooberPlayMenu from "./GooberPlayMenu";
 import GooberFoodMenu from "./GooberFoodMenu";
 import GooberGiftMenu from "./GooberGiftMenu";
 
 interface Props {
-  setXP: (arg0: number) => void;
-  setLevel: (arg0: number) => void;
-  setMoney: (arg0: number) => void;
-  setHealth: (arg0: number) => void;
+  setXP: Dispatch<SetStateAction<number>>;
+  setLevel: Dispatch<SetStateAction<number>>;
+  setMoney: Dispatch<SetStateAction<number>>;
+  setHealth: Dispatch<SetStateAction<number>>;
   currentXP: number;
   level: number;
   money: number;

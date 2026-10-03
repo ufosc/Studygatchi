@@ -1,10 +1,11 @@
 import "./GooberInfo.css";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 
 interface Props {
-  setXP: (arg0: number) => void;
-  setLevel: (arg0: number) => void;
-  setMoney: (arg0: number) => void;
-  setHealth: (arg0: number) => void;
+  setXP: Dispatch<SetStateAction<number>>;
+  setLevel: Dispatch<SetStateAction<number>>;
+  setMoney: Dispatch<SetStateAction<number>>;
+  setHealth: Dispatch<SetStateAction<number>>;
   currentXP: number;
   level: number;
   money: number;
@@ -21,24 +22,24 @@ export default function GooberInfo({
   money,
   currentHealth,
 }: Props) {
-  // Whent he user tabs out this crashes out
-  setInterval(() => {
-    if (currentHealth <= 0) {
-      setXP(0);
-      setLevel(0);
-      setHealth(100);
-    } else if (currentXP == 100) {
-      setXP(0);
-      // Once this runs once, it gets really weird and runs a lot,
-      // the level continues to increase even thought he bar isn't filling in
-      setLevel(level + 1);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentHealth <= 0) {
+        setXP(0);
+        setLevel(0);
+        setHealth(100);
+      } else if (currentXP >= 100) {
+        setXP(0);
+        setLevel((previousLevel) => previousLevel + 1);
 
-      setMoney(money + 10);
-    } else {
-      setXP(currentXP + 1);
-      setHealth(currentHealth - 0.1);
-    }
-  }, 1000);
+        setMoney((previousMoney) => previousMoney + 10);
+      } else {
+        setXP((previousXP) => previousXP + 1);
+        setHealth((previousHealth) => Math.max(0, previousHealth - 0.1));
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [currentHealth, currentXP, setXP, setLevel, setMoney, setHealth]);
 
   return (
     <>
@@ -56,8 +57,8 @@ export default function GooberInfo({
             className="progress"
             role="progressbar"
             aria-label="XP bar"
-            aria-valuenow={0}
-            aria-valuemin={currentXP}
+            aria-valuenow={currentXP}
+            aria-valuemin={0}
             aria-valuemax={100}
           >
             <div
@@ -72,8 +73,8 @@ export default function GooberInfo({
             className="progress"
             role="progressbar"
             aria-label="Health Bar"
-            aria-valuenow={0}
-            aria-valuemin={currentHealth}
+            aria-valuenow={currentHealth}
+            aria-valuemin={0}
             aria-valuemax={100}
           >
             <div
