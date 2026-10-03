@@ -62,7 +62,7 @@ export default function GooberMenu({
 
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ textAlign: "center", padding: 0 }}
       >
         <div
           style={{
