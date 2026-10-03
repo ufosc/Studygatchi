@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import SettingsMenu from "./components/SettingsMenu";
 import NavBar from "./components/NavBar"; //
 import Home from "./components/Home";
@@ -17,7 +17,15 @@ function App() {
   const [level, setLevel] = useState(9);
   const [money, setMoney] = useState(0);
   const [currentHealth, setHealth] = useState(50);
-
+  const TASK_REWARD = 10;
+  const TASK_HP_RESTORE = 10;
+  const rewardedTasks = useRef(new Set<string>());
+  const handleTaskComplete = (task: string) => {
+    if (rewardedTasks.current.has(task)) return;
+    rewardedTasks.current.add(task);
+    setMoney((currentMoney) => currentMoney + TASK_REWARD);
+    setHealth((health) => Math.min(100, health + TASK_HP_RESTORE));
+  };
   return (
     <Router>
       <div
@@ -44,7 +52,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/settings" element={<SettingsMenu />} />
           <Route path="/timer" element={<Timer />} />
-          <Route path="/todo" element={<ToDoList />} />
+          <Route
+            path="/todo"
+            element={<ToDoList onTaskComplete={handleTaskComplete} />}
+          />
           <Route path="*" element={<Home />} />
         </Routes>
       </div>

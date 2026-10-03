@@ -1,13 +1,19 @@
 import { useState } from "react";
 import "./App.css";
 
-export default function ToDoList() {
+interface Props {
+  onTaskComplete: (task: string) => void;
+}
+
+export default function ToDoList({ onTaskComplete }: Props) {
   const [items, setItems] = useState([
     "Lock in time",
     "Read Chapters 2-3",
     "Write new Draft",
   ]);
+
   const [newItem, setNewItem] = useState("");
+
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
     () =>
       items.reduce((acc, item) => {
@@ -16,22 +22,50 @@ export default function ToDoList() {
       }, {} as Record<string, boolean>)
   );
 
+  const [rewardedItems, setRewardedItems] = useState<Record<string, boolean>>(
+    {}
+  );
+
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!newItem.trim()) return;
 
-    setItems((prev) => [...prev, newItem]);
-    setCheckedItems((prev) => ({ ...prev, [newItem]: false }));
+    const trimmedItem = newItem.trim();
+
+    if (!trimmedItem || items.includes(trimmedItem)) return;
+
+    setItems((prev) => [...prev, trimmedItem]);
+    setCheckedItems((prev) => ({ ...prev, [trimmedItem]: false }));
     setNewItem("");
   };
 
   const checkItem = (item: string) => {
-    setCheckedItems((prev) => ({ ...prev, [item]: !prev[item] }));
+    const isCompleting = !checkedItems[item];
+
+    setCheckedItems((prev) => ({
+      ...prev,
+      [item]: !prev[item],
+    }));
+
+    if (isCompleting && !rewardedItems[item]) {
+      onTaskComplete(item);
+
+      setRewardedItems((prev) => ({
+        ...prev,
+        [item]: true,
+      }));
+    }
   };
 
   const removeItem = (item: string) => {
     setItems((prev) => prev.filter((i) => i !== item));
+
     setCheckedItems((prev) => {
+      const copy = { ...prev };
+      delete copy[item];
+      return copy;
+    });
+
+    setRewardedItems((prev) => {
       const copy = { ...prev };
       delete copy[item];
       return copy;
@@ -50,6 +84,7 @@ export default function ToDoList() {
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
         />
+
         <button className="todolist-addItem" type="submit">
           Add
         </button>
@@ -73,8 +108,12 @@ export default function ToDoList() {
                 checked={checkedItems[item]}
                 onChange={() => checkItem(item)}
               />
-              <label htmlFor={`checkbox-${item}`}>{item}</label>
+
+              <label htmlFor={`checkbox-${item}`}>
+                {item}
+              </label>
             </div>
+
             <button
               className="todolist-trashbutton"
               onClick={() => removeItem(item)}
