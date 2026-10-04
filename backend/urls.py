@@ -17,8 +17,13 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import URLResolver, include, path
+from quickstart import views
 
 urlpatterns: list[URLResolver] = [
     path("api/", include("api")),
     path("admin/", admin.site.urls),
+    
+    # API endpoints prefixed with api/ to match test routes
+    path('api/get_task/', views.get_task, name='get_task'),
+    path('api/delete_task/<int:pk>/', views.delete_task, name='delete_task'),
 ]
