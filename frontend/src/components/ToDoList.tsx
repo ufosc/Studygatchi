@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "./ToDoList.css";
 
 interface ListItem {
   id: string;
   task: string;
   class: string;
-  dueDate: Date; // I am choosing to have every item to force a due date.
-  // I think even if the item is optional the user should have a date to achive it
+  dueDate?: Date; // Optional due date
   isCompleted: boolean;
   percentOfTotalGrade?: number; // this is here for future implemenation with the canvas API
   // I don't expect the user to have to input this everytime.
@@ -15,12 +14,39 @@ interface ListItem {
 type SortField = "task" | "class" | "dueDate" | "urgency";
 type SortOrder = "ascending" | "descending";
 
-const emptyListItem = {
+const createEmptyListItem = () => ({
   task: "",
   class: "",
   dueDate: new Date(),
   urgency: 0,
   isCompleted: false,
+});
+
+const formatDueDate = (date?: Date | string | null) => {
+  if (!date) return "";
+  const d = typeof date === "string" ? new Date(date) : date;
+  if (!(d instanceof Date) || isNaN(d.getTime())) return "";
+  return d.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
+};
+
+const toDateInputString = (d?: Date) => {
+  if (!d || !(d instanceof Date) || isNaN(d.getTime())) return "";
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const parseDateInputValue = (val: string) => {
+  if (!val) return new Date();
+  const parts = val.split("-").map(Number);
+  if (parts.length === 3 && !parts.some(isNaN)) {
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
+  return new Date();
 };
 
 export default function ToDoList() {
@@ -52,7 +78,7 @@ export default function ToDoList() {
     },
   ]);
 
-  const [newItem, setNewItem] = useState(emptyListItem); // Field entry for a new item
+  const [newItem, setNewItem] = useState(createEmptyListItem); // Field entry for a new item
   const [sortField, setSortField] = useState<SortField>("dueDate");
   const [sortOrder, setSortOrder] = useState<SortOrder>("ascending");
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
@@ -64,50 +90,41 @@ export default function ToDoList() {
     setItems((prev) => [
       ...prev,
       {
-        task: newItem.task,
-        class: "Who knows rn",
-        dueDate: new Date(),
+        task: newItem.task.trim(),
+        class: newItem.class.trim(),
+        dueDate: newItem.dueDate instanceof Date && !isNaN(newItem.dueDate.getTime()) ? newItem.dueDate : new Date(),
         isCompleted: false,
         id: crypto.randomUUID(),
-        urgency: 0,
+        urgency: Number(newItem.urgency) || 0,
       },
     ]);
-    setNewItem(emptyListItem);
+    setNewItem(createEmptyListItem());
   };
 
-  const removeItem = (item: ListItem) => {
-    setItems((prev) => prev.filter((i) => i !== item));
+  const removeItem = (id: string) => {
+    setItems((prev) => prev.filter((i) => i.id !== id));
   };
 
-  const checkItem = (item: ListItem) => {
+  const checkItem = (id: string) => {
     setItems((prev) =>
-      prev.map((i) => (i === item ? { ...i, isCompleted: !i.isCompleted } : i)),
+      prev.map((i) => (i.id === id ? { ...i, isCompleted: !i.isCompleted } : i)),
     );
   };
 
-  const sortItems = (field: SortField, order: SortOrder) => {
+  const sortedItems = useMemo(() => {
+    const mult = sortOrder === "ascending" ? 1 : -1;
     return [...items].sort((a, b) => {
-      if (field === "task")
-        return order == "ascending"
-          ? a.task.localeCompare(b.task)
-          : b.task.localeCompare(a.task);
-      if (field == "class")
-        return order == "ascending"
-          ? a.class.localeCompare(b.class)
-          : b.class.localeCompare(a.class);
-      if (field == "dueDate")
-        return order == "ascending"
-          ? a.dueDate.getTime() - b.dueDate.getTime()
-          : b.dueDate.getTime() - a.dueDate.getTime();
-      if (field == "urgency")
-        return order == "ascending"
-          ? a.urgency - b.urgency
-          : b.urgency - a.urgency;
+      if (sortField === "task") return mult * a.task.localeCompare(b.task);
+      if (sortField === "class") return mult * a.class.localeCompare(b.class);
+      if (sortField === "dueDate") {
+        const aTime = a.dueDate instanceof Date ? a.dueDate.getTime() : 0;
+        const bTime = b.dueDate instanceof Date ? b.dueDate.getTime() : 0;
+        return mult * (aTime - bTime);
+      }
+      if (sortField === "urgency") return mult * (a.urgency - b.urgency);
       return 0;
     });
-  };
-
-  const sortedItems = sortItems(sortField, sortOrder); // the array of items to be displayed on the screen
+  }, [items, sortField, sortOrder]);
 
   return (
     <div className="todolist-container">
@@ -146,6 +163,7 @@ export default function ToDoList() {
           +
         </button>
       </div>
+      <hr className="todolist-divider" />
       {isFormOpen && (
         <div
           className="todolist-add-item-shadow"
@@ -192,11 +210,11 @@ export default function ToDoList() {
                   <input
                     id="due-date-input"
                     type="date"
-                    value={newItem.dueDate.toISOString().split("T")[0]}
+                    value={toDateInputString(newItem.dueDate)}
                     onChange={(e) =>
                       setNewItem({
                         ...newItem,
-                        dueDate: new Date(e.target.value),
+                        dueDate: parseDateInputValue(e.target.value),
                       })
                     }
                   />
@@ -206,11 +224,15 @@ export default function ToDoList() {
                   <input
                     id="urgency-input"
                     type="number"
+                    min="0"
                     value={newItem.urgency}
                     onChange={(e) =>
                       setNewItem({
                         ...newItem,
-                        urgency: parseInt(e.target.value),
+                        urgency:
+                          e.target.value === ""
+                            ? 0
+                            : Math.max(0, parseInt(e.target.value, 10) || 0),
                       })
                     }
                   />
@@ -235,24 +257,50 @@ export default function ToDoList() {
 
 
       <ul className="todolist-body">
-        {sortedItems.map((item) => (
-          <li key={item.id} className="todolist-item">
-            <input
-              type="checkbox"
-              id={`checkbox-${item.id}`}
-              name={item.task}
-              checked={item.isCompleted}
-              onChange={() => checkItem(item)}
-            />
-            <label htmlFor={`checkbox-${item.id}`}>{item.task}</label>
-            <button
-              className="todolist-trash-button"
-              onClick={() => removeItem(item)}
+        {sortedItems.map((item) => {
+          const dueDateStr = item.dueDate ? formatDueDate(item.dueDate) : "";
+          return (
+            <li
+              key={item.id}
+              className={`todolist-item ${item.isCompleted ? "completed" : ""}`}
             >
-              ✕
-            </button>
-          </li>
-        ))}
+              <input
+                type="checkbox"
+                id={`checkbox-${item.id}`}
+                name={item.task}
+                checked={item.isCompleted}
+                onChange={() => checkItem(item.id)}
+              />
+              <label
+                htmlFor={`checkbox-${item.id}`}
+                className="todolist-item-content"
+              >
+                {Boolean(item.class && item.class.trim()) && (
+                  <span className="todolist-item-class">{item.class}</span>
+                )}
+                <span className="todolist-item-task">
+                  {item.task}
+                </span>
+                {Boolean(dueDateStr) && (
+                  <span className="todolist-item-date">{dueDateStr}</span>
+                )}
+              </label>
+              {Number(item.urgency) > 0 && (
+                <div className="todolist-item-urgency">
+                  <span className="todolist-item-urgency-label">URG</span>
+                  <span className="todolist-item-urgency-val">{item.urgency}</span>
+                </div>
+              )}
+              <button
+                className="todolist-trash-button"
+                onClick={() => removeItem(item.id)}
+                aria-label={`Delete task ${item.task}`}
+              >
+                ✕
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
