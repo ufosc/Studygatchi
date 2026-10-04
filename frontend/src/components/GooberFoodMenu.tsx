@@ -12,6 +12,8 @@ TODO:
 interface Props {
   pageSetter: (page: string) => void;
   money?: number;
+  isBreak: boolean;
+  onInteract: () => void;
 }
 
 interface FoodItem {
@@ -58,10 +60,7 @@ const foodPool: FoodItem[] = Object.entries(foodModules)
   .filter((item) => item.image)
   .sort((a, b) => a.id - b.id);
 
-console.log("foodModules", foodModules);
-console.log("foodPool", foodPool);
-
-export default function GooberFoodMenu({ money = 0 }: Props) {
+export default function GooberFoodMenu({ money = 0, isBreak, onInteract,}: Props) {
   const [page, setPage] = useState(1);
   const [foods] = useState(() => fisherYatesShuffle(foodPool));
 
@@ -87,6 +86,12 @@ export default function GooberFoodMenu({ money = 0 }: Props) {
         <span className="goober-food-money">${money}</span>
       </div>
 
+      <p>
+        {isBreak
+          ? "Break time! Click food to restore 5 health."
+          : "Food is available during break time."}
+      </p>
+
       <div className="goober-food-grid">
         {currentItems.length > 0 ? (
           currentItems.map((item) => (
@@ -97,6 +102,8 @@ export default function GooberFoodMenu({ money = 0 }: Props) {
               tabIndex={0}
               aria-label={item.name}
               title={item.name}
+              onClick={isBreak ? onInteract : undefined}
+              aria-disabled={!isBreak}
             >
               <img
                 src={item.image}

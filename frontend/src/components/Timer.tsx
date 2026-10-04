@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import "./Timer.css";
 
 type SessionType = "Work" | "Short Break" | "Long Break";
+interface Props {
+  setIsBreak: (isBreak: boolean) => void;
+}
 
 const formatTime = (seconds: number) => {
   const m = Math.floor(seconds / 60)
@@ -13,7 +16,7 @@ const formatTime = (seconds: number) => {
   return `${m}:${s}`;
 };
 
-export default function Timer() {
+export default function Timer({ setIsBreak }: Props) {
   // settings (minutes)
   const [workMins, setWorkMins] = useState<number>(25);
   const [shortBreakMins, setShortBreakMins] = useState<number>(5);
@@ -26,7 +29,17 @@ export default function Timer() {
   const [completedCycles, setCompletedCycles] = useState<number>(0);
   const [showSettings, setShowSettings] = useState<boolean>(false); // popup toggle
 
-  const intervalRef = useRef<number | null>(null);
+
+  const endTimeRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+
+  useEffect(() => {
+  setIsBreak(session !== "Work");
+
+  return () => {
+    setIsBreak(false);
+  };
+  }, [session, setIsBreak]);
 
   const totalSeconds =
     session === "Work"
@@ -37,29 +50,32 @@ export default function Timer() {
 
   const progress = secondsLeft / totalSeconds;
 
-  useEffect(() => {
-    // Only update when settings change AND timer is not running
-    if (running) return;
+useEffect(() => {
+  if (!running) return;
 
-    if (session === "Work") setSecondsLeft(workMins * 60);
-    else if (session === "Short Break") setSecondsLeft(shortBreakMins * 60);
-    else if (session === "Long Break") setSecondsLeft(longBreakMins * 60);
-  }, [workMins, shortBreakMins, longBreakMins, session]);
+  const updateTimer = () => {
+    if (endTimeRef.current === null) return;
 
-  useEffect(() => {
-    if (running) {
-      intervalRef.current = window.setInterval(() => {
-        setSecondsLeft((s) => s - 1);
-      }, 1000) as unknown as number;
+    const remainingSeconds = Math.max(
+      0,
+      Math.ceil((endTimeRef.current - Date.now()) / 1000)
+    );
+
+    setSecondsLeft(remainingSeconds);
+    animationFrameRef.current =
+      window.requestAnimationFrame(updateTimer);
+  };
+
+  animationFrameRef.current =
+    window.requestAnimationFrame(updateTimer);
+
+  return () => {
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
     }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    };
-  }, [running]);
+  };
+}, [running]);
 
   useEffect(() => {
     if (secondsLeft < 0) return;
@@ -70,13 +86,16 @@ export default function Timer() {
         if (nextCycle % cyclesBeforeLong === 0) {
           setSession("Long Break");
           setSecondsLeft(longBreakMins * 60);
+          endTimeRef.current = Date.now() + longBreakMins * 60 * 1000;
         } else {
           setSession("Short Break");
           setSecondsLeft(shortBreakMins * 60);
+          endTimeRef.current = Date.now() + shortBreakMins * 60 * 1000;
         }
       } else {
         setSession("Work");
         setSecondsLeft(workMins * 60);
+        endTimeRef.current = Date.now() + workMins * 60 * 1000;
       }
     }
   }, [
@@ -89,9 +108,17 @@ export default function Timer() {
     longBreakMins,
   ]);
 
-  const toggle = () => setRunning((r) => !r);
+  const toggle = () => {
+  if (running) {
+    setRunning(false);
+  } else {
+    endTimeRef.current = Date.now() + secondsLeft * 1000;
+    setRunning(true);
+  }
+  };
   const reset = () => {
     setRunning(false);
+    endTimeRef.current = null;
     setCompletedCycles(0);
     setSession("Work");
     setSecondsLeft(workMins * 60);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import "./SettingsMenu.css";
 import { ThemeContext } from "./ThemeProvider.tsx";
 
@@ -7,7 +7,7 @@ export default function SettingsMenu() {
   if (!context) {
     throw new Error("SettingsMenu must be used within a ThemeProvider");
   }
-  const { theme, setTheme, themes } = context;
+  const { setTheme, themes } = context;
 
   const [firstOption, setFirst] = useState(false);
   const [secondOption, setSecond] = useState(false);

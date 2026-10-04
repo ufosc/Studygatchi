@@ -18,6 +18,7 @@ function App() {
   const [level, setLevel] = useState(9);
   const [money, setMoney] = useState(0);
   const [currentHealth, setHealth] = useState(50);
+  const [isBreak, setIsBreak] = useState(false);
 
   return (
     <ThemeProvider>
@@ -41,10 +42,11 @@ function App() {
             level={level}
             money={money}
             currentHealth={currentHealth}
+            isBreak={isBreak}
           />
           <Routes>
             <Route path="/settings" element={<SettingsMenu />} />
-            <Route path="/timer" element={<Timer />} />
+            <Route path="/timer" element={<Timer setIsBreak={setIsBreak} />} />
             <Route path="/todo" element={<ToDoList />} />
           </Routes>
         </div>

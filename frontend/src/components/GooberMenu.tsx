@@ -1,5 +1,5 @@
 import "./GooberMenu.css";
-// TODO These are placeholders. 
+// TODO These are placeholders.
 // Eventually we're going to want to lazy-load the assets since there will be a lot of them.
 import GooberBackground from "../assets/backgrounds/placeholder.jpg"
 import GooberImg from "../assets/goobers/goober-panda.png";
@@ -19,6 +19,7 @@ interface Props {
   level: number;
   money: number;
   currentHealth: number;
+  isBreak: boolean;
 }
 
 export default function GooberMenu({
@@ -30,9 +31,15 @@ export default function GooberMenu({
   level,
   money,
   currentHealth,
+  isBreak,
 }: Props) {
   const gooberName = "Goober";
   const [currentPage, setPage] = useState("home");
+  const handleBreakInteraction = () => {
+  if (isBreak) {
+    setHealth(Math.min(100, currentHealth + 5));
+  }
+};
 
   return (
     <div className="card bCard" style={{
@@ -62,7 +69,7 @@ export default function GooberMenu({
 
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ textAlign: "center", padding: 0 }}
       >
         <div
           style={{
@@ -186,10 +193,13 @@ export default function GooberMenu({
               level={level}
               money={money}
               currentHealth={currentHealth}
+              isBreak={isBreak}
             />
           )}
-          {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} />}
-          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} money={money} />}
+          {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} isBreak={isBreak}
+                           onInteract={handleBreakInteraction} />}
+          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} money={money}
+                           isBreak={isBreak} onInteract={handleBreakInteraction} />}
           {currentPage == "gift" && <GooberGiftMenu pageSetter={setPage} />}
         </div>
       </div>
