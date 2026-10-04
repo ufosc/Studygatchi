@@ -1,4 +1,5 @@
 import "./GooberInfo.css";
+import { useEffect } from "react";
 
 interface Props {
   setXP: (arg0: number) => void;
@@ -9,6 +10,7 @@ interface Props {
   level: number;
   money: number;
   currentHealth: number;
+  isBreakActive: boolean;
 }
 
 export default function GooberInfo({
@@ -20,25 +22,38 @@ export default function GooberInfo({
   level,
   money,
   currentHealth,
+  isBreakActive,
 }: Props) {
-  // Whent he user tabs out this crashes out
-  setInterval(() => {
-    if (currentHealth <= 0) {
-      setXP(0);
-      setLevel(0);
-      setHealth(100);
-    } else if (currentXP == 100) {
-      setXP(0);
-      // Once this runs once, it gets really weird and runs a lot,
-      // the level continues to increase even thought he bar isn't filling in
-      setLevel(level + 1);
+  useEffect(() => {
+    if (isBreakActive) return;
 
-      setMoney(money + 10);
-    } else {
-      setXP(currentXP + 1);
-      setHealth(currentHealth - 0.1);
-    }
-  }, 1000);
+    const intervalId = window.setInterval(() => {
+      if (currentHealth <= 0) {
+        setXP(0);
+        setLevel(0);
+        setHealth(100);
+      } else if (currentXP >= 100) {
+        setXP(0);
+        setLevel(level + 1);
+        setMoney(money + 10);
+      } else {
+        setXP(currentXP + 1);
+        setHealth(Math.max(0, currentHealth - 0.1));
+      }
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [
+    currentHealth,
+    currentXP,
+    isBreakActive,
+    level,
+    money,
+    setHealth,
+    setLevel,
+    setMoney,
+    setXP,
+  ]);
 
   return (
     <>
@@ -55,8 +70,8 @@ export default function GooberInfo({
             className="progress"
             role="progressbar"
             aria-label="XP bar"
-            aria-valuenow={0}
-            aria-valuemin={currentXP}
+            aria-valuenow={currentXP}
+            aria-valuemin={0}
             aria-valuemax={100}
           >
             <div
@@ -71,8 +86,8 @@ export default function GooberInfo({
             className="progress"
             role="progressbar"
             aria-label="Health Bar"
-            aria-valuenow={0}
-            aria-valuemin={currentHealth}
+            aria-valuenow={currentHealth}
+            aria-valuemin={0}
             aria-valuemax={100}
           >
             <div

@@ -19,6 +19,7 @@ interface Props {
   level: number;
   money: number;
   currentHealth: number;
+  isBreakActive: boolean;
 }
 
 export default function GooberMenu({
@@ -30,6 +31,7 @@ export default function GooberMenu({
   level,
   money,
   currentHealth,
+  isBreakActive,
 }: Props) {
   const gooberName = "Goober";
   const [currentPage, setPage] = useState("home");
@@ -62,8 +64,13 @@ export default function GooberMenu({
 
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ padding: 0 }}
       >
+        {isBreakActive && (
+          <div className="break-mode-banner" role="status">
+            Break mode: pet penalties are paused
+          </div>
+        )}
         <div
           style={{
             position: "relative",
@@ -186,6 +193,7 @@ export default function GooberMenu({
               level={level}
               money={money}
               currentHealth={currentHealth}
+              isBreakActive={isBreakActive}
             />
           )}
           {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} />}

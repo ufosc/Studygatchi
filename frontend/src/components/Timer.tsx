@@ -3,6 +3,10 @@ import "./Timer.css";
 
 type SessionType = "Work" | "Short Break" | "Long Break";
 
+interface TimerProps {
+  onBreakChange: (isBreakActive: boolean) => void;
+}
+
 const formatTime = (seconds: number) => {
   const m = Math.floor(seconds / 60)
     .toString()
@@ -13,7 +17,7 @@ const formatTime = (seconds: number) => {
   return `${m}:${s}`;
 };
 
-export default function Timer() {
+export default function Timer({ onBreakChange }: TimerProps) {
   // settings (minutes)
   const [workMins, setWorkMins] = useState<number>(25);
   const [shortBreakMins, setShortBreakMins] = useState<number>(5);
@@ -36,6 +40,15 @@ export default function Timer() {
       : longBreakMins * 60;
 
   const progress = secondsLeft / totalSeconds;
+  const isBreakActive = session !== "Work";
+
+  useEffect(() => {
+    onBreakChange(isBreakActive);
+
+    return () => {
+      if (isBreakActive) onBreakChange(false);
+    };
+  }, [isBreakActive, onBreakChange]);
 
   useEffect(() => {
     // Only update when settings change AND timer is not running
@@ -122,12 +135,15 @@ export default function Timer() {
           />
         </svg>
 
-        <div className="timer-content">
-          {(session === "Short Break" || session === "Long Break") && (
-            <div className="session-type">{session}</div>
-          )}
-          <div className="time-large">
+        <div className="timer-content" aria-live="polite">
+          <div className={isBreakActive ? "session-type break-active" : "session-type"}>
+            {session}
+          </div>
+          <div className="time-large" aria-label={`${session} time remaining`}>
             {formatTime(Math.max(0, secondsLeft))}
+          </div>
+          <div className="remaining-label">
+            {isBreakActive ? "Break time remaining" : "Focus time remaining"}
           </div>
         </div>
       </div>

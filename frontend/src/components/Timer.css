@@ -30,15 +30,20 @@
 }
 
 .timer-content .session-type {
-  position: absolute;
-  top: 0px;
-  width: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: red;
+  color: var(--text-color);
   font-size: 1rem;
   font-weight: 600;
   pointer-events: none;
+}
+
+.timer-content .session-type.break-active {
+  color: var(--accent);
+}
+
+.remaining-label {
+  margin-top: 0.25rem;
+  color: var(--text-color);
+  font-size: 0.75rem;
 }
 
 .controls-outside {
