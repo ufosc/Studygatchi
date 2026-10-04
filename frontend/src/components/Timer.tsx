@@ -1,19 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import "./Timer.css";
+import { formatTime } from "../utils/formatTime";
 
 type SessionType = "Work" | "Short Break" | "Long Break";
 
-const formatTime = (seconds: number) => {
-  const m = Math.floor(seconds / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = Math.floor(seconds % 60)
-    .toString()
-    .padStart(2, "0");
-  return `${m}:${s}`;
-};
+interface TimerProps {
+  onBreakChange?: (breakSecondsLeft: number | null) => void;
+}
 
-export default function Timer() {
+export default function Timer({ onBreakChange }: TimerProps) {
   // settings (minutes)
   const [workMins, setWorkMins] = useState<number>(25);
   const [shortBreakMins, setShortBreakMins] = useState<number>(5);
@@ -36,6 +31,15 @@ export default function Timer() {
       : longBreakMins * 60;
 
   const progress = secondsLeft / totalSeconds;
+
+  const isBreak = session !== "Work";
+
+  useEffect(() => {
+    onBreakChange?.(isBreak ? Math.max(0, secondsLeft) : null);
+  }, [isBreak, secondsLeft]);
+
+  // leaving /timer resets the timer, so clear break mode too
+  useEffect(() => () => onBreakChange?.(null), []);
 
   useEffect(() => {
     // Only update when settings change AND timer is not running

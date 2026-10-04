@@ -3,8 +3,8 @@ import "./GooberMenu.css";
 // Eventually we're going to want to lazy-load the assets since there will be a lot of them.
 import GooberBackground from "../assets/backgrounds/placeholder.jpg"
 import GooberImg from "../assets/goobers/goober-panda.png";
-
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { formatTime } from "../utils/formatTime";
 import GooberInfo from "./GooberInfo";
 import GooberPlayMenu from "./GooberPlayMenu";
 import GooberFoodMenu from "./GooberFoodMenu";
@@ -19,6 +19,7 @@ interface Props {
   level: number;
   money: number;
   currentHealth: number;
+  breakSecondsLeft: number | null;
 }
 
 export default function GooberMenu({
@@ -30,9 +31,35 @@ export default function GooberMenu({
   level,
   money,
   currentHealth,
+  breakSecondsLeft,
 }: Props) {
   const gooberName = "Goober";
   const [currentPage, setPage] = useState("home");
+
+  const isBreak = breakSecondsLeft !== null;
+
+  const stats = useRef({ currentXP, level, money, currentHealth });
+  stats.current = { currentXP, level, money, currentHealth };
+
+  useEffect(() => {
+    if (isBreak) return; // no XP gain and no health loss during breaks
+    const id = window.setInterval(() => {
+      const s = stats.current;
+      if (s.currentHealth <= 0) {
+        setXP(0);
+        setLevel(0);
+        setHealth(100);
+      } else if (s.currentXP == 100) {
+        setXP(0);
+        setLevel(s.level + 1);
+        setMoney(s.money + 10);
+      } else {
+        setXP(s.currentXP + 1);
+        setHealth(s.currentHealth - 0.1);
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [isBreak]);
 
   return (
     <div className="card bCard" style={{
@@ -62,7 +89,7 @@ export default function GooberMenu({
 
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ textAlign: "center", padding: 0 }}
       >
         <div
           style={{
@@ -85,6 +112,26 @@ export default function GooberMenu({
               zIndex: 0,
             }}
           />
+
+          {breakSecondsLeft !== null && (
+            <div
+              style={{
+                position: "absolute",
+                top: 8,
+                left: 8,
+                right: 8,
+                zIndex: 2,
+                textAlign: "center",
+                padding: "6px 10px",
+                borderRadius: 12,
+                background: "rgba(0,0,0,0.65)",
+                color: "white",
+                fontSize: 14,
+              }}
+            >
+              Break time: {formatTime(breakSecondsLeft)} left · no penalty
+            </div>
+          )}
 
           <img
             src={GooberImg}
@@ -177,11 +224,7 @@ export default function GooberMenu({
           }}
         >
           {currentPage == "home" && (
-            <GooberInfo
-              setXP={setXP}
-              setLevel={setLevel}
-              setMoney={setMoney}
-              setHealth={setHealth}
+           <GooberInfo
               currentXP={currentXP}
               level={level}
               money={money}
