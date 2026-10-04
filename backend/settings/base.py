@@ -1,4 +1,11 @@
 import os
+
+
+# Added
+import sys
+
+
+
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -59,16 +66,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "studygatchi_db"),
-        "USER": os.environ.get("POSTGRES_USER", "ant"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "studygatchi"),
-        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+
+
+
+
+# Added this so that in-memory SQLite database
+
+if 'pytest' in sys.argv[0] or 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'studygatchi_db',
+            'USER': 'ant',
+            'PASSWORD': 'studygatchi',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
+
+
+
+
+
+
 
 AUTH_USER_MODEL = "quickstart.StudyUser"
 
