@@ -592,6 +592,9 @@ class TestTaskRetrieval:
 # @pytest.mark.required
 @pytest.mark.tasks
 class TestTaskIsolation:
+    
+    
+    # Added to supply a valid ISO-8601 due_date
     def test_task_belongs_to_requesting_user(
         self,
         api_client: APIClient,
@@ -599,11 +602,20 @@ class TestTaskIsolation:
     ) -> None:
         """Task should be assigned to the authenticated user, not someone else."""
         api_client.force_authenticate(user=test_user)
-        data = {"name": "My Task", "reward": 50, "due_date": "2029-12-31T00:00:00Z"}
+        data = {
+            "name": "My Task",
+            "reward": 50,
+            "due_date": "2029-12-31T00:00:00Z",
+        }
         api_client.post("/api/create_task/", data, format="json")
 
         assert Task.objects.filter(name="My Task", user=test_user).exists()
 
+    
+    
+    
+    
+    
     def test_users_cannot_see_each_others_tasks(
         self,
         api_client: APIClient,
@@ -796,7 +808,6 @@ class TestTaskIsolation:
 
         assert "A" in names
         assert "B" not in names
-
 
 @pytest.mark.required
 @pytest.mark.tasks
