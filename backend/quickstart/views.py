@@ -31,18 +31,25 @@ def create_task(request: Request) -> Response:
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_task(request: Request) -> Response:
-    # look up user and react accordingly if they don't exist
-    try:
-        if not request.user.is_active:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+    # need to check if user is active, if not return 403
+    if not request.user.is_active:
+        return Response({"error": "Inactive users cannot get tasks"}, status=status.HTTP_403_FORBIDDEN)
 
-        tasks: QuerySet[Task] = Task.objects.filter(user=request.user)
-        serializer = TaskSerializer(tasks, many=True)
+    # try to find the task and return it, if it doesn't exist return 404
+    try:
+        task_id = request.query_params.get("id")
+
+        if task_id is None:
+            tasks: QuerySet[Task] = Task.objects.filter(user=request.user)
+            serializer = TaskSerializer(tasks, many=True)
+        else:
+            task: Task = Task.objects.get(id=task_id, user=request.user)
+            serializer = TaskSerializer(task)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    except StudyUser.DoesNotExist:
-        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Task.DoesNotExist:
+        return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["DELETE"])
