@@ -31,14 +31,15 @@
 
 .timer-content .session-type {
   position: absolute;
-  top: 0px;
+  top: -28px;
   width: 100px;
   left: 50%;
   transform: translateX(-50%);
-  color: red;
-  font-size: 1rem;
+  color: #0dcaf0;
+  font-size: 1.15rem;
   font-weight: 600;
   pointer-events: none;
+  text-align: center;
 }
 
 .controls-outside {

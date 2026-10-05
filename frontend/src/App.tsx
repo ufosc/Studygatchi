@@ -19,6 +19,10 @@ function App() {
   const [money, setMoney] = useState(0);
   const [currentHealth, setHealth] = useState(50);
 
+  // Track break mode
+  const [isBreak, setIsBreak] = useState<boolean>(false);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+
   return (
     <ThemeProvider>
       <Router>
@@ -41,10 +45,20 @@ function App() {
             level={level}
             money={money}
             currentHealth={currentHealth}
+            isBreak={isBreak}
+            isRunning={isRunning}
           />
           <Routes>
             <Route path="/settings" element={<SettingsMenu />} />
-            <Route path="/timer" element={<Timer />} />
+            <Route 
+              path="/timer"
+              element={
+                <Timer 
+                  setIsBreak={setIsBreak}
+                  setIsRunning={setIsRunning}
+                />
+              } 
+            />
             <Route path="/todo" element={<ToDoList />} />
           </Routes>
         </div>

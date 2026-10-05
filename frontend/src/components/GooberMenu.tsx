@@ -19,6 +19,8 @@ interface Props {
   level: number;
   money: number;
   currentHealth: number;
+  isBreak?: boolean,
+  isRunning?: boolean
 }
 
 export default function GooberMenu({
@@ -30,6 +32,8 @@ export default function GooberMenu({
   level,
   money,
   currentHealth,
+  isBreak = false,
+  isRunning = false
 }: Props) {
   const gooberName = "Goober";
   const [currentPage, setPage] = useState("home");
@@ -47,7 +51,33 @@ export default function GooberMenu({
           flexDirection: "row",
         }}
       >
-        <span>{gooberName}</span>
+        <div className="d-flex align-items-center gap-2">
+          <span>{gooberName}</span>
+
+          {!isRunning ? (
+            <span 
+              className="badge bg-secondary rounded-pill px-2 py-2"
+              style={{ fontSize: "12px", fontWeight: "bold" }}
+            >
+              Paused
+            </span>
+          ) : isBreak ? (
+            <span 
+              className="badge bg-info text-dark rounded-pill px-2 py-2"
+              style={{ fontSize: "12px", fontWeight: "bold" }}
+            >
+              On Break
+            </span>
+          ) : (
+            <span 
+              className="badge bg-success rounded-pill px-2 py-2"
+              style={{ fontSize: "12px", fontWeight: "bold" }}
+            >
+              Studying
+            </span>
+          )}
+        </div>
+
         <span
           style={{
             fontSize: 12,
@@ -60,9 +90,18 @@ export default function GooberMenu({
         </span>
       </div>
 
+      {isBreak && isRunning && (
+        <div 
+          className="alert alert-info d-flex align-items-center justify-content-center gap-2 mx-2 mt-2 mb-0 py-2 px-3 shadow rounded-2" 
+          style={{ fontSize: "13px", fontWeight: "bold", }}
+        >
+          Break mode is active! Interact without penalties.
+        </div>
+      )}
+
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ textAlign: "center", padding: 0 }}
       >
         <div
           style={{
@@ -186,6 +225,7 @@ export default function GooberMenu({
               level={level}
               money={money}
               currentHealth={currentHealth}
+              isBreak={isBreak}
             />
           )}
           {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} />}
