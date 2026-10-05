@@ -7,7 +7,9 @@ export default function ToDoList() {
     "Read Chapters 2-3",
     "Write new Draft",
   ]);
+
   const [newItem, setNewItem] = useState("");
+
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
     () =>
       items.reduce((acc, item) => {
@@ -15,6 +17,8 @@ export default function ToDoList() {
         return acc;
       }, {} as Record<string, boolean>)
   );
+
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
@@ -29,13 +33,20 @@ export default function ToDoList() {
     setCheckedItems((prev) => ({ ...prev, [item]: !prev[item] }));
   };
 
-  const removeItem = (item: string) => {
-    setItems((prev) => prev.filter((i) => i !== item));
+  // Issue #99: allow users to remove a task without receiving a reward.
+  // A confirmation modal helps prevent accidental deletion.
+  const confirmDelete = () => {
+    if (!taskToDelete) return;
+
+    setItems((prev) => prev.filter((item) => item !== taskToDelete));
+
     setCheckedItems((prev) => {
       const copy = { ...prev };
-      delete copy[item];
+      delete copy[taskToDelete];
       return copy;
     });
+
+    setTaskToDelete(null);
   };
 
   return (
@@ -50,6 +61,7 @@ export default function ToDoList() {
           value={newItem}
           onChange={(e) => setNewItem(e.target.value)}
         />
+
         <button className="todolist-addItem" type="submit">
           Add
         </button>
@@ -73,17 +85,53 @@ export default function ToDoList() {
                 checked={checkedItems[item]}
                 onChange={() => checkItem(item)}
               />
+
               <label htmlFor={`checkbox-${item}`}>{item}</label>
             </div>
+
             <button
               className="todolist-trashbutton"
-              onClick={() => removeItem(item)}
+              onClick={() => setTaskToDelete(item)}
+              aria-label={`Delete ${item}`}
             >
               Del
             </button>
           </li>
         ))}
       </ul>
+
+      {taskToDelete && (
+        <div className="delete-modal-overlay">
+          <div
+            className="delete-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-modal-title"
+          >
+            <h2 id="delete-modal-title">Delete task?</h2>
+
+            <p>
+              Are you sure you want to delete <strong>{taskToDelete}</strong>?
+            </p>
+
+            <div className="delete-modal-buttons">
+              <button
+                className="delete-modal-cancel"
+                onClick={() => setTaskToDelete(null)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="delete-modal-confirm"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
