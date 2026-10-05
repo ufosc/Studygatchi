@@ -1076,6 +1076,7 @@ class TestTaskUpdate:
 
 
 @pytest.mark.tasks
+@pytest.mark.required
 class TestTaskDeletion:
     def test_delete_task_authenticated_owner(
         self, api_client: APIClient, test_user: StudyUser, test_task: Task
