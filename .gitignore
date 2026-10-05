@@ -1,3 +1,11 @@
+# Environment variables
+.env/
+.env
+frontend/.env.local
+
+# Frontend
+.vite/
+
 # Python environment
 env/
 __pycache__/
