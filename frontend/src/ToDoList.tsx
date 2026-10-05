@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import CreateTaskForm from "./components/CreateTaskForm";
 
 export default function ToDoList() {
   const [items, setItems] = useState([
@@ -38,6 +39,11 @@ export default function ToDoList() {
     });
   };
 
+  const handleTaskCreated = (name: string) => {
+    setItems((prev) => [...prev, name]);
+    setCheckedItems((prev) => ({ ...prev, [name]: false }));
+  };
+
   return (
     <div>
       <div className="todolist-logo">
@@ -54,6 +60,8 @@ export default function ToDoList() {
           Add
         </button>
       </form>
+
+      <CreateTaskForm onCreated={handleTaskCreated} />
 
       <ul
         style={{
