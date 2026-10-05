@@ -53,9 +53,12 @@ export default function GooberMenu({
           <text>Settings</text>
         </text>
       </div>
-      <div className="card-body">
-        <img
-          src={GooberImg}
+
+      <div
+        className="card-body"
+        style={{ textAlign: "center", padding: 0 }}
+      >
+        <div
           style={{
             display: "block",
             margin: "auto",
@@ -143,8 +146,14 @@ export default function GooberMenu({
             />
           )}
           {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} />}
-          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} />}
-          {currentPage == "gift" && <GooberGiftMenu pageSetter={setPage} />}
+          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} money={money} />}
+          {currentPage == "gift" && (
+            <GooberGiftMenu
+              pageSetter={setPage}
+              money={money}
+              setMoney={setMoney}
+            />
+          )}
         </div>
       </div>
     </div>
