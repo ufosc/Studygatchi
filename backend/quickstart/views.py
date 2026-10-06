@@ -1,4 +1,5 @@
-from django.db.models import QuerySet
+from django.db import transaction
+from django.db.models import F, QuerySet
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -84,3 +85,27 @@ def update_task(request: Request, pk: int) -> Response:
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def complete_task(request: Request, task_id: int) -> Response:
+    """Marks a task as completed and pays its reward to the user."""
+    if not request.user.is_active:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    with transaction.atomic():
+        try:
+            task = Task.objects.select_for_update().get(id=task_id, user=request.user)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if task.completed:
+            return Response({"error": "Task already completed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        task.completed = True
+        task.save(update_fields=["completed"])
+        StudyUser.objects.filter(pk=request.user.pk).update(money=F("money") + task.reward)
+
+    user = StudyUser.objects.get(pk=request.user.pk)
+    return Response({"reward": task.reward, "money": user.money}, status=status.HTTP_200_OK)
