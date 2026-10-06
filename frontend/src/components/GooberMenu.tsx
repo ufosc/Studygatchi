@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./GooberMenu.css";
 import GooberImg from "../assets/GooberPlaceholder.png";
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import GooberInfo from "./GooberInfo";
 import GooberPlayMenu from "./GooberPlayMenu";
 import GooberFoodMenu from "./GooberFoodMenu";
@@ -11,11 +11,12 @@ interface Props {
   setXP: (arg0: number) => void;
   setLevel: (arg0: number) => void;
   setMoney: (arg0: number) => void;
-  setHealth: (arg0: number) => void;
+  setHealth: Dispatch<SetStateAction<number>>;
   currentXP: number;
   level: number;
   money: number;
   currentHealth: number;
+  running: boolean;
 }
 
 export default function GooberMenu({
@@ -27,9 +28,18 @@ export default function GooberMenu({
   level,
   money,
   currentHealth,
+  running,
 }: Props) {
   const gooberName = "Goober";
   const [currentPage, setPage] = useState("home");
+
+  const handleInteraction = (page: string) => {
+    if (running) {
+      setHealth((health) => Math.max(0, health - 5));
+    }
+
+    setPage(page);
+  };
 
   return (
     <div className="card bCard" style={{ width: "400px" }}>
@@ -104,7 +114,7 @@ export default function GooberMenu({
               "btn btn-primary interactionNavBtn " +
               (currentPage === "food" ? "active" : "")
             }
-            onClick={() => setPage("food")}
+            onClick={() => handleInteraction("food")}
           >
             Food
           </button>
@@ -114,7 +124,7 @@ export default function GooberMenu({
               "btn btn-primary interactionNavBtn " +
               (currentPage === "play" ? "active" : "")
             }
-            onClick={() => setPage("play")}
+            onClick={() => handleInteraction("play")}
           >
             Play
           </button>
@@ -124,7 +134,7 @@ export default function GooberMenu({
               "btn btn-primary interactionNavBtn " +
               (currentPage === "gift" ? "active" : "")
             }
-            onClick={() => setPage("gift")}
+            onClick={() => handleInteraction("gift")}
           >
             Gift
           </button>
