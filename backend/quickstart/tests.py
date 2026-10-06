@@ -1271,6 +1271,22 @@ class TestTaskDeletion:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
+@pytest.mark.required
+@pytest.mark.tasks
+class TestTaskCompletion:
+    def test_complete_task_pays_reward(
+        self, api_client: APIClient, test_user: StudyUser, test_task: Task
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+        response = api_client.post(f"/api/complete_task/{test_task.id}/")
+
+        assert response.status_code == status.HTTP_200_OK
+        test_task.refresh_from_db()
+        test_user.refresh_from_db()
+        assert test_task.completed is True
+        assert test_user.money == 550
+
+
 # Test Graveyard for tests that get generated but aren't useful *yet*
 
 # def test_deleting_user_cascades_to_tasks(

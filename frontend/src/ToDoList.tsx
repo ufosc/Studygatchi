@@ -1,7 +1,15 @@
 import { useState } from "react";
 import "./App.css";
 
-export default function ToDoList() {
+const HP_REWARD = 10;
+const MAX_HP = 100;
+
+type Props = {
+  currentHealth: number;
+  setHealth: (arg0: number) => void;
+};
+
+export default function ToDoList({ currentHealth, setHealth }: Props) {
   const [items, setItems] = useState([
     "Lock in time",
     "Read Chapters 2-3",
@@ -25,8 +33,14 @@ export default function ToDoList() {
     setNewItem("");
   };
 
-  const checkItem = (item: string) => {
+    const checkItem = (item: string) => {
+    const wasChecked = checkedItems[item];
     setCheckedItems((prev) => ({ ...prev, [item]: !prev[item] }));
+
+    // Completing a task (unchecked -> checked) restores some of Goober's HP
+    if (!wasChecked) {
+      setHealth(Math.min(currentHealth + HP_REWARD, MAX_HP));
+    }
   };
 
   const removeItem = (item: string) => {
