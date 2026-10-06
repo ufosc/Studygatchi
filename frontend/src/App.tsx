@@ -15,7 +15,7 @@ function App() {
   // Current Players data
   const [currentXP, setXP] = useState(50);
   const [level, setLevel] = useState(9);
-  const [money, setMoney] = useState(0);
+  const [money, setMoney] = useState(100);
   const [currentHealth, setHealth] = useState(50);
 
   return (
