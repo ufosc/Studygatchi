@@ -89,9 +89,26 @@ export default function Timer() {
     longBreakMins,
   ]);
 
-  const toggle = () => setRunning((r) => !r);
+  const toggle = () => {
+    setRunning((currentRunning) => {
+      const nextRunning = !currentRunning;
+      if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+        chrome.runtime.sendMessage({
+          type: "TIMER_STATE_CHANGED",
+          running: nextRunning,
+        }).catch(() => undefined);
+      }
+      return nextRunning;
+    });
+  };
   const reset = () => {
     setRunning(false);
+    if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+      chrome.runtime.sendMessage({
+        type: "TIMER_STATE_CHANGED",
+        running: false,
+      }).catch(() => undefined);
+    }
     setCompletedCycles(0);
     setSession("Work");
     setSecondsLeft(workMins * 60);

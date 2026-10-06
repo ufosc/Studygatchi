@@ -1,10 +1,6 @@
 import "./GooberInfo.css";
 
 interface Props {
-  setXP: (arg0: number) => void;
-  setLevel: (arg0: number) => void;
-  setMoney: (arg0: number) => void;
-  setHealth: (arg0: number) => void;
   currentXP: number;
   level: number;
   money: number;
@@ -12,34 +8,11 @@ interface Props {
 }
 
 export default function GooberInfo({
-  setXP,
-  setLevel,
-  setMoney,
-  setHealth,
   currentXP,
   level,
   money,
   currentHealth,
 }: Props) {
-  // Whent he user tabs out this crashes out
-  setInterval(() => {
-    if (currentHealth <= 0) {
-      setXP(0);
-      setLevel(0);
-      setHealth(100);
-    } else if (currentXP == 100) {
-      setXP(0);
-      // Once this runs once, it gets really weird and runs a lot,
-      // the level continues to increase even thought he bar isn't filling in
-      setLevel(level + 1);
-
-      setMoney(money + 10);
-    } else {
-      setXP(currentXP + 1);
-      setHealth(currentHealth - 0.1);
-    }
-  }, 1000);
-
   return (
     <>
       <div className = "gooberInfo"
@@ -66,18 +39,18 @@ export default function GooberInfo({
           </div>
         </div>
         <div>
-          <text>current health:</text>
+          <text>current health: {Math.max(0, currentHealth)}</text>
           <div
             className="progress"
             role="progressbar"
             aria-label="Health Bar"
-            aria-valuenow={0}
-            aria-valuemin={currentHealth}
+            aria-valuenow={Math.max(0, currentHealth)}
+            aria-valuemin={0}
             aria-valuemax={100}
           >
             <div
               className="progress-bar"
-              style={{ width: currentHealth + "%" }}
+              style={{ width: Math.max(0, currentHealth) + "%" }}
             ></div>
           </div>
         </div>

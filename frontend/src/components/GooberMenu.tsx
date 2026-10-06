@@ -11,10 +11,6 @@ import GooberFoodMenu from "./GooberFoodMenu";
 import GooberGiftMenu from "./GooberGiftMenu";
 
 interface Props {
-  setXP: (arg0: number) => void;
-  setLevel: (arg0: number) => void;
-  setMoney: (arg0: number) => void;
-  setHealth: (arg0: number) => void;
   currentXP: number;
   level: number;
   money: number;
@@ -22,10 +18,6 @@ interface Props {
 }
 
 export default function GooberMenu({
-  setXP,
-  setLevel,
-  setMoney,
-  setHealth,
   currentXP,
   level,
   money,
@@ -62,7 +54,7 @@ export default function GooberMenu({
 
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ padding: 0 }}
       >
         <div
           style={{
@@ -178,10 +170,6 @@ export default function GooberMenu({
         >
           {currentPage == "home" && (
             <GooberInfo
-              setXP={setXP}
-              setLevel={setLevel}
-              setMoney={setMoney}
-              setHealth={setHealth}
               currentXP={currentXP}
               level={level}
               money={money}
