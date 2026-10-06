@@ -17,7 +17,7 @@
 
 .progress-ring__progress {
   fill: none;
-  stroke: var(--accent, #00eaff);
+  stroke: var(--accent);
   transition: stroke-dashoffset 0.5s linear;
 }
 
@@ -31,7 +31,7 @@
 
 .timer-content .session-type {
   position: absolute;
-  top: 0px; /* adjust as needed */
+  top: 0px;
   width: 100px;
   left: 50%;
   transform: translateX(-50%);
@@ -52,7 +52,6 @@
   font-size: 2rem;
 }
 
-/* --- Popup Background Overlay --- */
 .settings-popup {
   position: fixed;
   top: 0;
@@ -67,7 +66,6 @@
   z-index: 999;
 }
 
-/* --- Popup Container --- */
 .settings-content {
   background: #191919;
   padding: 1.5rem 2rem;
@@ -77,7 +75,6 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-/* Subtle fade/scale animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -95,7 +92,6 @@
   font-size: 1.3rem;
 }
 
-/* --- Form Layout --- */
 .settings-content label {
   display: flex;
   flex-direction: column;
@@ -115,10 +111,9 @@
 }
 
 .settings-content input:focus {
-  border-color: var(--accent, #00eaff);
+  border-color: var(--accent);
 }
 
-/* --- Actions (Close Button) --- */
 .settings-actions {
   display: flex;
   justify-content: center;
@@ -126,16 +121,6 @@
 }
 
 .settings-actions button {
-  padding: 0.35rem 0.9rem;
-  background: var(--accent, #00eaff);
-  border: none;
-  border-radius: 8px;
+  background: var(--accent);
   color: #fff;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: opacity 0.2s;
-}
-
-.settings-actions button:hover {
-  opacity: 0.85;
 }
