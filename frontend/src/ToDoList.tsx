@@ -8,6 +8,8 @@ export default function ToDoList() {
     "Write new Draft",
   ]);
   const [newItem, setNewItem] = useState("");
+  const [editingItem, setEditingItem] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
     () =>
       items.reduce((acc, item) => {
@@ -18,10 +20,12 @@ export default function ToDoList() {
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!newItem.trim()) return;
+    const trimmedItem = newItem.trim();
 
-    setItems((prev) => [...prev, newItem]);
-    setCheckedItems((prev) => ({ ...prev, [newItem]: false }));
+    if (!trimmedItem) return;
+
+    setItems((prev) => [...prev, trimmedItem]);
+    setCheckedItems((prev) => ({ ...prev, [trimmedItem]: false }));
     setNewItem("");
   };
 
@@ -36,6 +40,53 @@ export default function ToDoList() {
       delete copy[item];
       return copy;
     });
+
+    if (editingItem === item) {
+      setEditingItem(null);
+      setEditText("");
+    }
+  };
+
+  const startEditing = (item: string) => {
+    setEditingItem(item);
+    setEditText(item);
+  };
+
+  const cancelEditing = () => {
+    setEditingItem(null);
+    setEditText("");
+  };
+
+  const saveEditedItem = () => {
+    if (editingItem === null) return;
+
+    const trimmedText = editText.trim();
+    if (!trimmedText) return;
+
+    setItems((prev) =>
+      prev.map((item) => (item === editingItem ? trimmedText : item))
+    );
+
+    setCheckedItems((prev) => {
+      const copy = { ...prev };
+      const wasChecked = copy[editingItem] ?? false;
+
+      delete copy[editingItem];
+      copy[trimmedText] = wasChecked;
+
+      return copy;
+    });
+
+    setEditingItem(null);
+    setEditText("");
+  };
+
+  const handleEditKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      saveEditedItem();
+    } else if (event.key === "Escape") {
+      cancelEditing();
+    }
   };
 
   return (
@@ -65,22 +116,67 @@ export default function ToDoList() {
       >
         {items.map((item) => (
           <li key={item} className="todolist-item">
-            <div className="wrapper">
+            {editingItem === item ? (
               <input
-                type="checkbox"
-                id={`checkbox-${item}`}
-                name={item}
-                checked={checkedItems[item]}
-                onChange={() => checkItem(item)}
+                className="todolist-edit-input"
+                type="text"
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                onKeyDown={handleEditKeyDown}
+                autoFocus
+                aria-label={`Edit ${item}`}
               />
-              <label htmlFor={`checkbox-${item}`}>{item}</label>
+            ) : (
+              <div className="wrapper">
+                <input
+                  type="checkbox"
+                  id={`checkbox-${item}`}
+                  name={item}
+                  checked={checkedItems[item]}
+                  onChange={() => checkItem(item)}
+                />
+                <label htmlFor={`checkbox-${item}`}>{item}</label>
+              </div>
+            )}
+
+            <div className="todolist-actions">
+              {editingItem === item ? (
+                <>
+                  <button
+                    className="todolist-savebutton"
+                    type="button"
+                    onClick={saveEditedItem}
+                    disabled={!editText.trim()}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="todolist-cancelbutton"
+                    type="button"
+                    onClick={cancelEditing}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="todolist-editbutton"
+                    type="button"
+                    onClick={() => startEditing(item)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="todolist-trashbutton"
+                    type="button"
+                    onClick={() => removeItem(item)}
+                  >
+                    Del
+                  </button>
+                </>
+              )}
             </div>
-            <button
-              className="todolist-trashbutton"
-              onClick={() => removeItem(item)}
-            >
-              Del
-            </button>
           </li>
         ))}
       </ul>

@@ -167,3 +167,42 @@
   margin-top: 0.25rem;
   padding: 0.25rem;
 }
+
+.todolist-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.todolist-edit-input {
+  flex: 1;
+  min-width: 0;
+  margin-left: 35px;
+  padding: 4px 6px;
+  font-size: 1rem;
+}
+
+.todolist-editbutton,
+.todolist-savebutton,
+.todolist-cancelbutton {
+  box-sizing: border-box;
+  margin: 4px 0 0 5px;
+  font-size: 12px;
+  padding: 4px 12px;
+  background-color: #8f8f8f;
+  color: #d3d1d1;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.todolist-editbutton:hover,
+.todolist-savebutton:hover,
+.todolist-cancelbutton:hover {
+  background-color: #7e7c7c;
+}
+
+.todolist-savebutton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
