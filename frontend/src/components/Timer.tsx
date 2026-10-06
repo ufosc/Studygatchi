@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import "./Timer.css";
 
+interface Props {
+  running: boolean;
+  setRunning: (value: boolean) => void;
+}
+
 type SessionType = "Work" | "Short Break" | "Long Break";
 
 const formatTime = (seconds: number) => {
@@ -13,16 +18,14 @@ const formatTime = (seconds: number) => {
   return `${m}:${s}`;
 };
 
-export default function Timer() {
+export default function Timer({ running, setRunning }: Props) {
   // settings (minutes)
   const [workMins, setWorkMins] = useState<number>(25);
   const [shortBreakMins, setShortBreakMins] = useState<number>(5);
   const [longBreakMins, setLongBreakMins] = useState<number>(15);
   const [cyclesBeforeLong, setCyclesBeforeLong] = useState<number>(4);
-
   const [session, setSession] = useState<SessionType>("Work");
   const [secondsLeft, setSecondsLeft] = useState<number>(workMins * 60);
-  const [running, setRunning] = useState<boolean>(false);
   const [completedCycles, setCompletedCycles] = useState<number>(0);
   const [showSettings, setShowSettings] = useState<boolean>(false); // popup toggle
 
@@ -89,7 +92,7 @@ export default function Timer() {
     longBreakMins,
   ]);
 
-  const toggle = () => setRunning((r) => !r);
+  const toggle = () => setRunning(!running);
   const reset = () => {
     setRunning(false);
     setCompletedCycles(0);
