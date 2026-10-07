@@ -45,7 +45,17 @@ function App() {
           <Routes>
             <Route path="/settings" element={<SettingsMenu />} />
             <Route path="/timer" element={<Timer />} />
-            <Route path="/todo" element={<ToDoList />} />
+            <Route
+              path="/todo"
+              element={
+                <ToDoList
+                  onComplete = {() => {
+                    setMoney((money => money + 10));
+                    setHealth((health) => Math.min(100, health + 10));
+                  }}
+                />
+              }
+            />
           </Routes>
         </div>
       </Router>
