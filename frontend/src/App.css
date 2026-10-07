@@ -167,11 +167,6 @@
   margin-top: 0.25rem;
   padding: 0.25rem;
 }
-<<<<<<< HEAD
-=======
-
-
-
 
 .task-buttons {
   display: flex;
@@ -238,4 +233,4 @@
   gap: 10px;
   margin-top: 12px;
 }
->>>>>>> 20081d7 (Implement frontend task editing)
+
