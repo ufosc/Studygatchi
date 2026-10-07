@@ -167,3 +167,76 @@
   margin-top: 0.25rem;
   padding: 0.25rem;
 }
+<<<<<<< HEAD
+=======
+
+
+
+
+// blien
+.task-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.todolist-editbutton {
+  background-color: #999;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 12px;
+}
+
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.edit-modal {
+  background: #242424;
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 24px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.edit-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.edit-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-modal label {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.edit-modal input,
+.edit-modal textarea {
+  margin-top: 5px;
+  padding: 8px;
+}
+
+.edit-modal textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.edit-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+>>>>>>> 20081d7 (Implement frontend task editing)
