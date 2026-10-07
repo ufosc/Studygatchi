@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -45,23 +48,42 @@ def get_task(request: Request) -> Response:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def delete_task(request: Request, task_id: int) -> Response:
 
-    # Need to check if user is active, if not return 403
+    # authorization check
     if not request.user.is_active:
+        logger.warning(f"Unauthorized delete attempt by inactive user: {request.user.username}")
         return Response(
             {"error": "Inactive users cannot delete tasks"}, status=status.HTTP_403_FORBIDDEN
         )
-    # Try to find the task and delete it, if it doesn't exist return 404
+
+    # prevent unnecessary DB queries for invalid IDs
+    if task_id < 1:
+        return Response(
+            {"error": "Task ID must be a positive integer."}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # database transaction and error handling
     try:
         task: Task = Task.objects.get(id=task_id, user=request.user)
+        task_name = task.name  # Store name before deletion for the log
         task.delete()
+        
+        # audit logging for destructive actions
+        logger.info(f"User '{request.user.username}' successfully deleted task '{task_name}' (ID: {task_id})")
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     except Task.DoesNotExist:
+        logger.warning(f"Failed delete attempt: Task {task_id} not found for user '{request.user.username}'")
         return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+    except Exception as e:
+        # catchall to prevent server crashes on unexpected database errors
+        logger.error(f"Unexpected server error during task {task_id} deletion: {str(e)}")
+        return Response({"error": "An unexpected server error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(["PATCH"])

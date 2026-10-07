@@ -1075,11 +1075,11 @@ class TestTaskUpdate:
         assert test_task.name == "Valid Update"
 
 
+@pytest.mark.required
 @pytest.mark.tasks
 class TestTaskDeletion:
     def test_delete_task_authenticated_owner(
-        self, api_client: APIClient, test_user: StudyUser, test_task: Task
-    ) -> None:
+        self, api_client: APIClient, test_user: StudyUser, test_task: Task) -> None:
         """The owner of a task should be able to delete it."""
         api_client.force_authenticate(user=test_user)
 
