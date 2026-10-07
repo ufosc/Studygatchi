@@ -37,16 +37,15 @@ def get_task(request: Request) -> Response:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         task_id = request.query_params.get("id")
+        tasks: QuerySet[Task] = Task.objects.filter(user=request.user)
+
         if task_id is not None:
             try:
-                # scope the lookup to the requesting user, so another user's
-                # task id is indistinguishable from one that doesn't exist
-                task = Task.objects.get(id=task_id, user=request.user)
+                task = tasks.get(id=task_id)
             except (Task.DoesNotExist, ValueError):
                 return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
             return Response(TaskSerializer(task).data, status=status.HTTP_200_OK)
 
-        tasks: QuerySet[Task] = Task.objects.filter(user=request.user)
         serializer = TaskSerializer(tasks, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
