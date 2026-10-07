@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
-export default function ToDoList() {
+export default function ToDoList({onComplete}: {onComplete: () => void}) {
   const [items, setItems] = useState([
     "Lock in time",
     "Read Chapters 2-3",
@@ -15,6 +15,7 @@ export default function ToDoList() {
         return acc;
       }, {} as Record<string, boolean>)
   );
+  const [rewardedItems, setRewardedItems] = useState<string[]>([]);
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
@@ -27,6 +28,11 @@ export default function ToDoList() {
 
   const checkItem = (item: string) => {
     setCheckedItems((prev) => ({ ...prev, [item]: !prev[item] }));
+
+    if (!checkedItems[item] && !rewardedItems.includes(item)) {
+      setRewardedItems((prev) => [...prev, item]);
+      onComplete();
+    }
   };
 
   const removeItem = (item: string) => {
