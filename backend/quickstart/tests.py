@@ -6,6 +6,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
+from secrets import token_hex # Generate random token for CSRF test
+from django.conf import settings # Provide configured CSRF cookie name
+
 from .models import StudyUser, Task
 
 # TODO Add docstrings to each of these functions to help newcomers understand what they do
@@ -1074,7 +1077,7 @@ class TestTaskUpdate:
         test_task.refresh_from_db()
         assert test_task.name == "Valid Update"
 
-
+@pytest.mark.required # Includes the deletion tests as required when pytest -m required is ran
 @pytest.mark.tasks
 class TestTaskDeletion:
     def test_delete_task_authenticated_owner(
@@ -1270,6 +1273,20 @@ class TestTaskDeletion:
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
+    # Check that deletion has Cross-Site-Request Forgery (CSRF) protection during logged-in authentication session
+    def test_delete_task_require_csrf(self, test_user, test_task):
+        client = APIClient(enforce_csrf_checks=True) # Enable CSRF checks
+        logged_in = client.login( # Check owner's credentials and establish session
+            username = test_user.username,
+            password = "password123"
+        )
+        assert logged_in is True # Confirm login successful
+
+        # Attempt to delete without sending CSRF token
+        response = client.delete(f"/api/delete_task/{test_task.id}/")
+        assert response.status_code == status.HTTP_403_FORBIDDEN # 403 Forbidden HTTP status code
+        assert "CSRF" in str(response.data) # Make sure that CSRF responsible for rejection
+        assert Task.objects.filter(id=test_task.id).exists() # Confirm task preservation
 
 # Test Graveyard for tests that get generated but aren't useful *yet*
 
