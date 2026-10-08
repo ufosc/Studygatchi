@@ -1,0 +1,132 @@
+name: Python application
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      test_filter:
+        description: "Pytest filter (e.g. -m smoke, -k auth)"
+        default: "-m required"
+        required: false
+
+permissions:
+  contents: read
+
+env:
+  REQUIRED_TESTS: ${{ github.event.inputs.test_filter || '-m required' }}
+  PYTHONPATH: .
+  DJANGO_SETTINGS_MODULE: settings.base
+  POSTGRES_HOST: 127.0.0.1
+  POSTGRES_DB: studygatchi_db
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: studygatchi
+  POSTGRES_PORT: 5432
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: studygatchi_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: studygatchi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+    - uses: actions/checkout@v6
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.12"
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-django
+    
+    - name: Lint with ruff
+      run: |
+        ruff check .
+        ruff format --check .
+
+    - name: Check for missing migrations
+      run: |
+        python manage.py makemigrations --check --dry-run
+    
+    - name: Run migrations
+      run: |
+        python manage.py migrate
+    
+    - name: Test with pytest
+      run: |
+        pytest ${{ env.REQUIRED_TESTS }}
+
+  build-addtl:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: studygatchi_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: studygatchi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest-django
+    
+    - name: Lint with ruff
+      run: |
+        ruff check .
+        ruff format --check .
+
+    - name: Check for missing migrations
+      run: |
+        python manage.py makemigrations --check --dry-run
+    
+    - name: Run migrations
+      run: |
+        python manage.py migrate
+    
+    - name: Test with pytest
+      run: |
+        pytest

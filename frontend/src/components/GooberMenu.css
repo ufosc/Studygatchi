@@ -1,3 +1,10 @@
-.interactionNavBtn{
-    justify-self: center;
+.interactionNavBtn {
+  background-color: var(--button-bg);
+  border: none;
+}
+
+.interactionNavBtn.active {
+  background-color: var(--bg-color);
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }

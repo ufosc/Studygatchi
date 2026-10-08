@@ -1,13 +1,31 @@
+# Environment variables
+.env/
+.env
+
+# Frontend
+.vite/
+
 # Python environment
 env/
+.venv/
 __pycache__/
 backend/__pycache/*
+uv.lock
 
 # personal settings
 backend/settings.py
 
-# Personal Migrations
-backend/quickstart/migrations/*
+# pytest
+.pytest_cache/
+*.py[cod]
 
 # MacOS
 .DS_Store
+
+# postman
+.postman/
+postman/
+
+# IDE settings
+.vscode/
+.idea/

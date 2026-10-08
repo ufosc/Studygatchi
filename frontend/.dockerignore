@@ -1,0 +1,40 @@
+# Dependencies
+node_modules
+
+# Logs
+npm-debug.log
+*.log
+
+# Build artifacts
+build
+dist
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Version control
+.git
+.gitignore
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Documentation
+README.md
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testing
+coverage
+.nyc_output
