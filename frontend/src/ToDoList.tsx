@@ -1,41 +1,63 @@
 import { useState } from "react";
 import "./App.css";
+import type { Task, TaskFields } from "./types/task";
+import TaskMenu from "./components/TaskMenu";
+import EditTaskModal from "./components/EditTaskModal";
+import { updateTask } from "./api/tasks";
+
+const newTask = (name: string): Task => ({
+  id: Date.now() + Math.random(),
+  name,
+  description: "",
+  category: "",
+  due_date: new Date(Date.now() + 86400000).toISOString(),
+  reward: 10,
+  completed: false,
+});
 
 export default function ToDoList() {
-  const [items, setItems] = useState([
-    "Lock in time",
-    "Read Chapters 2-3",
-    "Write new Draft",
+  const [tasks, setTasks] = useState<Task[]>([
+    newTask("Lock in time"),
+    newTask("Read Chapters 2-3"),
+    newTask("Write new Draft"),
   ]);
   const [newItem, setNewItem] = useState("");
-  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>(
-    () =>
-      items.reduce((acc, item) => {
-        acc[item] = false;
-        return acc;
-      }, {} as Record<string, boolean>)
-  );
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [saveError, setSaveError] = useState("");
 
   const addItem = (event: React.FormEvent) => {
     event.preventDefault();
     if (!newItem.trim()) return;
-
-    setItems((prev) => [...prev, newItem]);
-    setCheckedItems((prev) => ({ ...prev, [newItem]: false }));
+    setTasks((prev) => [...prev, newTask(newItem.trim())]);
     setNewItem("");
   };
 
-  const checkItem = (item: string) => {
-    setCheckedItems((prev) => ({ ...prev, [item]: !prev[item] }));
+  const checkItem = (id: number) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+    );
   };
 
-  const removeItem = (item: string) => {
-    setItems((prev) => prev.filter((i) => i !== item));
-    setCheckedItems((prev) => {
-      const copy = { ...prev };
-      delete copy[item];
-      return copy;
-    });
+  const removeItem = (id: number) => {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const closeEdit = () => {
+    setEditingTask(null);
+    setSaveError("");
+  };
+
+  const saveEdit = async (task: Task, values: TaskFields) => {
+    if (task.persisted) {
+      try {
+        await updateTask(task.id, values);
+      } catch {
+        setSaveError("Couldn't save your changes. Please try again.");
+        return;
+      }
+    }
+    setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, ...values } : t)));
+    closeEdit();
   };
 
   return (
@@ -63,27 +85,34 @@ export default function ToDoList() {
           padding: 0,
         }}
       >
-        {items.map((item) => (
-          <li key={item} className="todolist-item">
+        {tasks.map((task) => (
+          <li key={task.id} className="todolist-item">
             <div className="wrapper">
               <input
                 type="checkbox"
-                id={`checkbox-${item}`}
-                name={item}
-                checked={checkedItems[item]}
-                onChange={() => checkItem(item)}
+                id={`checkbox-${task.id}`}
+                name={task.name}
+                checked={task.completed}
+                onChange={() => checkItem(task.id)}
               />
-              <label htmlFor={`checkbox-${item}`}>{item}</label>
+              <label htmlFor={`checkbox-${task.id}`}>{task.name}</label>
             </div>
-            <button
-              className="todolist-trashbutton"
-              onClick={() => removeItem(item)}
-            >
-              Del
-            </button>
+            <TaskMenu
+              onEdit={() => setEditingTask(task)}
+              onDelete={() => removeItem(task.id)}
+            />
           </li>
         ))}
       </ul>
+
+      {editingTask && (
+        <EditTaskModal
+          task={editingTask}
+          error={saveError}
+          onSave={(values) => saveEdit(editingTask, values)}
+          onClose={closeEdit}
+        />
+      )}
     </div>
   );
 }
