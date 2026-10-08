@@ -76,7 +76,8 @@
   margin-top: 5px;
 }
 
-.todolist-trashbutton {
+.todolist-trashbutton,
+.todolist-editbutton {
   box-sizing: border-box;
   margin: 4px 0 0 5px;
   font-size: 12px;
@@ -88,8 +89,83 @@
   cursor: pointer;
 }
 
-.todolist-trashbutton:hover {
+.todolist-actions {
+  align-items: center;
+}
+
+.todolist-trashbutton:hover,
+.todolist-editbutton:hover {
   background-color: #7e7c7c;
+}
+
+.task-edit-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgb(0 0 0 / 65%);
+}
+
+.task-edit-window {
+  width: min(100%, 440px);
+  max-height: min(90vh, 700px);
+  overflow-y: auto;
+  padding: 1.25rem;
+  border: 1px solid #666;
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  text-align: left;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 45%);
+}
+
+.task-edit-window h2 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+}
+
+.task-edit-window form,
+.task-edit-window label {
+  display: grid;
+}
+
+.task-edit-window form {
+  gap: 0.75rem;
+}
+
+.task-edit-window label {
+  gap: 0.25rem;
+  text-align: left;
+}
+
+.task-edit-window input,
+.task-edit-window textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #666;
+  border-radius: 5px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font: inherit;
+}
+
+.task-edit-window textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.todolist-actions,
+.task-edit-actions {
+  display: flex;
+}
+
+.task-edit-actions {
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .wrapper {
