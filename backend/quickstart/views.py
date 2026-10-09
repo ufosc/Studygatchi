@@ -65,3 +65,20 @@ def update_task(request: Request, pk: int) -> Response:
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_task(request: Request, task_id: int) -> Response:
+    # Inactive users are not allowed to change their task list
+    if not request.user.is_active:
+        return Response(
+            {"error": "Inactive users cannot delete tasks"}, status=status.HTTP_403_FORBIDDEN
+        )
+
+    # Only look up tasks that belong to the logged-in user, so a user can't
+    # delete (or find out about) someone else's task by guessing its ID
+    deleted_count, _ = Task.objects.filter(id=task_id, user=request.user).delete()
+
+    if deleted_count == 0:
+        return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
