@@ -13,7 +13,12 @@ const formatTime = (seconds: number) => {
   return `${m}:${s}`;
 };
 
-export default function Timer() {
+interface TimerProps {
+  setIsBreak: (isBreak: boolean) => void;
+  setIsRunning: (isRunning: boolean) => void;
+}
+
+export default function Timer({ setIsBreak, setIsRunning }: TimerProps) {
   // settings (minutes)
   const [workMins, setWorkMins] = useState<number>(25);
   const [shortBreakMins, setShortBreakMins] = useState<number>(5);
@@ -37,6 +42,10 @@ export default function Timer() {
 
   const progress = secondsLeft / totalSeconds;
 
+  useEffect(() => {
+    setIsBreak(session === "Short Break" || session === "Long Break");
+  }, [session, setIsBreak]);
+  
   useEffect(() => {
     // Only update when settings change AND timer is not running
     if (running) return;
@@ -89,9 +98,17 @@ export default function Timer() {
     longBreakMins,
   ]);
 
-  const toggle = () => setRunning((r) => !r);
+  const toggle = () => {
+    setRunning((r) => {
+      const nextState = !r;
+      setIsRunning(nextState);
+      return nextState;
+    });
+  };
+
   const reset = () => {
     setRunning(false);
+    setIsRunning(false);
     setCompletedCycles(0);
     setSession("Work");
     setSecondsLeft(workMins * 60);
@@ -118,14 +135,21 @@ export default function Timer() {
             style={{
               strokeDasharray: 2 * Math.PI * 90,
               strokeDashoffset: (1 - progress) * (2 * Math.PI * 90),
+              stroke: session === "Work" ? "#198754" : undefined,
             }}
           />
         </svg>
 
         <div className="timer-content">
-          {(session === "Short Break" || session === "Long Break") && (
-            <div className="session-type">{session}</div>
-          )}
+          <div 
+            className="session-type" 
+            style={{ 
+              color: session === "Work" ? "#15803d" : undefined,
+              fontSize: session === "Work" ? "1.25rem" : undefined,
+            }}
+          >
+            {session === "Work" ? "Study" : session}
+          </div>
           <div className="time-large">
             {formatTime(Math.max(0, secondsLeft))}
           </div>

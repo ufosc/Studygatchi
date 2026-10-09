@@ -1,4 +1,5 @@
 import "./GooberInfo.css";
+import { useState, useEffect, useRef } from "react";
 
 interface Props {
   setXP: (arg0: number) => void;
@@ -9,6 +10,7 @@ interface Props {
   level: number;
   money: number;
   currentHealth: number;
+  isBreak?: boolean
 }
 
 export default function GooberInfo({
@@ -20,26 +22,40 @@ export default function GooberInfo({
   level,
   money,
   currentHealth,
+  isBreak = false,
 }: Props) {
-  // Whent he user tabs out this crashes out
-  setInterval(() => {
-    if (currentHealth <= 0) {
-      setXP(0);
-      setLevel(0);
-      setHealth(100);
-    } else if (currentXP == 100) {
-      setXP(0);
-      // Once this runs once, it gets really weird and runs a lot,
-      // the level continues to increase even thought he bar isn't filling in
-      setLevel(level + 1);
+  
+  const statsRef = useRef({ currentHealth, currentXP, level, money, isBreak });
+  useEffect(() => { // Update the stats
+    statsRef.current = { currentHealth, currentXP, level, money, isBreak };
+  });
 
-      setMoney(money + 10);
-    } else {
-      setXP(currentXP + 1);
-      setHealth(currentHealth - 0.1);
-    }
-  }, 1000);
+  useEffect(() => { // Since dependency list is empty, this component is not re-rendered even when they are any updates to XP, food, etc., avoiding creating multiple intervals
+    const interval = setInterval(() => {
+      const { currentHealth, currentXP, level, money, isBreak } = statsRef.current;
 
+      if (currentHealth <= 0) {
+        setXP(0);
+        setLevel(0);
+        setHealth(100);
+      } else if (currentXP >= 100) {
+        setXP(0);
+        setLevel(level + 1);
+        setMoney(money + 10);
+      } else {
+        // Avoid draining health and no XP gain if on break
+        if (!isBreak) { 
+          setXP(currentXP + 1);
+          setHealth(currentHealth - 0.1);
+        }
+      }
+    }, 1000); // Runs every 1000 milliseconds
+
+    return () => { // Remove the interval when you click away from the main page
+      clearInterval(interval); // Prevents multiple intervals from stacking up and messing up the rate at which XP and health change
+    }; // 
+  }, []);
+ 
   return (
     <>
       <div className = "gooberInfo"
