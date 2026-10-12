@@ -88,8 +88,12 @@
 
 .todolist-trashbutton {
   margin: 4px 0 0 5px;
-  font-size: 12px;
-  padding: 4px 12px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  padding: 0;
   background-color: #8f8f8f;
   color: #d3d1d1;
   border: 1px solid #444;
@@ -99,6 +103,91 @@
 
 .todolist-trashbutton:hover {
   background-color: #7e7c7c;
+}
+
+.todolist-context-menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 120px;
+  background-color: #8f8f8f;
+  border: 1px solid #444;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.todolist-context-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 13px;
+  padding: 6px 12px;
+  background-color: transparent;
+  color: #d3d1d1;
+  border: none;
+  cursor: pointer;
+}
+
+.todolist-context-menu button:hover {
+  background-color: #7e7c7c;
+}
+
+.todolist-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.todolist-modal {
+  max-width: 320px;
+  background-color: #8f8f8f;
+  color: #d3d1d1;
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.todolist-modal-message {
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+
+.todolist-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.todolist-modal-cancel,
+.todolist-modal-delete {
+  font-size: 12px;
+  padding: 4px 12px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.todolist-modal-cancel {
+  background-color: #8f8f8f;
+  color: #d3d1d1;
+}
+
+.todolist-modal-cancel:hover {
+  background-color: #7e7c7c;
+}
+
+.todolist-modal-delete {
+  background-color: #c0392b;
+  color: #fff;
+}
+
+.todolist-modal-delete:hover {
+  background-color: #a93226;
 }
 
 .wrapper {
