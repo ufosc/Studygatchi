@@ -14,6 +14,7 @@ The fastest way to get the full stack running locally is by using Docker Compose
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Docker Engine](https://docs.docker.com/compose/install/) with the `docker-compose` plugin.
 - Make sure you have [Node.js](https://nodejs.org/) (version 18+ or 20+) installed on your machine.
+- Make sure Docker Desktop or the docker daemon is running. 
 
 #### Optional
 
