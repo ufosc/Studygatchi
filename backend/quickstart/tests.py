@@ -589,7 +589,7 @@ class TestTaskRetrieval:
         assert response.status_code in (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN)
 
 
-# @pytest.mark.required
+@pytest.mark.required
 @pytest.mark.tasks
 class TestTaskIsolation:
     def test_task_belongs_to_requesting_user(
@@ -612,7 +612,13 @@ class TestTaskIsolation:
     ) -> None:
         """Tasks created by one user shouldn't appear for another."""
         api_client.force_authenticate(user=test_user)
-        api_client.post("/api/create_task/", {"name": "Private Task", "reward": 10}, format="json")
+        create_response = api_client.post(
+            "/api/create_task/",
+            {"name": "Private Task", "reward": 10, "due_date": "2029-12-31T00:00:00Z"},
+            format="json",
+        )
+        # make sure the task was actually created, otherwise this test passes for the wrong reason
+        assert create_response.status_code == status.HTTP_201_CREATED
 
         api_client.force_authenticate(user=other_user)
         response = api_client.get("/api/get_task/")
@@ -677,6 +683,34 @@ class TestTaskIsolation:
         response = api_client.get("/api/get_task/", data={"id": task.id})
 
         assert response.status_code in (status.HTTP_403_FORBIDDEN, status.HTTP_404_NOT_FOUND)
+
+    def test_user_can_access_own_task_by_id(
+        self, api_client: APIClient, test_user: StudyUser, other_user: StudyUser
+    ) -> None:
+        """Looking up your own task by id should return just that task."""
+        task = Task.objects.create(
+            name="My Task", reward=10, due_date="2029-12-31T00:00:00Z", user=test_user
+        )
+        Task.objects.create(
+            name="Their Task", reward=20, due_date="2029-12-31T00:00:00Z", user=other_user
+        )
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.get("/api/get_task/", data={"id": task.id})
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["name"] == "My Task"
+        assert response.data["reward"] == 10
+
+    def test_get_task_non_numeric_id_rejected(
+        self, api_client: APIClient, test_user: StudyUser
+    ) -> None:
+        """A non-numeric id should be rejected cleanly instead of crashing the server."""
+        api_client.force_authenticate(user=test_user)
+
+        for bad_id in ["abc", "-1", "1.5", ""]:
+            response = api_client.get("/api/get_task/", data={"id": bad_id})
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_isolation_holds_after_switching_authenticated_user_mid_session(
         self, api_client: APIClient, test_user: StudyUser, other_user: StudyUser
