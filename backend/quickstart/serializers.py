@@ -39,7 +39,16 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:  # type: ignore
         model = Task
-        fields: list[str] = ["reward", "name", "category", "due_date", "description", "user"]
+        fields: list[str] = [
+            "reward",
+            "name",
+            "category",
+            "due_date",
+            "description",
+            "completed",
+            "user",
+        ]
+        read_only_fields = ["completed"]
 
     def validate_due_date(self, value: datetime) -> datetime:
         if value < timezone.now():

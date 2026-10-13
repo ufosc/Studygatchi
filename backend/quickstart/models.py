@@ -26,3 +26,4 @@ class Task(models.Model):
     due_date = models.DateTimeField()
     description = models.TextField(default="No description given")
     user = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)

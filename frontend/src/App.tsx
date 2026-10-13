@@ -45,7 +45,8 @@ function App() {
           <Routes>
             <Route path="/settings" element={<SettingsMenu />} />
             <Route path="/timer" element={<Timer />} />
-            <Route path="/todo" element={<ToDoList />} />
+            <Route path="/todo" element={<ToDoList currentHealth={currentHealth} setHealth={setHealth} />}
+/>
           </Routes>
         </div>
       </Router>
