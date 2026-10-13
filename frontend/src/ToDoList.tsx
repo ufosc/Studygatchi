@@ -38,6 +38,17 @@ export default function ToDoList() {
     });
   };
 
+  // Ask the user to confirm before deleting. Deleting a task never gives a
+  // reward; only completing it does.
+  const handleDelete = (item: string) => {
+    const confirmed = window.confirm(
+      `Delete "${item}"? You will not receive a reward for it.`
+    );
+    if (confirmed) {
+      removeItem(item);
+    }
+  };
+
   return (
     <div>
       <div className="todolist-logo">
@@ -76,10 +87,13 @@ export default function ToDoList() {
               <label htmlFor={`checkbox-${item}`}>{item}</label>
             </div>
             <button
+              type="button"
               className="todolist-trashbutton"
-              onClick={() => removeItem(item)}
+              aria-label={`Delete task ${item}`}
+              title="Delete task (no reward)"
+              onClick={() => handleDelete(item)}
             >
-              Del
+              ×
             </button>
           </li>
         ))}

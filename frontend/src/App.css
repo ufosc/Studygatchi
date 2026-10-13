@@ -88,8 +88,9 @@
 
 .todolist-trashbutton {
   margin: 4px 0 0 5px;
-  font-size: 12px;
-  padding: 4px 12px;
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 8px;
   background-color: #8f8f8f;
   color: #d3d1d1;
   border: 1px solid #444;
