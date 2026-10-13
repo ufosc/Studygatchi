@@ -589,7 +589,7 @@ class TestTaskRetrieval:
         assert response.status_code in (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN)
 
 
-# @pytest.mark.required
+@pytest.mark.required
 @pytest.mark.tasks
 class TestTaskIsolation:
     def test_task_belongs_to_requesting_user(
