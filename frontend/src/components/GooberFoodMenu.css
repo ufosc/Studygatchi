@@ -86,6 +86,11 @@
     min-width: 72px;
 }
 
+.goober-page-button:hover:not(:disabled) {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
 .goober-page-indicator {
     font-size: 14px;
     font-weight: 600;
