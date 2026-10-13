@@ -13,6 +13,17 @@ const formatTime = (seconds: number) => {
   return `${m}:${s}`;
 };
 
+/** Name of the window event fired whenever the timer enters or leaves a break. */
+export const BREAK_EVENT = "studygatchi:break-change";
+
+export interface BreakChangeDetail {
+  onBreak: boolean;
+  session: SessionType;
+}
+
+const isBreakSession = (session: SessionType) =>
+  session === "Short Break" || session === "Long Break";
+
 export default function Timer() {
   // settings (minutes)
   const [workMins, setWorkMins] = useState<number>(25);
@@ -36,6 +47,17 @@ export default function Timer() {
       : longBreakMins * 60;
 
   const progress = secondsLeft / totalSeconds;
+  const onBreak = isBreakSession(session);
+
+  // Let other parts of the app (e.g. the Goober) know when a break starts/ends,
+  // so they can allow penalty-free interaction without prop drilling.
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent<BreakChangeDetail>(BREAK_EVENT, {
+        detail: { onBreak, session },
+      })
+    );
+  }, [onBreak, session]);
 
   useEffect(() => {
     // Only update when settings change AND timer is not running
@@ -90,6 +112,10 @@ export default function Timer() {
   ]);
 
   const toggle = () => setRunning((r) => !r);
+  const endBreakEarly = () => {
+    setSession("Work");
+    setSecondsLeft(workMins * 60);
+  };
   const reset = () => {
     setRunning(false);
     setCompletedCycles(0);
@@ -98,8 +124,15 @@ export default function Timer() {
   };
 
   return (
-    <div className="card timer-card">
+    <div className={`card timer-card${onBreak ? " on-break" : ""}`}>
       <h2>Pomodoro Timer</h2>
+
+      {onBreak && (
+        <div className="break-banner" role="status" aria-live="polite">
+          <strong>{session}</strong>: {formatTime(Math.max(0, secondsLeft))}{" "}
+          left. Play with your Goober penalty-free!
+        </div>
+      )}
       <div className="timer-display">
         <svg className="progress-ring" width="200" height="200">
           <circle
@@ -123,7 +156,7 @@ export default function Timer() {
         </svg>
 
         <div className="timer-content">
-          {(session === "Short Break" || session === "Long Break") && (
+          {onBreak && (
             <div className="session-type">{session}</div>
           )}
           <div className="time-large">
@@ -136,6 +169,11 @@ export default function Timer() {
       <div className="controls controls-outside">
         <button onClick={toggle}>{running ? "Pause" : "Start"}</button>
         <button onClick={reset}>Reset</button>
+        {onBreak && (
+          <button className="end-break-btn" onClick={endBreakEarly}>
+            End break
+          </button>
+        )}
         <button
           className="settings-btn"
           onClick={() => setShowSettings((s) => !s)}

@@ -124,3 +124,20 @@
   background: var(--accent);
   color: #fff;
 }
+/* --- Break mode --- */
+.break-banner {
+  margin: 0 auto 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(46, 204, 113, 0.15);
+  border: 1px solid #2ecc71;
+  font-size: 0.95rem;
+}
+
+.on-break .progress-ring__progress {
+  stroke: #2ecc71;
+}
+
+.on-break .timer-content .session-type {
+  color: #2ecc71;
+}
