@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from rest_framework import serializers
 
-from .models import StudyUser, Task
+from .models import ProhibitedSite, StudyUser, Task
 
 # TODO Add docstrings to each of these functions to help newcomers understand what they do
 
@@ -55,3 +55,9 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError("Reward exceeds permitted amount")
 
         return value
+
+
+class ProhibitedSiteSerializer(serializers.ModelSerializer):
+    class Meta:  # type: ignore
+        model = ProhibitedSite
+        fields: list[str] = ["id", "url"]

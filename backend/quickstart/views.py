@@ -5,8 +5,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from .models import StudyUser, Task  # TODO remove, should be serializer
-from .serializers import TaskSerializer
+from .models import (
+    ProhibitedSite,
+    StudyUser,
+    Task,  # TODO remove, should be serializer
+)
+from .serializers import ProhibitedSiteSerializer, TaskSerializer
 
 
 @api_view(["GET"])
@@ -84,3 +88,37 @@ def update_task(request: Request, pk: int) -> Response:
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_prohibited_sites(request: Request) -> Response:
+    if not request.user.is_active:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    sites: QuerySet[ProhibitedSite] = ProhibitedSite.objects.filter(user=request.user).order_by(
+        "url"
+    )
+    serializer = ProhibitedSiteSerializer(sites, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def remove_prohibited_site(request: Request, site_id: int) -> Response:
+    if not request.user.is_active:
+        return Response(
+            {"error": "Inactive users cannot remove prohibited sites"},
+            status=status.HTTP_403_FORBIDDEN,
+        )
+
+    try:
+        site = ProhibitedSite.objects.get(id=site_id, user=request.user)
+    except ProhibitedSite.DoesNotExist:
+        return Response(
+            {"error": "Prohibited site not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    site.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)

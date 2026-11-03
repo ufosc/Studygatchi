@@ -1,13 +1,14 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import "./SettingsMenu.css";
 import { ThemeContext } from "./ThemeProvider.tsx";
+import ProhibitedSitesList from "./ProhibitedSitesList";
 
 export default function SettingsMenu() {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error("SettingsMenu must be used within a ThemeProvider");
   }
-  const { theme, setTheme, themes } = context;
+  const { setTheme, themes } = context;
 
   const [firstOption, setFirst] = useState(false);
   const [secondOption, setSecond] = useState(false);
@@ -87,6 +88,10 @@ export default function SettingsMenu() {
             onClick={() => setTheme(themes.black)}
           ></button>
         </div>
+        <h5 className="card-title" style={{ paddingTop: 10 }}>
+          Prohibited sites
+        </h5>
+        <ProhibitedSitesList />
         <h5 className="card-title" style={{ paddingTop: 10 }}>
           Miscellaneous
         </h5>

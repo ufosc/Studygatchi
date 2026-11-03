@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
-from .models import StudyUser, Task
+from .models import ProhibitedSite, StudyUser, Task
 
 # TODO Add docstrings to each of these functions to help newcomers understand what they do
 
@@ -1269,6 +1269,212 @@ class TestTaskDeletion:
         response = api_client.delete(f"/api/delete_task/{deleted_id}/")
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.fixture
+def test_site(db: Any, test_user: StudyUser) -> ProhibitedSite:
+    return ProhibitedSite.objects.create(url="youtube.com", user=test_user)
+
+
+@pytest.mark.required
+@pytest.mark.prohibited_sites
+class TestProhibitedSiteRetrieval:
+    def test_get_sites_authenticated(
+        self, api_client: APIClient, test_user: StudyUser, test_site: ProhibitedSite
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == [{"id": test_site.id, "url": "youtube.com"}]
+
+    def test_get_sites_unauthenticated(self, api_client: APIClient) -> None:
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_get_sites_only_returns_own_sites(
+        self, api_client: APIClient, test_user: StudyUser, other_user: StudyUser
+    ) -> None:
+        ProhibitedSite.objects.create(url="reddit.com", user=test_user)
+        ProhibitedSite.objects.create(url="tiktok.com", user=other_user)
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert [site["url"] for site in response.data] == ["reddit.com"]
+
+    def test_get_sites_are_sorted_by_url(self, api_client: APIClient, test_user: StudyUser) -> None:
+        ProhibitedSite.objects.create(url="youtube.com", user=test_user)
+        ProhibitedSite.objects.create(url="google.com", user=test_user)
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert [site["url"] for site in response.data] == ["google.com", "youtube.com"]
+        assert all(set(site) == {"id", "url"} for site in response.data)
+
+    def test_get_sites_empty_list(self, api_client: APIClient, test_user: StudyUser) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == []
+
+    def test_get_sites_inactive_user_forbidden(
+        self,
+        api_client: APIClient,
+        test_user: StudyUser,
+    ) -> None:
+        test_user.is_active = False
+        test_user.save()
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_get_sites_post_not_allowed(self, api_client: APIClient, test_user: StudyUser) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.post("/api/get_prohibited_sites/", {})
+
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+@pytest.mark.required
+@pytest.mark.prohibited_sites
+class TestProhibitedSiteRemoval:
+    def test_remove_own_site(
+        self, api_client: APIClient, test_user: StudyUser, test_site: ProhibitedSite
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.delete(f"/api/remove_prohibited_site/{test_site.id}/")
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert response.content == b""
+        assert not ProhibitedSite.objects.filter(id=test_site.id).exists()
+
+    def test_remove_unauthenticated(self, api_client: APIClient, test_site: ProhibitedSite) -> None:
+        response = api_client.delete(f"/api/remove_prohibited_site/{test_site.id}/")
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert ProhibitedSite.objects.filter(id=test_site.id).exists()
+
+    def test_remove_inactive_user_forbidden(
+        self, api_client: APIClient, test_user: StudyUser, test_site: ProhibitedSite
+    ) -> None:
+        test_user.is_active = False
+        test_user.save()
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.delete(f"/api/remove_prohibited_site/{test_site.id}/")
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert ProhibitedSite.objects.filter(id=test_site.id).exists()
+
+    def test_remove_nonexistent_site(self, api_client: APIClient, test_user: StudyUser) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.delete("/api/remove_prohibited_site/999999/")
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_remove_other_users_site_not_allowed(
+        self, api_client: APIClient, test_user: StudyUser, other_user: StudyUser
+    ) -> None:
+        site = ProhibitedSite.objects.create(url="tiktok.com", user=other_user)
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.delete(f"/api/remove_prohibited_site/{site.id}/")
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert ProhibitedSite.objects.filter(id=site.id).exists()
+
+    def test_remove_only_target_site(self, api_client: APIClient, test_user: StudyUser) -> None:
+        keep = ProhibitedSite.objects.create(url="reddit.com", user=test_user)
+        remove = ProhibitedSite.objects.create(url="tiktok.com", user=test_user)
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.delete(f"/api/remove_prohibited_site/{remove.id}/")
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert ProhibitedSite.objects.filter(id=keep.id).exists()
+        assert not ProhibitedSite.objects.filter(id=remove.id).exists()
+
+    def test_remove_twice_second_call_404(
+        self, api_client: APIClient, test_user: StudyUser, test_site: ProhibitedSite
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        first = api_client.delete(f"/api/remove_prohibited_site/{test_site.id}/")
+        second = api_client.delete(f"/api/remove_prohibited_site/{test_site.id}/")
+
+        assert first.status_code == status.HTTP_204_NO_CONTENT
+        assert second.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_remove_invalid_id_format(self, api_client: APIClient, test_user: StudyUser) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.delete("/api/remove_prohibited_site/not-an-id/")
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_remove_negative_id(self, api_client: APIClient, test_user: StudyUser) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.delete("/api/remove_prohibited_site/-1/")
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_remove_get_request_not_allowed(
+        self, api_client: APIClient, test_user: StudyUser, test_site: ProhibitedSite
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.get(f"/api/remove_prohibited_site/{test_site.id}/")
+
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert ProhibitedSite.objects.filter(id=test_site.id).exists()
+
+    def test_remove_post_request_not_allowed(
+        self, api_client: APIClient, test_user: StudyUser, test_site: ProhibitedSite
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.post(
+            f"/api/remove_prohibited_site/{test_site.id}/",
+            {},
+        )
+
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+        assert ProhibitedSite.objects.filter(id=test_site.id).exists()
+
+    def test_same_url_allowed_for_different_users(
+        self, test_user: StudyUser, other_user: StudyUser
+    ) -> None:
+        ProhibitedSite.objects.create(url="youtube.com", user=test_user)
+        ProhibitedSite.objects.create(url="youtube.com", user=other_user)
+
+        assert ProhibitedSite.objects.filter(url="youtube.com").count() == 2
+
+    def test_get_sites_inactive_user_forbidden(
+        self,
+        api_client: APIClient,
+        test_user: StudyUser,
+        test_site: ProhibitedSite,
+    ) -> None:
+        test_user.is_active = False
+        test_user.save()
+
+        api_client.force_authenticate(user=test_user)
+        response = api_client.get("/api/get_prohibited_sites/")
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 # Test Graveyard for tests that get generated but aren't useful *yet*
