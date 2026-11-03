@@ -1,112 +1,57 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import "./GooberFoodMenu.css";
+import { PET_ITEMS, type PetInventory } from "./petItems";
 
-/*
-TODO:
-- Cut down on margins
-- replace money with exit button to close the food menu
-- Allow clicking the food button again to close the menu
-- Think about scrolling vs pagination for the food menu?
-
-*/
 interface Props {
-  pageSetter: (page: string) => void;
-  money?: number;
-}
-
-interface FoodItem {
-  id: number;
-  name: string;
-  image: string;
+  money: number;
+  inventory: PetInventory;
+  onFeed: (itemId: string) => void;
 }
 
 const ITEMS_PER_PAGE = 6;
 
-function fisherYatesShuffle<T>(array: T[]) {
-  const copy = [...array];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function formatFoodName(filename: string) {
-  return filename
-    .replace(/^\d+_/, "")
-    .replace(/\.png$/, "")
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
-const foodModules = import.meta.glob("../assets/food/plated-food/*.png", {
-  eager: true,
-}) as Record<string, { default: string }>;
-
-const foodPool: FoodItem[] = Object.entries(foodModules)
-  .map(([path, module]) => {
-    const filename = path.split("/").pop() ?? "";
-    const idMatch = filename.match(/^(\d+)_/);
-    const id = idMatch ? Number(idMatch[1]) : 0;
-
-    return {
-      id,
-      name: formatFoodName(filename),
-      image: module.default,
-    };
-  })
-  .filter((item) => item.image)
-  .sort((a, b) => a.id - b.id);
-
-console.log("foodModules", foodModules);
-console.log("foodPool", foodPool);
-
-export default function GooberFoodMenu({ money = 0 }: Props) {
+export default function GooberFoodMenu({ money, inventory, onFeed }: Props) {
   const [page, setPage] = useState(1);
-  const [foods] = useState(() => fisherYatesShuffle(foodPool));
-
-  const totalPages = Math.ceil(foods.length / ITEMS_PER_PAGE);
-
-  const currentItems = useMemo(() => {
-    const start = (page - 1) * ITEMS_PER_PAGE;
-    return foods.slice(start, start + ITEMS_PER_PAGE);
-  }, [foods, page]);
-
-  const handleNextPage = () => {
-    setPage((prev) => (prev < totalPages ? prev + 1 : prev));
-  };
-
-  const handlePrevPage = () => {
-    setPage((prev) => (prev > 1 ? prev - 1 : prev));
-  };
+  const foods = PET_ITEMS.filter(
+    (item) => item.type === "food" && inventory[item.id] > 0,
+  );
+  const totalPages = Math.max(1, Math.ceil(foods.length / ITEMS_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const currentItems = foods.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   return (
     <div className="goober-food-menu">
       <div className="goober-food-header">
-        <span className="goober-food-title">food</span>
+        <span className="goober-food-title">Panda's food</span>
         <span className="goober-food-money">${money}</span>
       </div>
 
       <div className="goober-food-grid">
         {currentItems.length > 0 ? (
           currentItems.map((item) => (
-            <div
+            <button
               key={item.id}
+              type="button"
               className="goober-food-tile"
-              role="button"
-              tabIndex={0}
-              aria-label={item.name}
-              title={item.name}
+              aria-label={`Feed Panda ${item.name}, ${inventory[item.id]} available`}
+              title={`Feed Panda ${item.name} (x${inventory[item.id]})`}
+              onClick={() => onFeed(item.id)}
             >
               <img
                 src={item.image}
-                alt={item.name}
+                alt=""
                 className="goober-food-image"
               />
-            </div>
+              <span className="goober-food-quantity">x{inventory[item.id]}</span>
+            </button>
           ))
         ) : (
-          <div className="goober-food-empty">No food found</div>
+          <div className="goober-food-empty">
+            No food yet. Get some from the Gacha!
+          </div>
         )}
       </div>
 
@@ -114,21 +59,23 @@ export default function GooberFoodMenu({ money = 0 }: Props) {
         <button
           type="button"
           className="studygatchi-button goober-page-button"
-          onClick={handlePrevPage}
-          disabled={page === 1}
+          onClick={() => setPage((previous) => Math.max(1, previous - 1))}
+          disabled={currentPage === 1}
         >
           Prev
         </button>
 
         <span className="goober-page-indicator">
-          {page} / {totalPages}
+          {currentPage} / {totalPages}
         </span>
 
         <button
           type="button"
           className="studygatchi-button goober-page-button"
-          onClick={handleNextPage}
-          disabled={page === totalPages}
+          onClick={() =>
+            setPage((previous) => Math.min(totalPages, previous + 1))
+          }
+          disabled={currentPage === totalPages}
         >
           Next
         </button>

@@ -8,3 +8,15 @@
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+
+.panda-customization {
+  position: absolute;
+  z-index: 2;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(2rem, 12vw, 3.5rem);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 60%));
+  pointer-events: none;
+}

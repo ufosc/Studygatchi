@@ -1,0 +1,159 @@
+.goober-gacha {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #5f8f99;
+  color: white;
+}
+
+.goober-gacha-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #d9d9d9;
+  color: #333;
+}
+
+.goober-gacha-header h2,
+.goober-gacha-content h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.goober-gacha-content {
+  padding: 16px;
+}
+
+.goober-gacha-description {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.goober-gacha-pull {
+  width: 100%;
+}
+
+.goober-gacha-pull:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.goober-gacha-message {
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+.goober-gacha-odds {
+  margin: 0 0 12px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.goober-gacha-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 15%);
+}
+
+.goober-gacha-result-icon,
+.goober-gacha-item-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  font-size: 34px;
+}
+
+.goober-gacha-result img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.goober-gacha-content h3 {
+  margin: 20px 0 10px;
+}
+
+.goober-gacha-collection {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.goober-gacha-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 8px 4px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: white;
+  background: rgb(0 0 0 / 15%);
+}
+
+.goober-gacha-item.equipped {
+  border-color: white;
+}
+
+.goober-gacha-item img {
+  width: 56px;
+  height: 56px;
+}
+
+.goober-gacha-item img {
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.goober-gacha-item-name {
+  font-size: 13px;
+}
+
+.goober-gacha-item-rarity {
+  font-size: 11px;
+}
+
+.goober-gacha-item-quantity {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.goober-gacha-equip {
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+.goober-gacha-empty {
+  margin: 0;
+  text-align: center;
+}
+
+.rarity-common .goober-gacha-item-rarity {
+  color: #e7e7e7;
+}
+
+.rarity-uncommon .goober-gacha-item-rarity {
+  color: #9eff9e;
+}
+
+.rarity-rare .goober-gacha-item-rarity {
+  color: #8bd1ff;
+}
+
+.rarity-epic .goober-gacha-item-rarity {
+  color: #e5a1ff;
+}
+
+.goober-gacha-home {
+  display: block;
+  margin: 0 auto 12px;
+}
