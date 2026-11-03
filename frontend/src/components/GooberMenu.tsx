@@ -1,19 +1,18 @@
 import "./GooberMenu.css";
-// TODO These are placeholders. 
-// Eventually we're going to want to lazy-load the assets since there will be a lot of them.
 import GooberBackground from "../assets/backgrounds/placeholder.jpg"
-import GooberImg from "../assets/goobers/goober-panda.png";
+import GooberPanda from "../assets/goobers/goober-panda.png";
 
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import GooberInfo from "./GooberInfo";
 import GooberPlayMenu from "./GooberPlayMenu";
 import GooberFoodMenu from "./GooberFoodMenu";
 import GooberGiftMenu from "./GooberGiftMenu";
+import { PET_ITEMS, type PetInventory } from "./petItems";
 
 interface Props {
   setXP: (arg0: number) => void;
   setLevel: (arg0: number) => void;
-  setMoney: (arg0: number) => void;
+  setMoney: Dispatch<SetStateAction<number>>;
   setHealth: (arg0: number) => void;
   currentXP: number;
   level: number;
@@ -31,8 +30,19 @@ export default function GooberMenu({
   money,
   currentHealth,
 }: Props) {
-  const gooberName = "Goober";
+  const gooberName = "Panda";
   const [currentPage, setPage] = useState("home");
+  const [inventory, setInventory] = useState<PetInventory>({});
+  const [equippedCustomizationId, setEquippedCustomizationId] = useState<
+    string | null
+  >(null);
+  const equippedCustomization = PET_ITEMS.find(
+    (item) => item.id === equippedCustomizationId,
+  );
+
+  if (equippedCustomizationId && !equippedCustomization) {
+    throw new Error(`Unknown equipped item: ${equippedCustomizationId}`);
+  }
 
   return (
     <div className="card bCard" style={{
@@ -55,14 +65,14 @@ export default function GooberMenu({
             marginLeft: "auto",
           }}
         >
-          <span style={{ paddingRight: 10 }}>Money</span>
+          <span style={{ paddingRight: 10 }}>Money ${money}</span>
           <span>Settings</span>
         </span>
       </div>
 
       <div
         className="card-body"
-        style={{ spanAlign: "center", padding: 0 }}
+        style={{ padding: 0 }}
       >
         <div
           style={{
@@ -87,8 +97,8 @@ export default function GooberMenu({
           />
 
           <img
-            src={GooberImg}
-            alt={`${gooberName} placeholder`}
+            src={GooberPanda}
+            alt="Panda"
             style={{
               position: "relative",
               zIndex: 1,
@@ -97,6 +107,15 @@ export default function GooberMenu({
               display: "block",
             }}
           />
+          {equippedCustomization?.icon && (
+            <span
+              className="panda-customization"
+              aria-label={equippedCustomization.name}
+              title={equippedCustomization.name}
+            >
+              {equippedCustomization.icon}
+            </span>
+          )}
         </div>
       </div>
 
@@ -162,7 +181,7 @@ export default function GooberMenu({
             }
             onClick={() => setPage("gift")}
           >
-            Gift
+            Gacha
           </button>
         </div>
 
@@ -189,8 +208,30 @@ export default function GooberMenu({
             />
           )}
           {currentPage == "play" && <GooberPlayMenu pageSetter={setPage} />}
-          {currentPage == "food" && <GooberFoodMenu pageSetter={setPage} money={money} />}
-          {currentPage == "gift" && <GooberGiftMenu pageSetter={setPage} />}
+          {currentPage == "food" && (
+            <GooberFoodMenu
+              money={money}
+              inventory={inventory}
+              onFeed={(itemId) => {
+                setInventory((previous) => ({
+                  ...previous,
+                  [itemId]: previous[itemId] - 1,
+                }));
+                setHealth(Math.min(100, currentHealth + 20));
+              }}
+            />
+          )}
+          {currentPage == "gift" && (
+            <GooberGiftMenu
+              pageSetter={setPage}
+              money={money}
+              setMoney={setMoney}
+              inventory={inventory}
+              setInventory={setInventory}
+              equippedCustomizationId={equippedCustomizationId}
+              onEquip={setEquippedCustomizationId}
+            />
+          )}
         </div>
       </div>
     </div>
