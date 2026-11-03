@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
-from .models import StudyUser, Task
+from .models import ProhibitedSite, StudyUser, Task
 
 # TODO Add docstrings to each of these functions to help newcomers understand what they do
 
@@ -40,6 +40,114 @@ def test_task(db: Any, test_user: StudyUser) -> Task:
         due_date="2026-12-31T00:00:00Z",
         user=test_user,
     )
+
+
+@pytest.mark.required
+class TestProhibitedSites:
+    endpoint = "/api/prohibited_sites/"
+
+    def test_create_prohibited_site(self, api_client: APIClient, test_user: StudyUser) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.post(self.endpoint, {"url": "example.com"}, format="json")
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data["url"] == "example.com"
+        assert ProhibitedSite.objects.get(user=test_user).url == "example.com"
+
+    def test_create_prohibited_site_normalizes_url(
+        self, api_client: APIClient, test_user: StudyUser
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        response = api_client.post(
+            self.endpoint,
+            {"url": "  HTTPS://Example.COM/path/  "},
+            format="json",
+        )
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data["url"] == "example.com"
+        assert ProhibitedSite.objects.get(user=test_user).url == "example.com"
+
+    def test_create_prohibited_site_rejects_empty_and_invalid_urls(
+        self, api_client: APIClient, test_user: StudyUser
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+
+        for url in ("", "not a website", "ftp://example.com", "https://", "example.com:bad"):
+            response = api_client.post(self.endpoint, {"url": url}, format="json")
+            assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+        assert ProhibitedSite.objects.count() == 0
+
+    def test_create_prohibited_site_rejects_duplicates(
+        self, api_client: APIClient, test_user: StudyUser
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+        first_response = api_client.post(
+            self.endpoint, {"url": "https://Example.com/"}, format="json"
+        )
+        duplicate_response = api_client.post(
+            self.endpoint, {"url": "http://example.com/another-page"}, format="json"
+        )
+
+        assert first_response.status_code == status.HTTP_201_CREATED
+        assert duplicate_response.status_code == status.HTTP_409_CONFLICT
+        assert ProhibitedSite.objects.filter(user=test_user).count() == 1
+
+    def test_prohibited_sites_require_authentication(self, api_client: APIClient) -> None:
+        response = api_client.post(self.endpoint, {"url": "example.com"}, format="json")
+
+        assert response.status_code in (
+            status.HTTP_401_UNAUTHORIZED,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+    def test_session_authenticated_add_requires_and_accepts_csrf_token(
+        self, test_user: StudyUser
+    ) -> None:
+        client = APIClient(enforce_csrf_checks=True)
+        client.force_login(test_user)
+
+        origin = "http://localhost:5173"
+        get_response = client.get(self.endpoint, HTTP_ORIGIN=origin)
+        csrf_token = get_response.cookies["csrftoken"].value
+        rejected_response = client.post(
+            self.endpoint,
+            {"url": "example.com"},
+            format="json",
+            HTTP_ORIGIN=origin,
+        )
+        accepted_response = client.post(
+            self.endpoint,
+            {"url": "example.com"},
+            format="json",
+            HTTP_ORIGIN=origin,
+            HTTP_X_CSRFTOKEN=csrf_token,
+        )
+
+        assert rejected_response.status_code == status.HTTP_403_FORBIDDEN
+        assert accepted_response.status_code == status.HTTP_201_CREATED
+
+    def test_prohibited_sites_are_scoped_to_authenticated_user(
+        self, api_client: APIClient, test_user: StudyUser, other_user: StudyUser
+    ) -> None:
+        api_client.force_authenticate(user=test_user)
+        response = api_client.post(self.endpoint, {"url": "example.com"}, format="json")
+        assert response.status_code == status.HTTP_201_CREATED
+
+        api_client.force_authenticate(user=other_user)
+        response = api_client.get(self.endpoint)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == []
+        assert ProhibitedSite.objects.get().user == test_user
+
+        response = api_client.post(self.endpoint, {"url": "https://example.com"}, format="json")
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert ProhibitedSite.objects.count() == 2
 
 
 @pytest.mark.required

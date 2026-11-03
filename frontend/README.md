@@ -34,6 +34,12 @@ npm run dev
 
 Inside your terminal, enter 'o' to open the project in your browser.
 
+The prohibited-sites API uses the Django backend at `http://localhost:8000` by default. The Vite
+development server proxies `/api` requests to that backend. For a built extension using a different
+backend, set `VITE_API_BASE_URL` when building and add that backend origin to
+`public/manifest.json` under `host_permissions`. Set Django's `CSRF_TRUSTED_ORIGINS` to the frontend
+origin when it differs from the Vite defaults.
+
 ## Build
 
 To create a production build for later importation as a Chrome extension:

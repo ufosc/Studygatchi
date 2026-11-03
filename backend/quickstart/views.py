@@ -1,12 +1,13 @@
 from django.db.models import QuerySet
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from .models import StudyUser, Task  # TODO remove, should be serializer
-from .serializers import TaskSerializer
+from .models import ProhibitedSite, StudyUser, Task  # TODO remove, should be serializer
+from .serializers import ProhibitedSiteSerializer, TaskSerializer
 
 
 @api_view(["GET"])
@@ -84,3 +85,39 @@ def update_task(request: Request, pk: int) -> Response:
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@ensure_csrf_cookie
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def prohibited_sites(request: Request) -> Response:
+    if request.method == "GET":
+        sites = ProhibitedSite.objects.filter(user=request.user).order_by("id")
+        serializer = ProhibitedSiteSerializer(sites, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    serializer = ProhibitedSiteSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    normalized_url = serializer.validated_data["url"]
+    if ProhibitedSite.objects.filter(user=request.user, url=normalized_url).exists():
+        return Response(
+            {"detail": "This website is already in your prohibited-sites list."},
+            status=status.HTTP_409_CONFLICT,
+        )
+
+    site, created = ProhibitedSite.objects.get_or_create(
+        user=request.user,
+        url=normalized_url,
+    )
+    if not created:
+        return Response(
+            {"detail": "This website is already in your prohibited-sites list."},
+            status=status.HTTP_409_CONFLICT,
+        )
+
+    return Response(
+        ProhibitedSiteSerializer(site).data,
+        status=status.HTTP_201_CREATED,
+    )

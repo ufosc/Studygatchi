@@ -26,3 +26,13 @@ class Task(models.Model):
     due_date = models.DateTimeField()
     description = models.TextField(default="No description given")
     user = models.ForeignKey(StudyUser, on_delete=models.CASCADE)
+
+
+class ProhibitedSite(models.Model):
+    url = models.CharField(max_length=2048)
+    user = models.ForeignKey(StudyUser, on_delete=models.CASCADE, related_name="prohibited_sites")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "url"], name="unique_prohibited_site_per_user")
+        ]
