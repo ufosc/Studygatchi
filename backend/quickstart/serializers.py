@@ -1,11 +1,14 @@
 from datetime import datetime
 from typing import Any
+from urllib.parse import urlsplit
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import URLValidator
 from django.utils import timezone
 from rest_framework import serializers
 
-from .models import StudyUser, Task
+from .models import ProhibitedSite, StudyUser, Task
 
 # TODO Add docstrings to each of these functions to help newcomers understand what they do
 
@@ -55,3 +58,45 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
             raise serializers.ValidationError("Reward exceeds permitted amount")
 
         return value
+
+
+class ProhibitedSiteSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(allow_blank=True, max_length=2048)
+
+    class Meta:
+        model = ProhibitedSite
+        fields = ["id", "url"]
+        read_only_fields = ["id"]
+
+    def validate_url(self, value: str) -> str:
+        raw_url = value.strip()
+        if not raw_url:
+            raise serializers.ValidationError("Website URL cannot be empty.")
+        if any(character.isspace() for character in raw_url):
+            raise serializers.ValidationError("Enter a valid website URL.")
+
+        if "://" in raw_url:
+            candidate = raw_url
+        else:
+            candidate = f"https://{raw_url}"
+
+        try:
+            parsed = urlsplit(candidate)
+            URLValidator(schemes=["http", "https"])(candidate)
+            hostname = parsed.hostname
+            port = parsed.port
+            if not hostname or parsed.username or parsed.password:
+                raise ValueError
+            normalized_hostname = hostname.rstrip(".").encode("idna").decode("ascii").lower()
+        except (DjangoValidationError, UnicodeError, ValueError):
+            raise serializers.ValidationError("Enter a valid HTTP or HTTPS website URL.") from None
+
+        if not normalized_hostname:
+            raise serializers.ValidationError("Enter a valid HTTP or HTTPS website URL.")
+
+        # A prohibited site represents a host, not a particular page on that site.
+        normalized_url = f"[{normalized_hostname}]" if ":" in normalized_hostname else normalized_hostname
+        default_port = 80 if parsed.scheme == "http" else 443
+        if port and port != default_port:
+            normalized_url = f"{normalized_url}:{port}"
+        return normalized_url

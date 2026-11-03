@@ -8,3 +8,30 @@
     height: 45px;
 }
 
+.prohibitedSites {
+    margin-top: 12px;
+}
+
+.prohibitedSites-form {
+    display: flex;
+    gap: 8px;
+}
+
+.prohibitedSites-form input {
+    flex: 1;
+    min-width: 0;
+}
+
+.prohibitedSites-error {
+    color: #dc3545;
+}
+
+.prohibitedSites-success {
+    color: #198754;
+}
+
+.prohibitedSites-list {
+    max-height: 120px;
+    overflow-y: auto;
+    padding-left: 20px;
+}
