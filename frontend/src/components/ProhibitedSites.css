@@ -1,0 +1,50 @@
+.prohibited-sites-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.prohibited-sites-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.prohibited-sites-url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prohibited-sites-remove {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 6px;
+    cursor: pointer;
+}
+
+.prohibited-sites-remove:hover:not(:disabled) {
+    color: #e5534b;
+}
+
+.prohibited-sites-remove:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.prohibited-sites-note {
+    font-size: 13px;
+    opacity: 0.75;
+    margin: 0 0 4px;
+}
+
+.prohibited-sites-error {
+    font-size: 13px;
+    color: #e5534b;
+    margin: 0 0 4px;
+}

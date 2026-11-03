@@ -92,4 +92,5 @@ python_functions = ["test_*"]
 markers = [
     "required: required core tests for CI pipeline",
     "tasks: tests for adding/removing/editing tasks",
+    "prohibited_sites: tests for listing/removing prohibited sites",
 ]
