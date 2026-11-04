@@ -187,3 +187,76 @@
   margin-top: 0.25rem;
   padding: 0.25rem;
 }
+
+.home-page {
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+.home-links {
+  display: flex;
+  justify-content: center;
+}
+
+.focus-card {
+  margin: 1.5rem auto;
+  text-align: left;
+}
+
+.focus-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.site-form {
+  margin-top: 1.25rem;
+}
+
+.site-form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.site-form-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.site-form-controls input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.45rem 0.6rem;
+}
+
+.site-form-controls button,
+.prohibited-site-list button {
+  padding: 0.4rem 0.7rem;
+}
+
+.prohibited-site-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prohibited-site-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #555;
+  border-radius: 0.35rem;
+}
+
+.site-error {
+  margin: 0.75rem 0 0;
+  color: #ff8d8d;
+}
+
+.monitoring-note {
+  font-size: 0.9rem;
+  color: #bdbdbd;
+}

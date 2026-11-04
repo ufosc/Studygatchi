@@ -50,6 +50,14 @@ This will generate the build files in the `build` directory.
 2. Enable "Developer mode" using the toggle switch in the top right corner.
 3. Click "Load unpacked" and select the `build` directory.
 
+## Off-task warnings
+
+StudyGatchi displays an in-page warning on common distracting social and video
+sites, including YouTube. It also shows a Chrome notification when the active
+tab is on any website in the prohibited-sites list on the Home screen. The list
+starts with common sites and can be edited there. Reload the extension from
+`chrome://extensions/` after installing an updated build.
+
 ## Project Structure
 
 - `public/`: Contains static files and the `manifest.json`.

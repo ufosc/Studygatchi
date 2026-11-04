@@ -7,9 +7,25 @@
       "default_popup": "index.html"
     },
     "background": {
-      "service_worker": "background.js"
+      "service_worker": "background.js",
+      "type": "module"
     },
-     "permissions": ["sidePanel"],
+     "permissions": ["sidePanel", "tabs", "storage", "notifications"],
+    "content_scripts": [
+      {
+        "matches": [
+          "*://*.facebook.com/*",
+          "*://*.instagram.com/*",
+          "*://*.reddit.com/*",
+          "*://*.tiktok.com/*",
+          "*://*.twitch.tv/*",
+          "*://*.x.com/*",
+          "*://*.youtube.com/*"
+        ],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+      }
+    ],
     "side_panel": {
       "default_path": "index.html"
     }

@@ -4,6 +4,7 @@ import SettingsMenu from "./components/SettingsMenu";
 import NavBar from "./components/NavBar"; //
 import Timer from "./components/Timer";
 import ToDoList from "./ToDoList";
+import Home from "./components/Home";
 import GooberMenu from "./components/GooberMenu";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from './components/ThemeProvider';
@@ -43,6 +44,7 @@ function App() {
             currentHealth={currentHealth}
           />
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/settings" element={<SettingsMenu />} />
             <Route path="/timer" element={<Timer />} />
             <Route path="/todo" element={<ToDoList />} />
